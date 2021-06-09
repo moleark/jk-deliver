@@ -1,5 +1,6 @@
 export const en = {
 	home: 'Home',
+	deliver: 'Deliver',
 	relation: 'Relation',
 	discover: 'Discover',
 	test: 'Test',

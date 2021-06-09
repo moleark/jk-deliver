@@ -1,4 +1,4 @@
-import { CHome } from "./home";
+import { CHome } from "../home";
 import { CMe } from "./me";
 import { CBug } from "./bug";
 import { CUqApp } from "./CBase";
@@ -6,11 +6,13 @@ import { res } from "./res";
 import { VMain } from "./VMain";
 import { CTester } from "./test-uqui";
 import { setUI } from "./uqs";
+import { CDeliver } from "deliver";
 
 const gaps = [10, 3,3,3,3,3,5,5,5,5,5,5,5,5,10,10,10,10,15,15,15,30,30,60];
 
 export class CApp extends CUqApp {
 	cHome: CHome;
+	cDeliver: CDeliver;
 	cBug: CBug;
 	cMe: CMe;
 	cUI: CTester;
@@ -19,6 +21,7 @@ export class CApp extends CUqApp {
 		this.setRes(res);
 		setUI(this.uqs);
 		this.cHome = this.newC(CHome);
+		this.cDeliver = this.newC(CDeliver);
 		this.cBug = this.newC(CBug);
 		this.cMe = this.newC(CMe);
 		this.cUI = this.newC(CTester) as CTester;

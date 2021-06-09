@@ -1,5 +1,6 @@
 export const zh = {
 	home: '首页',
+	deliver: '发货',
 	relation: '关系',
 	discover: '发现',
 	test: '测试',
