@@ -12,7 +12,7 @@ export class VMain extends VPage<CApp> {
 		let { cHome, cDeliver, cBug, cMe, cUI } = this.controller;
 		let tabs: TabProp[] = [
 			{name: 'home', caption: caption(t('home'), 'home'), content: cHome.tab},
-			{name: 'deliver', caption: caption(t('deliver'), 'share-square-o'), content: cDeliver.tab, load: cDeliver.load},
+			{name: 'deliver', caption: caption(t('deliver'), 'share-square-o'), content: cDeliver.tab, onShown: cDeliver.load},
 			{name: 'me', caption: caption(t('me'), 'user-o'), content: cMe.tab, load: cMe.load},
 		];
 		if (this.isDev === true) {
