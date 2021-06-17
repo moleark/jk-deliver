@@ -1,21 +1,15 @@
 import { CApp, CUqBase } from "uq-app";
 import { VDeliver } from "./VDeliver";
-import { ReturnCustomerPendingDeliverRet } from 'uq-app/uqs/JkDeliver'
+import { ReturnCustomerPendingDeliverRet, ReturnWarehousePendingDeliverRet } from 'uq-app/uqs/JkDeliver'
 import { VCustomerDeliver } from "./VCustomerDeliver";
 import { makeObservable, observable } from "mobx";
-
-export interface WarehousePendingDeliver {
-	warehouse: number;
-	customer: number;
-	rowCount: number;
-}
 
 export interface CustomerPendingDeliver extends ReturnCustomerPendingDeliverRet {
 	deliverQuantity: number;
 }
 
 export class CDeliver extends CUqBase {
-	warehousePendingDeliver: WarehousePendingDeliver[];
+	warehousePendingDeliver: ReturnWarehousePendingDeliverRet[];
 	warehouse: number;
 	customer: number;
 	customerOrderDetails: CustomerPendingDeliver[];
@@ -37,11 +31,11 @@ export class CDeliver extends CUqBase {
 		this.warehousePendingDeliver = ret.ret;
 	}
 
-	loadCustomerPendingDeliver = async(row: WarehousePendingDeliver) => {
-		let {warehouse, customer} = row;
+	loadCustomerPendingDeliver = async(row: ReturnWarehousePendingDeliverRet) => {
+		let {warehouse} = row;
+		let customer = 0;
 		let ret = await this.uqs.JkDeliver.CustomerPendingDeliver.query({warehouse, customer});
 		this.warehouse = warehouse;
-		this.customer = customer;
 		this.customerOrderDetails = ret.ret as CustomerPendingDeliver[];
 		this.openVPage(VCustomerDeliver);
 	}

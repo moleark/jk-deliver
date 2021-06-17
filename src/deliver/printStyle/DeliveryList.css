@@ -1,0 +1,148 @@
+/* 页面设置 */
+
+.printPage_D {
+    width: 100%;
+    page-break-before: auto;
+    page-break-after: always;
+    background-color: white;
+}
+
+/* 页面头部信息 */
+.top_D{
+    width: 100%;
+    height: 35px;
+    border-bottom: 3px solid black;
+    background-color: white;
+}
+
+.hLeft_D {
+    width: 32%;
+    float: left;
+    text-align: left;
+    padding: 1px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hcenter_D {
+    width: 20%;
+    float: left;
+    text-align: left;
+    font-weight: bold;
+    font-size: 24px;
+    padding-left: 1%;
+}
+
+.hright_D{
+    width: 45%;
+    float: left;
+}
+    .hright_D div {
+        width: 100%;
+    }
+    .hright_D ul {
+        list-style-type: none;
+    }
+    .hright_D ul li {
+            display: inline;
+            width:45%;
+            float:left
+        }
+
+/* 明细信息 */
+.dataList_D{
+    width: 100%;
+    padding-top: 0px;
+    background-color: white;
+}
+
+.dataList_D ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0.1em;
+    margin-block-end: 0.4em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    border-bottom: 1px solid #000;
+}
+.dataList_D ul.va-list {
+    list-style: none;
+    padding: 0px;
+}
+.dataList_D ul.va-list li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    border-bottom: 1px solid #000;
+}
+
+.itemTable_D{
+    border: 0px;
+    width: 100%;
+}
+
+.item_D {
+    width: 100%;
+    height: 30px;
+    background-color: white;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:15px;
+}
+
+.item_D tr{
+    width: 100%;
+    padding: 0;
+}
+
+.item_D-1{
+    width:1%;
+    text-align: left;
+    font-size:15px;
+}
+
+.item_D-2{
+    width:6%;
+    text-align: left;
+    font-size:16px;
+}
+.item_D-3{
+    width:0.1%;
+    text-align: left;
+}
+.item_D-4{
+    width:5%;
+    text-align: left;
+}
+.item_D-5{
+    width:6%;
+    text-align: left;
+}
+.item_D-6{
+    width:8%;
+    text-align: left;
+}
+.item_D-7{
+    width:30%;
+    text-align: left;
+}
+
+/*尾部信息*/
+.footer_D{
+    width: 99%;
+    height: 10px;
+    padding:0px;
+    background-color: white;
+}
+
+.footer_D Div{
+    text-align: center;
+    margin: 1px auto; 
+    margin-top: 1px;
+}
+.footer_D span {
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+}

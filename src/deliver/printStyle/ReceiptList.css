@@ -1,0 +1,249 @@
+.breakPage{
+    page-break-before:always;
+}
+
+.top{
+    width: 100%;
+    padding-bottom: 5px;
+}
+    .top tr{
+        width: 100%;
+    }
+
+.td_left{
+    display: flex;
+    padding-bottom: 5px; 
+    font-size: 25px; 
+    font-weight: 600;
+    width: 25%;
+}
+    .td_left div{
+        display: flex;
+        padding-top: 40px;
+    }
+    .td_left span{
+        font-size: 15px;
+    }
+
+.td_right{
+    width: 8%;
+    text-align: right;
+    padding-right: 10px; 
+    font-size: 15px;
+}
+
+.deliveryInfo{
+    width:100%;
+    border:1px;
+    padding-bottom: 5px;
+}
+.deliveryInfo_tr_1{
+    width: 100%;
+    font-size: 16px;
+}
+
+.deliveryInfo_td_1{
+    width:9%;
+}
+.deliveryInfo_td_2{
+    width:8%;
+}
+.deliveryInfo_td_3{
+    width:9%;
+}
+.deliveryInfo_td_4{
+    width:25%;
+}
+.deliveryInfo_td_5{
+    width:5%;
+}
+.deliveryInfo_td_6{
+    width:13%;
+}
+.deliveryInfo_td_7{
+    width:9%;
+}
+.deliveryInfo_td_8{
+    width:8%;
+}
+/*
+.deliveryInfo_td_9{
+    width:45%;
+}*/
+
+.title{
+    width: 100%;
+    padding-bottom: 5px;
+}
+.title_tr{
+    width: 100%;
+    font-size: 16px;
+}
+.title_tr_td_1{
+    text-align: left;
+    width: 8%;
+}
+.title_tr_td_2{
+    text-align: left;
+    width: 20%;
+}
+.title_tr_td_3{
+    text-align: center;
+    width: 7%;
+}
+.title_tr_td_4{
+    text-align: center;
+    width: 4%;
+}
+.title_tr_td_5{
+    text-align: center;
+    width: 7%;
+}
+.title_tr_td_6{
+    text-align: center;
+    width: 4%;
+}
+.title_tr_td_7{
+    text-align: center;
+    width: 9%;
+}
+.title_tr_td_8{
+    text-align: center;
+    width: 8%;
+}
+.title_tr_td_9{
+    text-align: center;
+    width: 8%;
+}
+.title_tr_td_10{
+    text-align: center;
+    width: 8%;
+}
+
+.dataListItem_DR{
+    width: 100%;
+    display: grid;
+    flex-direction: row;
+    border-bottom: 1px solid #000;
+}
+.dataListItem_DR_tr{
+    width: 100%;
+    font-size: 16px;
+    height: 26px;
+}
+.dataListItem_DR_tr_td_1{
+    text-align: left;
+    width: 8%;
+}
+.dataListItem_DR_tr_td_2{
+    text-align: left;
+    width: 20%;
+}
+.dataListItem_DR_tr_td_3{
+    text-align: center;
+    width: 7%;
+}
+.dataListItem_DR_tr_td_4{
+    text-align: center;
+    width: 4%;
+}
+.dataListItem_DR_tr_td_5{
+    text-align: center;
+    width: 7%;
+}
+.dataListItem_DR_tr_td_6{
+    text-align: center;
+    width: 4%;
+}
+.dataListItem_DR_tr_td_7{
+    text-align: center;
+    width: 9%;
+}
+.dataListItem_DR_tr_td_8{
+    text-align: center;
+    width: 8%;
+}
+.dataListItem_DR_tr_td_9{
+    text-align: center;
+    width: 8%;
+}
+.dataListItem_DR_tr_td_10{
+    text-align: center;
+    width: 8%;
+}
+
+.dataList_DR{
+    width: 100%;
+}
+
+/**/
+.dataList_DR ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    border-bottom: 1px solid #000;
+    width: 100%;
+}
+.dataList_DR ul.va-list {
+    list-style: none;
+    padding: 0px;
+    margin-bottom: -1px;
+    background-color: #f0f0f0;
+}
+.dataList_DR ul.va-list li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    margin-bottom: 1px;
+    background-color: white;
+    page-break-before: always;
+}
+.dataList_DR ul.va-list>li>div{
+    flex: 1 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/*
+#dataListDiv ul.va-list li {
+    page-break-before:always;
+}*/
+
+.dataListDetail_DR{
+    width: 100%;
+    /*flex: 1 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;*/
+}
+.dataListDetail_DR ul.va-list li{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    margin-bottom: 1px;
+    background-color: white;
+    page-break-before: avoid;
+}
+.dataListDetail_DR ul.va-list>li>div{
+    flex: 1 1;
+    display: grid;
+    flex-direction: row;
+}
+
+.footer{
+    padding-top: 11px;
+    width: 85%;
+    /*height: 30px;*/
+    text-align: right;
+    float: right;
+}
+.footer span {
+    width: 70px;
+    border-bottom: 1px solid Black;
+    padding: 3px 20px 3px 20px;
+}

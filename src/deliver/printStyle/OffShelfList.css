@@ -1,0 +1,192 @@
+/* 页面设置 */
+main *{
+    box-sizing: border-box;
+}
+
+.printPage_O {
+    width: 100%;
+    page-break-before: auto;
+    page-break-after: always;
+    background-color: white;
+}
+
+/* 页面头部信息 */
+.header_O{
+    width: 100%;
+    height: 50px;
+    padding: 1px;
+    background-color: white;
+}
+
+.hLeft_O {
+    width: 18%;
+    float: left;
+    text-align: left;
+    padding-left: 1px;
+}
+    .hLeft_O img{
+        height: 50px;
+        width: 50px;
+    }
+
+.hcenter_O {
+    width: 40%;
+    float: left;
+    text-align: right;
+    font-weight: bold;
+    font-size: 28px;
+    padding-top: 5px;
+}
+
+.hright_O{
+    width: 30%;
+    float: right;
+}
+    .hright_O ul {
+        list-style-type: none;
+        padding-top: 2px;
+    }    
+        .hright_O ul li {
+                height: 30px;
+                line-height: 30px;
+            }
+
+/* 标题 */
+.title_O{
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    font-size:16px;
+}
+    .title_O table{
+        width: 100%;
+    }
+    .title_O tbody{
+        width: 100%;
+    }
+    .th-1{
+        width:15mm;
+        padding: 0;
+        text-align: left;
+    }
+    .th-2{
+        width:35mm;
+        text-align: left;
+    }
+    .th-3{
+        width:35mm;
+        text-align: left;
+    }
+    .th-4{
+        width:30mm;
+        text-align: left;
+    }
+    .th-5{
+        width:30mm;
+        text-align: left;
+    }
+    .th-6{
+        width:20mm;
+        text-align: left;
+    }
+    .th-7{
+        width:35mm;
+        text-align: center;
+    }
+
+
+/* 明细信息 */
+.itemList_O{
+    width: 100%;
+    padding-top: 1px;
+    background-color: white;
+}
+
+.itemList_O ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0.1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    border-bottom: 1px solid #000;
+}
+.itemList_O ul.va-list {
+    list-style: none;
+    padding: 0px;
+    margin-bottom: 15px;
+}
+.itemList_O ul.va-list li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    height: 25px;
+    line-height: 25px;
+    border-bottom: 1px solid #000;
+}
+
+.item_O {
+    width: 100%;
+    height: auto;
+    background-color: white;
+    display: flex;
+    padding: 1px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:15px;
+}
+
+.item_O-1{
+    width:12mm;
+    text-align: left;
+}
+.item_O-2{
+    width:50mm;
+    text-align: left;
+}
+.item_O-3{
+    width:45mm;
+    text-align: left;
+}
+.item_O-4{
+    width:40mm;
+    text-align: left;
+}
+.item_O-5{
+    width:40mm;
+    text-align: left;
+}
+.item_O-6{
+    width:20mm;
+    text-align: left;
+}
+.item_O-7{
+    width:40mm;
+    text-align: left;
+}
+
+/*尾部信息*/
+.footer_O{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: left;
+    background-color: white;
+}
+
+.footerDiv_O{
+    float: right;
+}
+    .footerDiv_O ul {
+        list-style-type: none;
+        margin: 1;
+    }
+        .footerDiv_O ul li {
+            float: left;
+        }
+
+    .footerDiv_O span {
+        width: 100px;
+        border-bottom: 1px solid Black;
+        padding: 10px 110px 10px 10px;
+    }

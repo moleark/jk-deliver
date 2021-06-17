@@ -7,12 +7,14 @@ import { VMain } from "./VMain";
 import { CTester } from "./test-uqui";
 import { setUI } from "./uqs";
 import { CDeliver } from "deliver";
+import { CFind } from "find";
 
 const gaps = [10, 3,3,3,3,3,5,5,5,5,5,5,5,5,10,10,10,10,15,15,15,30,30,60];
 
 export class CApp extends CUqApp {
 	cHome: CHome;
 	cDeliver: CDeliver;
+	cFind: CFind;
 	cBug: CBug;
 	cMe: CMe;
 	cUI: CTester;
@@ -22,6 +24,7 @@ export class CApp extends CUqApp {
 		setUI(this.uqs);
 		this.cHome = this.newC(CHome);
 		this.cDeliver = this.newC(CDeliver);
+		this.cFind = this.newC(CFind);
 		this.cBug = this.newC(CBug);
 		this.cMe = this.newC(CMe);
 		this.cUI = this.newC(CTester) as CTester;
