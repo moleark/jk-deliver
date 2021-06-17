@@ -31,7 +31,7 @@ export class CApp extends CUqApp {
 		this.cHome.load();
 		this.openVPage(VMain, undefined, this.dispose);
 		// 加上下面一句，可以实现主动页面刷新
-		// this.timer = setInterval(this.callTick, 1000);
+		this.timer = setInterval(this.callTick, 1000);
 		// uq 里面加入这一句，会让相应的$Poked查询返回poke=1：
 		// TUID [$User] ID (member) SET poke=1;
 	}
@@ -52,14 +52,14 @@ export class CApp extends CUqApp {
 			//console.error('tick ', new Date());
 			this.tick = 0;
 			if (this.gapIndex < gaps.length - 1) ++this.gapIndex;
-			let ret = await this.uqs.BzHelloTonva.$poked.query(undefined, false);
+			let ret = await this.uqs.JkDeliver.$poked.query(undefined, false);
 			let v = ret.ret[0];
 			if (v === undefined) return;
 			if (!v.poke) return;
 			this.gapIndex = 1;
 
 			// 数据服务器提醒客户端刷新，下面代码重新调入的数据
-			//this.cHome.refresh();
+			this.cHome.load();
 		}
 		catch {
 		}
