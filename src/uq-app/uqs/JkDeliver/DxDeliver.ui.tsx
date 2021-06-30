@@ -17,11 +17,20 @@ const fields = {
 		"isKey": false,
 		"label": "Staff"
 	} as FieldItemId,
-	picked: {
-		"name": "picked",
+	rows: {
+		"name": "rows",
+		"type": "integer",
 		"isKey": false,
-		"label": "Picked"
-	} as undefined,
+		"widget": "updown",
+		"label": "Rows"
+	} as FieldItemInt,
+	pickRows: {
+		"name": "pickRows",
+		"type": "integer",
+		"isKey": false,
+		"widget": "updown",
+		"label": "PickRows"
+	} as FieldItemInt,
 	deliverTime: {
 		"name": "deliverTime",
 		"isKey": false,
@@ -31,7 +40,7 @@ const fields = {
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.staff, fields.picked, fields.deliverTime, 
+	fields.staff, fields.rows, fields.pickRows, fields.deliverTime, 
 ];
 
 export const ui: UI = {

@@ -1,25 +1,31 @@
 import { Res, setRes, TFunc, UI } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { DxPicking } from "./JkDeliver";
+import { WarehouseSection } from "./JkWarehouse";
 
 /*--fields--*/
 const fields = {
-	id: {
-		"name": "id",
+	ix: {
+		"name": "ix",
 		"type": "id",
 		"isKey": false,
-		"label": "Id"
+		"label": "Ix"
+	} as FieldItemId,
+	xi: {
+		"name": "xi",
+		"type": "id",
+		"isKey": false,
+		"label": "Xi"
 	} as FieldItemId,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	
+	fields.xi, 
 ];
 
 export const ui: UI = {
-	label: "DxPicking",
+	label: "WarehouseSection",
 	fieldArr,
 	fields,
 };
@@ -37,6 +43,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: DxPicking):JSX.Element {
+export function render(item: WarehouseSection):JSX.Element {
 	return <>{JSON.stringify(item)}</>;
 };

@@ -1,7 +1,7 @@
 import { Res, setRes, TFunc, UI } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { PickupDetail } from "./JkDeliver";
+import { PickupDetail } from "./JkWarehouse";
 
 /*--fields--*/
 const fields = {
@@ -17,11 +17,24 @@ const fields = {
 		"isKey": false,
 		"label": "Main"
 	} as FieldItemId,
+	orderDetail: {
+		"name": "orderDetail",
+		"type": "id",
+		"isKey": false,
+		"label": "OrderDetail"
+	} as FieldItemId,
+	quantity: {
+		"name": "quantity",
+		"type": "number",
+		"isKey": false,
+		"widget": "number",
+		"label": "Quantity"
+	} as FieldItemNum,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.main, 
+	fields.main, fields.orderDetail, fields.quantity, 
 ];
 
 export const ui: UI = {

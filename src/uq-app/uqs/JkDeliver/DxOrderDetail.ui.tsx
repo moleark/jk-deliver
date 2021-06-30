@@ -11,12 +11,19 @@ const fields = {
 		"isKey": false,
 		"label": "Id"
 	} as FieldItemId,
-	deliver: {
-		"name": "deliver",
+	deliverShould: {
+		"name": "deliverShould",
 		"type": "number",
 		"isKey": false,
 		"widget": "number",
-		"label": "Deliver"
+		"label": "DeliverShould"
+	} as FieldItemNum,
+	pickDone: {
+		"name": "pickDone",
+		"type": "number",
+		"isKey": false,
+		"widget": "number",
+		"label": "PickDone"
 	} as FieldItemNum,
 	deliverDone: {
 		"name": "deliverDone",
@@ -36,7 +43,7 @@ const fields = {
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.deliver, fields.deliverDone, fields.returnDone, 
+	fields.deliverShould, fields.pickDone, fields.deliverDone, fields.returnDone, 
 ];
 
 export const ui: UI = {

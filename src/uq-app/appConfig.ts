@@ -26,6 +26,11 @@ export const appConfig: AppConfig = {
 			name: 'deliver',
 			version: '0.1.1',
 		},
+		{
+			dev: jk,
+			name: 'warehouse',
+			version: '0.1.1',
+		},
 	],
 	noUnit: true,
     tvs: {},

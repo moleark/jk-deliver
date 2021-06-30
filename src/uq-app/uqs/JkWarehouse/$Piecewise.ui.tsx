@@ -1,7 +1,7 @@
 import { Res, setRes, TFunc, UI } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { $PiecewiseDetail } from "./JkDeliver";
+import { $Piecewise } from "./JkWarehouse";
 
 /*--fields--*/
 const fields = {
@@ -11,35 +11,39 @@ const fields = {
 		"isKey": false,
 		"label": "Id"
 	} as FieldItemId,
-	main: {
-		"name": "main",
-		"type": "id",
-		"isKey": false,
-		"label": "Main"
-	} as FieldItemId,
-	sec: {
-		"name": "sec",
+	name: {
+		"name": "name",
+		"isKey": true,
+		"label": "Name"
+	} as undefined,
+	ratio: {
+		"name": "ratio",
 		"type": "number",
 		"isKey": false,
 		"widget": "number",
-		"label": "Sec"
+		"label": "Ratio"
 	} as FieldItemNum,
-	value: {
-		"name": "value",
+	offset: {
+		"name": "offset",
 		"type": "number",
 		"isKey": false,
 		"widget": "number",
-		"label": "Value"
+		"label": "Offset"
 	} as FieldItemNum,
+	asc: {
+		"name": "asc",
+		"isKey": false,
+		"label": "Asc"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.main, fields.sec, fields.value, 
+	fields.name, fields.ratio, fields.offset, fields.asc, 
 ];
 
 export const ui: UI = {
-	label: "$PiecewiseDetail",
+	label: "$Piecewise",
 	fieldArr,
 	fields,
 };
@@ -57,6 +61,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: $PiecewiseDetail):JSX.Element {
+export function render(item: $Piecewise):JSX.Element {
 	return <>{JSON.stringify(item)}</>;
 };

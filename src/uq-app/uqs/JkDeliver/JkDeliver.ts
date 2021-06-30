@@ -1,4 +1,4 @@
-//=== UqApp builder created on Wed Jun 16 2021 20:01:25 GMT-0400 (GMT-04:00) ===//
+//=== UqApp builder created on Tue Jun 29 2021 22:58:37 GMT-0400 (GMT-04:00) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -41,27 +41,26 @@ export interface ParamDoneDeliver {
 export interface ResultDoneDeliver {
 }
 
-export interface ParamPick {
-	warehouse: number;
-	pickupMaxRows: number;
+export interface ParamAutoWarehouseDeliver {
 }
-export interface ReturnPickPickups {
-	id: number;
-	no: string;
-}
-export interface ReturnPickDelivers {
-	id: number;
-	no: string;
-}
-export interface ResultPick {
-	pickups: ReturnPickPickups[];
-	delivers: ReturnPickDelivers[];
+export interface ResultAutoWarehouseDeliver {
 }
 
-export interface ParamDonePickupDeliver {
-	pickup: number;
+export interface ParamPiling {
+	deliver: number;
 }
-export interface ResultDonePickupDeliver {
+export interface ResultPiling {
+}
+
+export interface ParamDonePileup {
+	deliver: number;
+	detail: {
+		id: number;
+		quantity: number;
+	}[];
+
+}
+export interface ResultDonePileup {
 }
 
 export interface Param$poked {
@@ -94,7 +93,7 @@ export interface ReturnCustomerPendingDeliverRet {
 	quantity: number;
 	amount: number;
 	price: number;
-	deliver: number;
+	deliverShould: number;
 	deliverDone: number;
 	returnDone: number;
 }
@@ -102,38 +101,52 @@ export interface ResultCustomerPendingDeliver {
 	ret: ReturnCustomerPendingDeliverRet[];
 }
 
-export interface ParamWarehousePickups {
-}
-export interface ReturnWarehousePickupsRet {
-	warehouse: number;
-	pickup: number;
-	no: string;
-	create: any;
-	picker: number;
-}
-export interface ResultWarehousePickups {
-	ret: ReturnWarehousePickupsRet[];
-}
-
 export interface ParamWarehouseDeliverMain {
 }
 export interface ReturnWarehouseDeliverMainRet {
 	warehouse: number;
-	deliverMan: number;
+	deliverMain: number;
 	no: string;
 	customer: number;
 	create: any;
-	picked: number;
-	$id: number;
+	rows: number;
+	pickRows: number;
 }
 export interface ResultWarehouseDeliverMain {
 	ret: ReturnWarehouseDeliverMainRet[];
 }
 
+export interface ParamGetDeliver {
+	deliver: number;
+}
+export interface ReturnGetDeliverMain {
+	id: number;
+	no: string;
+	customer: number;
+	warehouse: number;
+	staff: number;
+	rows: number;
+	pickRows: number;
+	deliverTime: any;
+}
+export interface ReturnGetDeliverDetail {
+	id: number;
+	main: number;
+	item: number;
+	product: number;
+	deliverShould: number;
+	pickDone: number;
+	deliverDone: number;
+	returnDone: number;
+}
+export interface ResultGetDeliver {
+	main: ReturnGetDeliverMain[];
+	detail: ReturnGetDeliverDetail[];
+}
+
 export interface $PiecewiseDetail {
 	id?: number;
 	main?: number;
-	row?: number;
 	sec: number;
 	value: number;
 }
@@ -169,20 +182,6 @@ export interface Warehouse {
 	name: string;
 }
 
-export interface PickupDetail {
-	id?: number;
-	main?: number;
-}
-
-export interface Pickup {
-	id?: number;
-	no?: string;
-	warehouse: number;
-	picker: number;
-	startTime: any;
-	finishTime: any;
-}
-
 export interface DeliverMain {
 	id?: number;
 	no?: string;
@@ -197,7 +196,8 @@ export interface DeliverDetail {
 
 export interface DxOrderDetail {
 	id: number;
-	deliver?: number;
+	deliverShould?: number;
+	pickDone?: number;
 	deliverDone?: number;
 	returnDone?: number;
 	$act?: number;
@@ -217,22 +217,19 @@ export interface OrderDetailX {
 	$act?: number;
 }
 
-export interface DxPicking {
-	id: number;
-	$act?: number;
-}
-
 export interface DxDeliver {
 	id: number;
 	staff?: number;
-	picked?: number;
+	rows?: number;
+	pickRows?: number;
 	deliverTime?: any;
 	$act?: number;
 }
 
 export interface ActParamDxOrderDetail {
 	id: number|IDXValue;
-	deliver?: number|IDXValue;
+	deliverShould?: number|IDXValue;
+	pickDone?: number|IDXValue;
 	deliverDone?: number|IDXValue;
 	returnDone?: number|IDXValue;
 	$act?: number;
@@ -252,15 +249,11 @@ export interface ActParamOrderDetailX {
 	$act?: number;
 }
 
-export interface ActParamDxPicking {
-	id: number|IDXValue;
-	$act?: number;
-}
-
 export interface ActParamDxDeliver {
 	id: number|IDXValue;
 	staff?: number|IDXValue;
-	picked?: number|IDXValue;
+	rows?: number|IDXValue;
+	pickRows?: number|IDXValue;
 	deliverTime?: any|IDXValue;
 	$act?: number;
 }
@@ -281,7 +274,7 @@ export interface IxUserWarehouse {
 	xi: number;
 }
 
-export interface IxWarehoueDeliverMain {
+export interface IxWarehouseDeliverMain {
 	ix: number;
 	xi: number;
 }
@@ -292,19 +285,16 @@ export interface ParamActs {
 	orderDetail?: OrderDetail[];
 	$Piecewise?: $Piecewise[];
 	warehouse?: Warehouse[];
-	pickupDetail?: PickupDetail[];
-	pickup?: Pickup[];
 	deliverMain?: DeliverMain[];
 	deliverDetail?: DeliverDetail[];
 	dxOrderDetail?: ActParamDxOrderDetail[];
 	dxReturnDetail?: ActParamDxReturnDetail[];
 	orderDetailX?: ActParamOrderDetailX[];
-	dxPicking?: ActParamDxPicking[];
 	dxDeliver?: ActParamDxDeliver[];
 	ixPendingDeliver?: IxPendingDeliver[];
 	ixCustomerPendingReturn?: IxCustomerPendingReturn[];
 	ixUserWarehouse?: IxUserWarehouse[];
-	ixWarehoueDeliverMain?: IxWarehoueDeliverMain[];
+	ixWarehouseDeliverMain?: IxWarehouseDeliverMain[];
 }
 
 
@@ -314,29 +304,27 @@ export interface UqExt extends Uq {
 	$user: UqTuid<Tuid$user>;
 	$sheet: UqTuid<Tuid$sheet>;
 	DoneDeliver: UqAction<ParamDoneDeliver, ResultDoneDeliver>;
-	Pick: UqAction<ParamPick, ResultPick>;
-	DonePickupDeliver: UqAction<ParamDonePickupDeliver, ResultDonePickupDeliver>;
+	AutoWarehouseDeliver: UqAction<ParamAutoWarehouseDeliver, ResultAutoWarehouseDeliver>;
+	Piling: UqAction<ParamPiling, ResultPiling>;
+	DonePileup: UqAction<ParamDonePileup, ResultDonePileup>;
 	$poked: UqQuery<Param$poked, Result$poked>;
 	WarehousePendingDeliver: UqQuery<ParamWarehousePendingDeliver, ResultWarehousePendingDeliver>;
 	CustomerPendingDeliver: UqQuery<ParamCustomerPendingDeliver, ResultCustomerPendingDeliver>;
-	WarehousePickups: UqQuery<ParamWarehousePickups, ResultWarehousePickups>;
 	WarehouseDeliverMain: UqQuery<ParamWarehouseDeliverMain, ResultWarehouseDeliverMain>;
+	GetDeliver: UqQuery<ParamGetDeliver, ResultGetDeliver>;
 	$PiecewiseDetail: UqID<any>;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
 	$Piecewise: UqID<any>;
 	Warehouse: UqID<any>;
-	PickupDetail: UqID<any>;
-	Pickup: UqID<any>;
 	DeliverMain: UqID<any>;
 	DeliverDetail: UqID<any>;
 	DxOrderDetail: UqIDX<any>;
 	DxReturnDetail: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
-	DxPicking: UqIDX<any>;
 	DxDeliver: UqIDX<any>;
 	IxPendingDeliver: UqIX<any>;
 	IxCustomerPendingReturn: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;
-	IxWarehoueDeliverMain: UqIX<any>;
+	IxWarehouseDeliverMain: UqIX<any>;
 }

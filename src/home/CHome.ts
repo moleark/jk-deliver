@@ -1,22 +1,33 @@
 import { makeObservable, observable } from "mobx";
-import { Controller, ParamIDDetailGet, VPage } from "tonva-react";
 import { CApp, CUqBase } from "uq-app";
-import { Pickup, PickupDetail, ReturnCustomerPendingDeliverRet, ReturnWarehouseDeliverMainRet, ReturnWarehousePendingDeliverRet, ReturnWarehousePickupsRet } from "uq-app/uqs/JkDeliver";
+import { ReturnCustomerPendingDeliverRet, ReturnWarehouseDeliverMainRet, ReturnWarehousePendingDeliverRet } from "uq-app/uqs/JkDeliver";
+import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
 import { VCustomerDeliver } from "./VCustomerDeliver";
+import { VDelivering } from "./VDelivering";
+import { VDeliverSheet } from "./VDeliverSheet";
 import { VHome } from "./VHome";
 import { VPicking } from "./VPicking";
-import { VPickup } from "./VPickup";
-import { VPrepare } from "./VPrepare";
+import { VPickSheet } from "./VPickSheet";
 
 export interface CustomerPendingDeliver extends ReturnCustomerPendingDeliverRet {
 	deliverQuantity: number;
 }
 
-export interface WarehousePending {
+export class WarehousePending {
 	warehouse: number;
-	delivers: ReturnWarehousePendingDeliverRet[];
 	pickups: ReturnWarehousePickupsRet[];
 	deliverMains: ReturnWarehouseDeliverMainRet[];
+	constructor() {
+		makeObservable(this, {
+			pickups: observable.shallow,
+			deliverMains: observable.shallow,
+		});
+	}
+	removePickup(pickup: number) {
+		if (!this.pickups) return;
+		let index = this.pickups.findIndex(v => v.pickup === pickup);
+		if (index >=0) this.pickups.splice(index, 1);
+	}
 }
 
 export class CHome extends CUqBase {
@@ -37,10 +48,9 @@ export class CHome extends CUqBase {
 	tab = () => this.renderView(VHome);
 
 	load = async () => {
-		let {JkDeliver} = this.uqs;
-		let [delivers, pickups, deliverMains] = await Promise.all([
-			JkDeliver.WarehousePendingDeliver.query({}),
-			JkDeliver.WarehousePickups.query({}),
+		let {JkDeliver, JkWarehouse} = this.uqs;
+		let [pickups, deliverMains] = await Promise.all([
+			JkWarehouse.WarehousePickups.query({}),
 			JkDeliver.WarehouseDeliverMain.query({})
 		]);
 		let coll: {[warehouse:number]: WarehousePending} = {};
@@ -48,20 +58,13 @@ export class CHome extends CUqBase {
 		function wpFromWarehouse(warehouse: number): WarehousePending {
 			let wp = coll[warehouse];
 			if (!wp) {
-				wp = coll[warehouse] = {
-					warehouse,
-					delivers: [],
-					pickups: [],
-					deliverMains: [],
-				}
+				wp = coll[warehouse] = new WarehousePending();
+				wp.warehouse = warehouse;
+				wp.pickups = [];
+				wp.deliverMains = [];
 				arr.push(wp);
 			}
 			return wp;
-		}
-		for (let row of delivers.ret) {
-			let {warehouse} = row;
-			let wp = wpFromWarehouse(warehouse);
-			wp.delivers.push(row);
 		}
 		for (let row of pickups.ret) {
 			let {warehouse} = row;
@@ -74,23 +77,6 @@ export class CHome extends CUqBase {
 			wp.deliverMains.push(row);
 		}
 		this.warehousePending = arr;
-	}
-
-	createPickup = async (row: ReturnWarehousePendingDeliverRet) => {
-		let {warehouse} = row;
-		const pickupMaxRows = 1; // 100;
-		let result = await this.uqs.JkDeliver.Pick.submitReturns({warehouse, pickupMaxRows});
-		// 下面语句返回带表名的结果。
-		// let result = await this.uqs.JkDeliver.Pick.submitReturns({warehouse, maxRows});
-		if (!result) {
-			alert('no pick created');
-			return;
-		}
-		this.openVPage(VPrepare, result, this.reloadHome);
-	}
-
-	private reloadHome = async (ret: any) => {
-		await this.load();
 	}
 
 	loadCustomerPendingDeliver = async(row: ReturnWarehousePendingDeliverRet) => {
@@ -115,17 +101,12 @@ export class CHome extends CUqBase {
 	}
 
 	onPickup = async (row: ReturnWarehousePickupsRet) => {
-		let {JkDeliver} = this.uqs;
-		let {pickup: id} = row;
-		let param:ParamIDDetailGet = {
-			id,
-			main: JkDeliver.Pickup,
-			detail: JkDeliver.PickupDetail,
-		};
-		let ret = await JkDeliver.IDDetailGet<Pickup, PickupDetail>(param);
-		let [main, detail] = ret;
+		let {JkWarehouse} = this.uqs;
+		let {pickup} = row;
+		let ret = await JkWarehouse.GetPickup.query({pickup});
+		let {main, detail} = ret;
 		if (main.length === 0) {
-			alert(`id ${id} 没有取到单据`);
+			alert(`id ${pickup} 没有取到单据`);
 			return;
 		}
 		let pickupMain = main[0];
@@ -134,18 +115,57 @@ export class CHome extends CUqBase {
 		if (this.isMe(picker) === true)
 			this.openVPage(VPicking, vPageParam);
 		else
-			this.openVPage(VPickup, vPageParam);
+			this.openVPage(VPickSheet, vPageParam);
 	}
 
 	onDeliverMain = async (row: ReturnWarehouseDeliverMainRet) => {
-		alert(row.deliverMan);
+		let {JkDeliver} = this.uqs;
+		let {deliverMain} = row;
+		let ret = await JkDeliver.GetDeliver.query({deliver: deliverMain});
+		let {main:mainArr, detail} = ret;
+		if (mainArr.length === 0) {
+			alert(`id ${deliverMain} 没有取到发运单据`);
+			return;
+		}
+		let main = mainArr[0];
+		let {staff} = main;
+		let vPageParam = [main, detail];
+		if (this.isMe(staff) === true)
+			this.openVPage(VDelivering, vPageParam);
+		else
+			this.openVPage(VDeliverSheet, vPageParam);
 	}
 
-	async startPickup(pickupId: number) {
-
+	async picking(pickupId: number) {
+		await this.uqs.JkWarehouse.Picking.submit({pickup: pickupId});
 	}
 
-	async donePickup(pickupId: number) {
-		
+	async donePickup(pickupId: number, 
+		pickDetail: {
+			orderDetail: number;
+			quantity: number;
+		}[])
+	{
+		await this.uqs.JkWarehouse.Picked.submit({
+			pickup: pickupId,
+			detail: pickDetail
+		});
+		this.warehousePending.forEach(v => v.removePickup(pickupId));
+	}
+
+	async piling(deliverMain: number) {
+		await this.uqs.JkDeliver.Piling.submit({deliver: deliverMain});
+	}
+
+	async donePileup(deliver: number, 
+		detail: {
+			id: number;
+			quantity: number;
+		}[])
+	{
+		await this.uqs.JkDeliver.DonePileup.submit({
+			deliver,
+			detail
+		});
 	}
 }
