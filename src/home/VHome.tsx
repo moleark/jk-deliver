@@ -57,10 +57,15 @@ export class VHome extends VPage<CHome> {
 	}
 
 	private renderDeliverMain = (row: ReturnWarehouseDeliverMainRet, index: number): JSX.Element => {
-		let {deliverMain, no, customer, create, rows, pickRows} = row;
+		let {deliverMain, no, customer, create, rows, pickRows, staff} = row;
 		let left = <div className="w-8c text-primary">发运单</div>;
 		let right = pickRows===rows?
-			<span className="text-danger">可发运</span>
+			(
+				staff ? 
+				<span>{this.renderUser(staff)} <span className="text-success">发前确认</span></span>
+				:
+				<span className="text-danger">可发运</span>
+			)
 			:
 			<span className="text-muted">待拣货</span>;
 		return <LMR className="px-3 py-2" left={left} right={right}>

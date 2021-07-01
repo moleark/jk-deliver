@@ -2,7 +2,6 @@ import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase } from "uq-app";
 import { ReturnCustomerPendingDeliverRet, ReturnWarehouseDeliverMainRet, ReturnWarehousePendingDeliverRet } from "uq-app/uqs/JkDeliver";
 import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
-import { VCustomerDeliver } from "./VCustomerDeliver";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
 import { VHome } from "./VHome";
@@ -27,6 +26,11 @@ export class WarehousePending {
 		if (!this.pickups) return;
 		let index = this.pickups.findIndex(v => v.pickup === pickup);
 		if (index >=0) this.pickups.splice(index, 1);
+	}
+	removeDeliver(id: number) {
+		if (!this.deliverMains) return;
+		let index = this.deliverMains.findIndex(v => v.deliverMain === id);
+		if (index >= 0) this.deliverMains.splice(index, 1);
 	}
 }
 
@@ -78,7 +82,7 @@ export class CHome extends CUqBase {
 		}
 		this.warehousePending = arr;
 	}
-
+/*
 	loadCustomerPendingDeliver = async(row: ReturnWarehousePendingDeliverRet) => {
 		let {warehouse} = row;
 		let customer = 0;
@@ -87,19 +91,7 @@ export class CHome extends CUqBase {
 		this.customerOrderDetails = ret.ret as CustomerPendingDeliver[];
 		this.openVPage(VCustomerDeliver);
 	}
-
-	doneDeliver = async () => {
-		// let ret = 
-		await this.uqs.JkDeliver.DoneDeliver.submit({
-			warehouse: this.warehouse,
-			customer: this.customer,
-			detail: this.customerOrderDetails
-				.filter(v => v.deliverQuantity !== undefined)
-				.map(v => ({orderDetail:v.orderDetail, quantity: v.deliverQuantity})),
-		});
-		await this.load();
-	}
-
+*/
 	onPickup = async (row: ReturnWarehousePickupsRet) => {
 		let {JkWarehouse} = this.uqs;
 		let {pickup} = row;
@@ -157,15 +149,28 @@ export class CHome extends CUqBase {
 		await this.uqs.JkDeliver.Piling.submit({deliver: deliverMain});
 	}
 
-	async donePileup(deliver: number, 
+	async doneDeliver(deliver: number, 
 		detail: {
 			id: number;
-			quantity: number;
+			deliverDone: number;
 		}[])
 	{
 		await this.uqs.JkDeliver.DonePileup.submit({
 			deliver,
-			detail
+			detail: detail.map(v => ({id: v.id, quantity: v.deliverDone}))
 		});
+		this.warehousePending.forEach(v => v.removeDeliver(deliver));
 	}
+	/*
+	doneDeliver = async (detail:{id:number;deliverDone:number}[]) => {
+		await this.uqs.JkDeliver.DoneDeliver.submit({
+			warehouse: this.warehouse,
+			customer: this.customer,
+			detail: this.customerOrderDetails
+				.filter(v => v.deliverQuantity !== undefined)
+				.map(v => ({orderDetail:v.orderDetail, quantity: v.deliverQuantity})),
+		});
+		await this.load();
+	}
+	*/
 }

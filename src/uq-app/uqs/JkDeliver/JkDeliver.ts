@@ -111,6 +111,7 @@ export interface ReturnWarehouseDeliverMainRet {
 	create: any;
 	rows: number;
 	pickRows: number;
+	staff: number;
 }
 export interface ResultWarehouseDeliverMain {
 	ret: ReturnWarehouseDeliverMainRet[];
