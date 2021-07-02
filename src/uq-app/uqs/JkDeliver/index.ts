@@ -1,8 +1,6 @@
 import { UqExt as Uq } from './JkDeliver';
-import * as $PiecewiseDetail from './$PiecewiseDetail.ui';
 import * as OrderMain from './OrderMain.ui';
 import * as OrderDetail from './OrderDetail.ui';
-import * as $Piecewise from './$Piecewise.ui';
 import * as Warehouse from './Warehouse.ui';
 import * as DeliverMain from './DeliverMain.ui';
 import * as DeliverDetail from './DeliverDetail.ui';
@@ -16,10 +14,8 @@ import * as IxUserWarehouse from './IxUserWarehouse.ui';
 import * as IxWarehouseDeliverMain from './IxWarehouseDeliverMain.ui';
 
 export function setUI(uq: Uq) {
-	Object.assign(uq.$PiecewiseDetail, $PiecewiseDetail);
 	Object.assign(uq.OrderMain, OrderMain);
 	Object.assign(uq.OrderDetail, OrderDetail);
-	Object.assign(uq.$Piecewise, $Piecewise);
 	Object.assign(uq.Warehouse, Warehouse);
 	Object.assign(uq.DeliverMain, DeliverMain);
 	Object.assign(uq.DeliverDetail, DeliverDetail);

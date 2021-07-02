@@ -1,6 +1,4 @@
 import { UqExt as Uq } from './JkWarehouse';
-import * as $PiecewiseDetail from './$PiecewiseDetail.ui';
-import * as $Piecewise from './$Piecewise.ui';
 import * as StorePoint from './StorePoint.ui';
 import * as Item from './Item.ui';
 import * as Section from './Section.ui';
@@ -20,8 +18,6 @@ import * as IxUserWarehouse from './IxUserWarehouse.ui';
 import * as IxPendingPickup from './IxPendingPickup.ui';
 
 export function setUI(uq: Uq) {
-	Object.assign(uq.$PiecewiseDetail, $PiecewiseDetail);
-	Object.assign(uq.$Piecewise, $Piecewise);
 	Object.assign(uq.StorePoint, StorePoint);
 	Object.assign(uq.Item, Item);
 	Object.assign(uq.Section, Section);

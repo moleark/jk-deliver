@@ -1,7 +1,7 @@
 ///+++import AppUQs+++///
 import {UQs as AppUQs} from '../appUQs';
 ///###import AppUQs###///
-//=== UqApp builder created on Tue Jun 29 2021 22:58:37 GMT-0400 (GMT-04:00) ===//
+//=== UqApp builder created on Thu Jul 01 2021 16:27:36 GMT-0400 (GMT-04:00) ===//
 import * as BzHelloTonva from './BzHelloTonva';
 import * as JkDeliver from './JkDeliver';
 import * as JkWarehouse from './JkWarehouse';
