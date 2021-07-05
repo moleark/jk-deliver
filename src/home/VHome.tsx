@@ -10,7 +10,8 @@ export class VHome extends VPage<CHome> {
 	content() {
 		return React.createElement(observer(() => {
 			// 这个页面每10秒刷一次。因为很少人用，每次数据库查询很小
-			let {warehousePending, onPickup, onDeliverMain} = this.controller;
+			let {uqs, warehousePending, onPickup, onDeliverMain} = this.controller;
+			let {JkWarehouse} = uqs;
 			let content: any;
 			if (!warehousePending) {
 				content = <FA name="spinner" spin={true} className="text-info mx-3" size="lg" />;
@@ -18,13 +19,13 @@ export class VHome extends VPage<CHome> {
 			else {
 				content = warehousePending.map(v => {
 					let {warehouse, pickups, deliverMains} = v;
-					return <div key={warehouse} className="mb-3">
-						<div className="mb-2 px-3 text-info font-weight-bold">
-							仓库: {this.controller.uqs.JkDeliver.IDRender(warehouse)}
+					return <div key={warehouse} className="my-3">
+						<div className="my-1 px-3 text-info font-weight-bold">
+							{JkWarehouse.Warehouse.tv(warehouse)}
 						</div>
-						<List className="mb-3" items={pickups} none="无拣货单"
+						<List className="my-1" items={pickups} none="无拣货单"
 							item={{render: this.renderPickup, onClick: onPickup}} />
-						<List className="mb-3" items={deliverMains} none="无发货单"
+						<List className="my-1" items={deliverMains} none="无发货单"
 							item={{render: this.renderDeliverMain, onClick: onDeliverMain}} />
 					</div>
 				});
@@ -33,20 +34,11 @@ export class VHome extends VPage<CHome> {
 		}));
 		// <List className="mb-3" items={delivers} none="无发货指令"
 		// 	item={{render: this.renderPending, onClick: createPickup}} />
-}
-
-	private renderPending = (row: ReturnWarehousePendingDeliverRet, index: number): JSX.Element => {
-		let {warehouse, rowCount} = row;
-		let left = <div className="w-8c text-primary">仓库待发</div>;
-		let right = <span className="text-success">{rowCount}</span>;
-		return <LMR className="px-3 py-2" left={left} right={right}>
-			warehouse:{this.controller.uqs.JkDeliver.IDRender(warehouse)}
-		</LMR>
 	}
 
 	private renderPickup = (row: ReturnWarehousePickupsRet, index: number): JSX.Element => {
 		let {no, picker} = row;
-		let left = <div className="w-8c text-primary">拣货单</div>;
+		let left = <div className="w-8c text-success">拣货单</div>;
 		let right:any;
 		if (picker) {
 			right = <span>{this.renderUser(picker)}在拣</span>
@@ -57,6 +49,8 @@ export class VHome extends VPage<CHome> {
 	}
 
 	private renderDeliverMain = (row: ReturnWarehouseDeliverMainRet, index: number): JSX.Element => {
+		let {JkCustomer} = this.controller.uqs;
+		let {Customer} = JkCustomer;
 		let {deliverMain, no, customer, create, rows, pickRows, staff} = row;
 		let left = <div className="w-8c text-primary">发运单</div>;
 		let right = pickRows===rows?
@@ -70,7 +64,7 @@ export class VHome extends VPage<CHome> {
 			<span className="text-muted">待拣货</span>;
 		return <LMR className="px-3 py-2" left={left} right={right}>
 			<b>{no}</b> &nbsp; 
-			客户: {this.controller.uqs.JkDeliver.IDRender(customer)}
+			客户: {Customer.tv(customer)}
 		</LMR>
 	}
 }

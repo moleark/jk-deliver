@@ -1,6 +1,5 @@
-import { Res, setRes, TFunc, UI } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FieldItem, FieldItemNumber, FieldItemString, FieldItemId } from "tonva-react";
+import { Res, setRes, TFunc, FieldItem, FieldItemNumber, FieldItemString, FieldItemId, UI } from "tonva-react";
 import { TuidWarehouse } from "./JkWarehouse";
 
 const resRaw: Res<any> = {
@@ -17,5 +16,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 }
 
 export function render(item: TuidWarehouse):JSX.Element {
-	return <>{JSON.stringify(item)}</>;
+	let {id, no, name} = item;
+	return <>{name} <small className="text-muted">{id} {no}</small></>;
 };

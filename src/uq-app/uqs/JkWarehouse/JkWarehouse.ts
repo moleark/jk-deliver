@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Jul 01 2021 16:27:37 GMT-0400 (GMT-04:00) ===//
+//=== UqApp builder created on Sat Jul 03 2021 15:05:11 GMT-0400 (北美东部夏令时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -8,6 +8,7 @@ import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPe
 //===============================
 
 export interface Tuid$user {
+	id?: number;
 	name: string;
 	nick: string;
 	icon: string;
@@ -16,6 +17,7 @@ export interface Tuid$user {
 }
 
 export interface Tuid$sheet {
+	id?: number;
 	no: string;
 	user: number;
 	date: any;
@@ -30,12 +32,14 @@ export interface Tuid$sheet {
 }
 
 export interface TuidSalesRegion {
+	id?: number;
 	name: string;
 	currency: number;
 	no: string;
 }
 
 export interface TuidAddress {
+	id?: number;
 	country: number;
 	province: number;
 	city: number;
@@ -44,6 +48,7 @@ export interface TuidAddress {
 }
 
 export interface TuidCountry {
+	id?: number;
 	code: string;
 	englishName: string;
 	chineseName: string;
@@ -51,6 +56,7 @@ export interface TuidCountry {
 }
 
 export interface TuidProvince {
+	id?: number;
 	country: number;
 	englishName: string;
 	chineseName: string;
@@ -58,6 +64,7 @@ export interface TuidProvince {
 }
 
 export interface TuidCity {
+	id?: number;
 	province: number;
 	englishName: string;
 	chineseName: string;
@@ -65,6 +72,7 @@ export interface TuidCity {
 }
 
 export interface TuidCounty {
+	id?: number;
 	city: number;
 	englishName: string;
 	chineseName: string;
@@ -72,24 +80,29 @@ export interface TuidCounty {
 }
 
 export interface TuidCurrency {
+	id?: number;
 	name: string;
 	suffix: string;
 }
 
 export interface TuidBrand {
+	id?: number;
 	name: string;
 	no: string;
 }
 
 export interface TuidProductX {
+	id?: number;
 	brand: number;
 }
 
 export interface TuidShippingArea {
+	id?: number;
 	name: string;
 }
 
 export interface TuidWarehouse {
+	id?: number;
 	name: string;
 	no: string;
 	code: string;
@@ -97,6 +110,7 @@ export interface TuidWarehouse {
 }
 
 export interface TuidWarehouseRoom {
+	id?: number;
 	name: string;
 	no: string;
 	code: string;
@@ -105,6 +119,7 @@ export interface TuidWarehouseRoom {
 }
 
 export interface TuidShelfLayer {
+	id?: number;
 	name: string;
 	no: string;
 	code: string;
@@ -113,6 +128,7 @@ export interface TuidShelfLayer {
 }
 
 export interface TuidShelf {
+	id?: number;
 	name: string;
 	no: string;
 	code: string;
@@ -121,6 +137,7 @@ export interface TuidShelf {
 }
 
 export interface TuidShelfBlock {
+	id?: number;
 	name: string;
 	no: string;
 	code: string;
@@ -128,16 +145,19 @@ export interface TuidShelfBlock {
 }
 
 export interface TuidStorageCondition {
+	id?: number;
 	name: string;
 	no: string;
 }
 
 export interface TuidWarehouseStorageCondition {
+	id?: number;
 	name: string;
 	description: string;
 }
 
 export interface TuidExpressLogistics {
+	id?: number;
 	name: string;
 	no: string;
 	isValid: number;
@@ -145,6 +165,7 @@ export interface TuidExpressLogistics {
 }
 
 export interface TuidOutInBoundOrder {
+	id?: number;
 	warehouse: number;
 	createTime: any;
 	confirmTime: any;
@@ -155,12 +176,14 @@ export interface TuidOutInBoundOrder {
 }
 
 export interface TuidOutInBoundReason {
+	id?: number;
 	name: string;
 	no: string;
 	note: string;
 }
 
 export interface TuidWebUser {
+	id?: number;
 }
 
 export interface ParamOutBoundCut {

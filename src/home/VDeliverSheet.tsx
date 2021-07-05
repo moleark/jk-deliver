@@ -1,3 +1,5 @@
+import { observer } from "mobx-react";
+import React from "react";
 import { VPage } from "tonva-react";
 import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliver";
 import { CHome } from "./CHome";
@@ -21,7 +23,9 @@ export class VDeliverSheet extends VPage<CHome> {
 	}
 
 	content() {
-		let {JkDeliver} = this.controller.uqs;
+		let {JkDeliver, JkProduct} = this.controller.uqs;
+		let {ProductX} = JkProduct;
+		let PackX = ProductX.div('packx');
 		let {id, staff, rows, pickRows} = this.main;
 		let state: any;
 		if (staff) {
@@ -37,10 +41,13 @@ export class VDeliverSheet extends VPage<CHome> {
 			<div>{JkDeliver.IDRender(id)}</div>
 			<div>
 				{this.detail.map(v => {
-					let {id, item, product, deliverShould} = v;
-					return <div key={id}>
-						id:{id} product:{product} item:{item} deliver:{deliverShould}
-					</div>;
+					return React.createElement(observer(() => {
+						let {id, item, product, deliverShould} = v;
+						let pack = PackX.getObj(item);
+						return <div key={id}>
+							id:{id} product:{ProductX.tv(product)} item:{JSON.stringify(pack)} deliver:{deliverShould}
+						</div>;	
+					}));
 				})}
 			</div>
 			<div className="my-3">{state}</div>

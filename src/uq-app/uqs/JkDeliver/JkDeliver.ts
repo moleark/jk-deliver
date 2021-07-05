@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Jul 01 2021 16:27:36 GMT-0400 (GMT-04:00) ===//
+//=== UqApp builder created on Sat Jul 03 2021 15:05:11 GMT-0400 (北美东部夏令时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -8,6 +8,7 @@ import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonv
 //===============================
 
 export interface Tuid$user {
+	id?: number;
 	name: string;
 	nick: string;
 	icon: string;
@@ -16,6 +17,7 @@ export interface Tuid$user {
 }
 
 export interface Tuid$sheet {
+	id?: number;
 	no: string;
 	user: number;
 	date: any;
@@ -77,6 +79,7 @@ export interface ParamWarehousePendingDeliver {
 export interface ReturnWarehousePendingDeliverRet {
 	warehouse: number;
 	rowCount: number;
+	$id: number;
 }
 export interface ResultWarehousePendingDeliver {
 	ret: ReturnWarehousePendingDeliverRet[];

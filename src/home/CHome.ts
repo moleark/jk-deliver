@@ -1,6 +1,6 @@
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase } from "uq-app";
-import { ReturnCustomerPendingDeliverRet, ReturnWarehouseDeliverMainRet, ReturnWarehousePendingDeliverRet } from "uq-app/uqs/JkDeliver";
+import { ReturnCustomerPendingDeliverRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
 import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
@@ -71,15 +71,20 @@ export class CHome extends CUqBase {
 			return wp;
 		}
 		for (let row of pickups.ret) {
-			let {warehouse} = row;
+			let {warehouse, pickup} = row;
 			let wp = wpFromWarehouse(warehouse);
-			wp.pickups.push(row);
+			if (pickup) {
+				wp.pickups.push(row);
+			}
 		}
 		for (let row of deliverMains.ret) {
-			let {warehouse} = row;
+			let {warehouse, deliverMain} = row;
 			let wp = wpFromWarehouse(warehouse);
-			wp.deliverMains.push(row);
+			if (deliverMain) {
+				wp.deliverMains.push(row);
+			}
 		}
+		arr.sort((a, b) => a.warehouse - b.warehouse);
 		this.warehousePending = arr;
 	}
 /*

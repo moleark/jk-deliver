@@ -15,12 +15,12 @@ export const appConfig: AppConfig = {
 	version: '0.1.0',
 	app: undefined,
 	uqs: [
-		{
+		/*{
 			dev: bz,
 			name: 'hello-tonva',
 			alias: 'HelloTonva',
 			version: '0.1.0',
-		},
+		},*/
 		{
 			dev: jk,
 			name: 'deliver',
@@ -31,6 +31,16 @@ export const appConfig: AppConfig = {
 			name: 'warehouse',
 			version: '0.1.1',
 		},
+		{
+			dev: jk,
+			name: 'product',
+			version: '0.1.1',
+		},
+		{
+			dev: jk,
+			name: 'customer',
+			version: '0.1.1',
+		}
 	],
 	noUnit: true,
     tvs: {},
