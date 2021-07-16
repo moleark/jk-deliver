@@ -2,6 +2,7 @@
     page-break-before:always;
 }
 
+/*头部logo信息*/
 .top{
     width: 100%;
     padding-bottom: 5px;
@@ -29,13 +30,14 @@
     width: 8%;
     text-align: right;
     padding-right: 10px; 
-    font-size: 15px;
+    font-size: 18px;
 }
 
+/*发运信息*/
 .deliveryInfo{
     width:100%;
     border:1px;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
 }
 .deliveryInfo_tr_1{
     width: 100%;
@@ -66,64 +68,97 @@
 .deliveryInfo_td_8{
     width:8%;
 }
-/*
-.deliveryInfo_td_9{
-    width:45%;
-}*/
 
+/*表格标题*/
 .title{
     width: 100%;
-    padding-bottom: 5px;
-}
-.title_tr{
-    width: 100%;
     font-size: 16px;
+    /*height: 28px;*/
+    padding-bottom: 0px;
 }
-.title_tr_td_1{
+.title_div_1{
+    text-align: left;
+    width: 10%;
+    float: left;
+}
+.title_div_2{
+    text-align: left;
+    width: 30%;
+    float: left;
+}
+.title_div_3{
     text-align: left;
     width: 8%;
+    float: left;
 }
-.title_tr_td_2{
-    text-align: left;
-    width: 20%;
-}
-.title_tr_td_3{
-    text-align: center;
-    width: 7%;
-}
-.title_tr_td_4{
+.title_div_4{
     text-align: center;
     width: 4%;
+    float: left;
 }
-.title_tr_td_5{
-    text-align: center;
-    width: 7%;
-}
-.title_tr_td_6{
-    text-align: center;
-    width: 4%;
-}
-.title_tr_td_7{
+.title_div_5{
     text-align: center;
     width: 9%;
+    float: left;
 }
-.title_tr_td_8{
+.title_div_6{
     text-align: center;
-    width: 8%;
+    width: 4%;
+    float: left;
 }
-.title_tr_td_9{
-    text-align: center;
-    width: 8%;
+.title_div_7{
+    text-align: left;
+    width: 10%;
+    float: left;
 }
-.title_tr_td_10{
-    text-align: center;
+.title_div_8{
+    text-align: left;
     width: 8%;
+    float: left;
+}
+.title_div_9{
+    text-align: left;
+    width: 8%;
+    float: left;
+}
+.title_div_10{
+    text-align: left;
+    width: 9%;
+    float: left;
 }
 
-.dataListItem_DR{
+.dataListDetail_DR{
     width: 100%;
+    flex: 1 1;
+    display: grid;
+    flex-wrap: wrap;
+    margin-top: -15px;
+    /*margin-right: -15px;
+    margin-left: -15px;*/
+}
+.dataListDetail_DR ul.va-list {
+    list-style: none;
+    background-color: #f0f0f0;
+    padding: 0;
+    margin-bottom: -1px;
+}
+.dataListDetail_DR ul.va-list>li{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    margin-bottom: 1px;
+    background-color: white;
+    /*page-break-before: always;*/
+}
+.dataListDetail_DR ul.va-list>li>div{
+    flex: 1 1;
     display: grid;
     flex-direction: row;
+}
+
+/*产品明细信息*/
+.dataListItem_DR{
+    width: 100%;
     border-bottom: 1px solid #000;
 }
 .dataListItem_DR_tr{
@@ -132,115 +167,49 @@
     height: 26px;
 }
 .dataListItem_DR_tr_td_1{
+    width: 10%;
     text-align: left;
-    width: 8%;
 }
 .dataListItem_DR_tr_td_2{
+    width: 30%;
     text-align: left;
-    width: 20%;
 }
 .dataListItem_DR_tr_td_3{
-    text-align: center;
-    width: 7%;
+    text-align: left;
+    width: 8%;
 }
 .dataListItem_DR_tr_td_4{
-    text-align: center;
     width: 4%;
+    text-align: center;
 }
 .dataListItem_DR_tr_td_5{
+    width: 9%;
     text-align: center;
-    width: 7%;
 }
 .dataListItem_DR_tr_td_6{
-    text-align: center;
     width: 4%;
+    text-align: center;
 }
 .dataListItem_DR_tr_td_7{
-    text-align: center;
-    width: 9%;
+    width: 10%;
+    text-align: left;
 }
 .dataListItem_DR_tr_td_8{
-    text-align: center;
     width: 8%;
+    text-align: left;
 }
 .dataListItem_DR_tr_td_9{
-    text-align: center;
     width: 8%;
+    text-align: left;
 }
 .dataListItem_DR_tr_td_10{
-    text-align: center;
-    width: 8%;
-}
-
-.dataList_DR{
-    width: 100%;
-}
-
-/**/
-.dataList_DR ul {
-    display: block;
-    list-style-type: disc;
-    margin-block-start: 0em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 40px;
-    border-bottom: 1px solid #000;
-    width: 100%;
-}
-.dataList_DR ul.va-list {
-    list-style: none;
-    padding: 0px;
-    margin-bottom: -1px;
-    background-color: #f0f0f0;
-}
-.dataList_DR ul.va-list li {
-    display: flex;
-    flex-direction: row;
-    flex-wrap:nowrap;
-    margin-bottom: 1px;
-    background-color: white;
-    page-break-before: always;
-}
-.dataList_DR ul.va-list>li>div{
-    flex: 1 1;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-/*
-#dataListDiv ul.va-list li {
-    page-break-before:always;
-}*/
-
-.dataListDetail_DR{
-    width: 100%;
-    /*flex: 1 1;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;*/
-}
-.dataListDetail_DR ul.va-list li{
-    display: flex;
-    flex-direction: row;
-    flex-wrap:nowrap;
-    margin-bottom: 1px;
-    background-color: white;
-    page-break-before: avoid;
-}
-.dataListDetail_DR ul.va-list>li>div{
-    flex: 1 1;
-    display: grid;
-    flex-direction: row;
+    width: 9%;
+    text-align: left;
 }
 
 .footer{
     padding-top: 11px;
-    width: 85%;
-    /*height: 30px;*/
     text-align: right;
-    float: right;
 }
 .footer span {
     width: 70px;

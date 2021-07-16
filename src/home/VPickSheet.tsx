@@ -18,23 +18,40 @@ export class VPickSheet extends VPage<CHome> {
 	}
 
 	content() {
-		let {JkDeliver} = this.controller.uqs;
-		let {id, picker} = this.main;
-		return <div className="p-3">
-			<div>{JkDeliver.IDRender(id)}</div>
+		let { JkDeliver } = this.controller.uqs;
+		let { id, no, picker } = this.main;
+
+		let pickTotal: number = 0;
+		this.detail.forEach(element => {
+			pickTotal += element.quantity;
+		});
+
+		/*
+		<div>{JkDeliver.IDRender(id)}</div>
 			<div>
 				{this.detail.map(v => {
-					let {id} = v;
+					let { id } = v;
 					return <div key={id}>
 						{JkDeliver.OrderDetail.render(id)}
 					</div>;
 				})}
 			</div>
-			{
-				!picker && <div className="my-3">
-					<button className="btn btn-success" onClick={() => this.picking(id)}>开始拣货</button>
-				</div>
-			}
+		*/
+		return <div className="p-3 px-1 py-1">
+
+			<div className="row col-12 px-1 py-1 float-left">
+				<span><strong>{no}</strong></span>
+			</div>
+			<div className="row col-12 px-1 py-1 float-left">
+				<span className="text-info small">应拣货总瓶数：<strong>{pickTotal}</strong></span>
+			</div>
+			<div className="row col-12 px-1 py-1">
+				{
+					!picker && <div className="my-3">
+						<button className="btn btn-success" onClick={() => this.picking(id)}>开始拣货</button>
+					</div>
+				}
+			</div>
 		</div>;
 	}
 

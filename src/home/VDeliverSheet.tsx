@@ -16,17 +16,15 @@ export class VDeliverSheet extends VPage<CHome> {
 	}
 
 	header() {
-		let {rows, pickRows} = this.main;
+		let { rows, pickRows } = this.main;
 		let h = '发运单';
 		if (pickRows < rows) h += ' - 拣货中';
 		return h;
 	}
 
 	content() {
-		let {JkDeliver, JkProduct} = this.controller.uqs;
-		let {ProductX} = JkProduct;
-		let PackX = ProductX.div('packx');
-		let {id, staff, rows, pickRows} = this.main;
+		let { JkProduct } = this.controller.uqs;
+		let { id, no, staff, rows, pickRows } = this.main;
 		let state: any;
 		if (staff) {
 			state = <>{this.renderUser(staff)} 在理货</>;
@@ -37,20 +35,21 @@ export class VDeliverSheet extends VPage<CHome> {
 		else {
 			state = <>拣货中...</>;
 		}
+
+		let deliverTotal: number = 0;
+		this.detail.forEach(element => {
+			deliverTotal += element.deliverShould;
+		});
+
 		return <div className="p-3">
-			<div>{JkDeliver.IDRender(id)}</div>
-			<div>
-				{this.detail.map(v => {
-					return React.createElement(observer(() => {
-						let {id, item, product, deliverShould} = v;
-						let pack = PackX.getObj(item);
-						return <div key={id}>
-							id:{id} product:{ProductX.tv(product)} item:{JSON.stringify(pack)} deliver:{deliverShould}
-						</div>;	
-					}));
-				})}
+
+			<div className="row col-12 px-1 py-1 float-left">
+				<span><strong>{no}</strong></span>
 			</div>
-			<div className="my-3">{state}</div>
+			<div className="row col-12 px-1 py-1 float-left">
+				<span className="text-info small">应发货总瓶数：<strong>{deliverTotal}</strong></span>
+			</div>
+			<div className="row col-12 px-1 py-1 my-3">{state}</div>
 		</div>;
 	}
 

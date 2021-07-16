@@ -11,10 +11,10 @@ const resRaw: Res<any> = {
 const res: any = {};
 setRes(res, resRaw);
 
-export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
+export const t: TFunc = (str: string | JSX.Element): string | JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: TuidProductX):JSX.Element {
-	return <>{JSON.stringify(item)}</>;
+export function render(item: TuidProductX): JSX.Element {
+	return <>{item.origin}</>;
 };
