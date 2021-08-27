@@ -1,4 +1,4 @@
-import { LMR, VPage, List, tv } from "tonva-react";
+import { LMR, VPage, List } from "tonva-react";
 import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse";
 import { CHome } from "./CHome";
 
@@ -12,12 +12,12 @@ export class VPicking extends VPage<CHome> {
 		this.detail = detail;
 	}
 
-	header() { return this.main.no + ' 拣货中...' }
+	header() { return '拣货单：' + this.main.no }
 
-	right() {
+	/*right() {
 		let { id } = this.main;
 		return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.donePickup(id)}>拣货完成</button>;
-	}
+	}*/
 
 	// 修改当前选中行颜色
 	private onClickPickItem = (rowIndex: number) => {
@@ -39,12 +39,27 @@ export class VPicking extends VPage<CHome> {
 		let { ProductX } = JkProduct;
 		let PackX = ProductX.div('packx');
 
+		let { id: mainId } = this.main;
 		let { id, product, item, quantity, shouldQuantity } = pickItem;
 		let pack = PackX.getObj(item);	// JSON.stringify(pack)
 
+		// <input className="box" type="checkbox" defaultChecked={false}></input>&nbsp;
 		let right = <div>
-			<span className="text-muted">应捡:</span><span className="text-info">{shouldQuantity}</span> &nbsp;
-			<span className="text-muted">实捡:</span><span className="text-info">{quantity}</span>
+			<div className="row px-1">
+				<label className="text-muted">应捡：</label ><span className="text-info">{shouldQuantity}</span>
+			</div>
+			<div className="row px-1 text-justify">
+				<label className="text-muted">实捡：</label >
+				<input type="text" className="form-control col-5 px-0 mx-0" onChange={o => pickItem.quantity = o.target.value} defaultValue={quantity} />
+			</div>
+			<div className="row px-1">
+				<label className="small text-muted">
+					<input type="checkbox"
+						defaultChecked={false}
+						onChange={e => this.donePickupItem(mainId, id, pickItem.quantity)} />
+					&nbsp;完成
+				</label>
+			</div>
 		</div>;
 
 		// {JkDeliver.OrderDetail.render(id)}	ProductX.tv(product)	tv(product, v => v.origin)	JSON.stringify(pack)
@@ -74,10 +89,15 @@ export class VPicking extends VPage<CHome> {
 
 		return <div id="pickListDiv" className="p-1 bg-white">
 			<List items={this.detail} item={{ render: this.renderPickItem }} none="无拣货数据" />
-			<div className="float-left py-2">
+			<div className="float-right py-3">
 				<span className="px-2 text-info small">应拣总瓶数：<strong>{pickTotal}</strong></span>
 			</div>
 		</div>;
+	}
+
+	private async donePickupItem(pickupId: number, orderDetail: number, pickQuantity: number) {
+
+		alert("pickupId:" + pickupId + ",orderDetail:" + orderDetail + ",pickQuantity:" + pickQuantity);
 	}
 
 	private async donePickup(pickupId: number) {
