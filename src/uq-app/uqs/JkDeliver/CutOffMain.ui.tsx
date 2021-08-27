@@ -1,31 +1,50 @@
 import { Res, setRes, TFunc, UI } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { IxCustomerPendingReturn } from "./JkDeliver";
+import { CutOffMain } from "./JkDeliver";
 
 /*--fields--*/
 const fields = {
-	ix: {
-		"name": "ix",
+	id: {
+		"name": "id",
 		"type": "id",
 		"isKey": false,
-		"label": "Ix"
+		"label": "Id"
 	} as FieldItemId,
-	xi: {
-		"name": "xi",
+	no: {
+		"name": "no",
+		"type": "string",
+		"isKey": true,
+		"widget": "string",
+		"label": "No"
+	} as FieldItemString,
+	warehouse: {
+		"name": "warehouse",
 		"type": "id",
 		"isKey": false,
-		"label": "Xi"
+		"label": "Warehouse"
+	} as FieldItemId,
+	cutter: {
+		"name": "cutter",
+		"type": "id",
+		"isKey": false,
+		"label": "Cutter"
+	} as FieldItemId,
+	staff: {
+		"name": "staff",
+		"type": "id",
+		"isKey": false,
+		"label": "Staff"
 	} as FieldItemId,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.xi, 
+	fields.no, fields.warehouse, fields.cutter, fields.staff, 
 ];
 
 export const ui: UI = {
-	label: "IxCustomerPendingReturn",
+	label: "CutOffMain",
 	fieldArr,
 	fields,
 };
@@ -43,6 +62,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: IxCustomerPendingReturn):JSX.Element {
+export function render(item: CutOffMain):JSX.Element {
 	return <>{JSON.stringify(item)}</>;
 };

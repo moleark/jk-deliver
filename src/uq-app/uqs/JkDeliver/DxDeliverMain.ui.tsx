@@ -31,6 +31,19 @@ const fields = {
 		"widget": "updown",
 		"label": "PickRows"
 	} as FieldItemInt,
+	carrier: {
+		"name": "carrier",
+		"type": "id",
+		"isKey": false,
+		"label": "Carrier"
+	} as FieldItemId,
+	waybillNumber: {
+		"name": "waybillNumber",
+		"type": "string",
+		"isKey": false,
+		"widget": "string",
+		"label": "WaybillNumber"
+	} as FieldItemString,
 	deliverTime: {
 		"name": "deliverTime",
 		"isKey": false,
@@ -40,7 +53,7 @@ const fields = {
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.staff, fields.rows, fields.pickRows, fields.deliverTime,
+	fields.staff, fields.rows, fields.pickRows, fields.carrier, fields.waybillNumber, fields.deliverTime, 
 ];
 
 export const ui: UI = {
@@ -58,10 +71,10 @@ const resRaw: Res<any> = {
 const res: any = {};
 setRes(res, resRaw);
 
-export const t: TFunc = (str: string | JSX.Element): string | JSX.Element => {
+export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: DxDeliverMain): JSX.Element {
+export function render(item: DxDeliverMain):JSX.Element {
 	return <>{JSON.stringify(item)}</>;
 };

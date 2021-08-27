@@ -1,4 +1,4 @@
-//=== UqApp builder created on Sat Jul 03 2021 15:05:11 GMT-0400 (北美东部夏令时间) ===//
+//=== UqApp builder created on Thu Aug 26 2021 17:50:50 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -31,30 +31,18 @@ export interface Tuid$sheet {
 	processing: number;
 }
 
-export interface ParamDoneDeliver {
-	warehouse: number;
-	customer: number;
-	detail: {
-		orderDetail: number;
-		quantity: number;
-	}[];
-
-}
-export interface ResultDoneDeliver {
-}
-
 export interface ParamAutoWarehouseDeliver {
 }
 export interface ResultAutoWarehouseDeliver {
 }
 
-export interface ParamPiling {
+export interface ParamPicking {
 	deliver: number;
 }
-export interface ResultPiling {
+export interface ResultPicking {
 }
 
-export interface ParamDonePileup {
+export interface ParamDonePickup {
 	deliver: number;
 	detail: {
 		id: number;
@@ -62,7 +50,35 @@ export interface ParamDonePileup {
 	}[];
 
 }
-export interface ResultDonePileup {
+export interface ResultDonePickup {
+}
+
+export interface ParamCutOff {
+	currentWarehouse: number;
+}
+export interface ReturnCutOffMain {
+	id: number;
+	no: string;
+}
+export interface ResultCutOff {
+	main: ReturnCutOffMain[];
+}
+
+export interface ParamTallying {
+	cutOffMain: number;
+}
+export interface ResultTallying {
+}
+
+export interface ParamTallied {
+	cutOffMain: number;
+	detail: {
+		orderDetail: number;
+		quantity: number;
+	}[];
+
+}
+export interface ResultTallied {
 }
 
 export interface Param$poked {
@@ -79,7 +95,6 @@ export interface ParamWarehousePendingDeliver {
 export interface ReturnWarehousePendingDeliverRet {
 	warehouse: number;
 	rowCount: number;
-	$id: number;
 }
 export interface ResultWarehousePendingDeliver {
 	ret: ReturnWarehousePendingDeliverRet[];
@@ -115,7 +130,6 @@ export interface ReturnWarehouseDeliverMainRet {
 	rows: number;
 	pickRows: number;
 	staff: number;
-	$id: number;
 }
 export interface ResultWarehouseDeliverMain {
 	ret: ReturnWarehouseDeliverMainRet[];
@@ -128,7 +142,10 @@ export interface ReturnGetDeliverMain {
 	id: number;
 	no: string;
 	customer: number;
+	contact: number;
 	warehouse: number;
+	cutOffMain: number;
+	trayNumber: number;
 	staff: number;
 	rows: number;
 	pickRows: number;
@@ -137,6 +154,7 @@ export interface ReturnGetDeliverMain {
 export interface ReturnGetDeliverDetail {
 	id: number;
 	main: number;
+	delivermain: number;
 	item: number;
 	product: number;
 	deliverShould: number;
@@ -149,11 +167,67 @@ export interface ResultGetDeliver {
 	detail: ReturnGetDeliverDetail[];
 }
 
-export interface $PiecewiseDetail {
-	id?: number;
-	main?: number;
-	sec: number;
-	value: number;
+export interface ParamGetReadyCutOffList {
+	warehouse: number;
+}
+export interface ReturnGetReadyCutOffListList {
+	orderDetail: number;
+	product: number;
+	item: number;
+	shouldQuantity: number;
+	customer: number;
+}
+export interface ResultGetReadyCutOffList {
+	list: ReturnGetReadyCutOffListList[];
+}
+
+export interface ParamGetCutOffMainList {
+	warehouse: number;
+}
+export interface ReturnGetCutOffMainListList {
+	id: number;
+	no: string;
+}
+export interface ResultGetCutOffMainList {
+	list: ReturnGetCutOffMainListList[];
+}
+
+export interface ParamWarehouseCutOffMain {
+}
+export interface ReturnWarehouseCutOffMainRet {
+	warehouse: number;
+	cutOffMain: number;
+	no: string;
+	cutter: number;
+	create: any;
+	staff: number;
+}
+export interface ResultWarehouseCutOffMain {
+	ret: ReturnWarehouseCutOffMainRet[];
+}
+
+export interface ParamGetCutOffMain {
+	cutOffMain: number;
+}
+export interface ReturnGetCutOffMainMain {
+	id: number;
+	no: string;
+	warehouse: number;
+	cutter: number;
+	staff: number;
+}
+export interface ReturnGetCutOffMainDetail {
+	delivermain: number;
+	trayNumber: number;
+	id: number;
+	main: number;
+	item: number;
+	product: number;
+	tallyShould: number;
+}
+export interface ResultGetCutOffMain {
+	main: ReturnGetCutOffMainMain[];
+	detail: ReturnGetCutOffMainDetail[];
 }
 
 export interface OrderMain {
@@ -174,14 +248,6 @@ export interface OrderDetail {
 	warehouse: number;
 }
 
-export interface $Piecewise {
-	id?: number;
-	name: string;
-	ratio: number;
-	offset: number;
-	asc: number;
-}
-
 export interface Warehouse {
 	id?: number;
 	name: string;
@@ -191,7 +257,10 @@ export interface DeliverMain {
 	id?: number;
 	no?: string;
 	customer: number;
+	contact: number;
 	warehouse: number;
+	cutOffMain: number;
+	trayNumber: number;
 }
 
 export interface DeliverDetail {
@@ -199,19 +268,33 @@ export interface DeliverDetail {
 	main?: number;
 }
 
+export interface DeliverMainEx {
+	id?: number;
+	deliverId: string;
+	warehouseName: string;
+	addressString: string;
+}
+
+export interface CutOffMain {
+	id?: number;
+	no?: string;
+	warehouse: number;
+	cutter: number;
+	staff: number;
+}
+
 export interface DxOrderDetail {
 	id: number;
 	deliverShould?: number;
+	deliverReturn?: number;
+	returnDone?: number;
 	pickDone?: number;
 	deliverDone?: number;
-	returnDone?: number;
 	$act?: number;
 }
 
 export interface DxReturnDetail {
 	id: number;
-	orderDetail?: number;
-	quantity?: number;
 	quantityDone?: number;
 	$act?: number;
 }
@@ -219,31 +302,47 @@ export interface DxReturnDetail {
 export interface OrderDetailX {
 	id: number;
 	needInsuredWhenDelivery?: number;
+	showPrice?: number;
+	lotNumber?: string;
+	json?: string;
 	$act?: number;
 }
 
-export interface DxDeliver {
+export interface DxDeliverMain {
 	id: number;
 	staff?: number;
 	rows?: number;
 	pickRows?: number;
+	carrier?: number;
+	waybillNumber?: string;
 	deliverTime?: any;
+	$act?: number;
+}
+
+export interface DXDeliverDetail {
+	id: number;
+	deliverDone?: number;
+	$act?: number;
+}
+
+export interface DxCutOffMain {
+	id: number;
+	staff?: number;
 	$act?: number;
 }
 
 export interface ActParamDxOrderDetail {
 	id: number|IDXValue;
 	deliverShould?: number|IDXValue;
+	deliverReturn?: number|IDXValue;
+	returnDone?: number|IDXValue;
 	pickDone?: number|IDXValue;
 	deliverDone?: number|IDXValue;
-	returnDone?: number|IDXValue;
 	$act?: number;
 }
 
 export interface ActParamDxReturnDetail {
 	id: number|IDXValue;
-	orderDetail?: number|IDXValue;
-	quantity?: number|IDXValue;
 	quantityDone?: number|IDXValue;
 	$act?: number;
 }
@@ -251,25 +350,37 @@ export interface ActParamDxReturnDetail {
 export interface ActParamOrderDetailX {
 	id: number|IDXValue;
 	needInsuredWhenDelivery?: number|IDXValue;
+	showPrice?: number|IDXValue;
+	lotNumber?: string|IDXValue;
+	json?: string|IDXValue;
 	$act?: number;
 }
 
-export interface ActParamDxDeliver {
+export interface ActParamDxDeliverMain {
 	id: number|IDXValue;
 	staff?: number|IDXValue;
 	rows?: number|IDXValue;
 	pickRows?: number|IDXValue;
+	carrier?: number|IDXValue;
+	waybillNumber?: string|IDXValue;
 	deliverTime?: any|IDXValue;
+	$act?: number;
+}
+
+export interface ActParamDXDeliverDetail {
+	id: number|IDXValue;
+	deliverDone?: number|IDXValue;
+	$act?: number;
+}
+
+export interface ActParamDxCutOffMain {
+	id: number|IDXValue;
+	staff?: number|IDXValue;
 	$act?: number;
 }
 
 export interface IxPendingDeliver {
 	ixx: number;
-	ix: number;
-	xi: number;
-}
-
-export interface IxCustomerPendingReturn {
 	ix: number;
 	xi: number;
 }
@@ -284,22 +395,29 @@ export interface IxWarehouseDeliverMain {
 	xi: number;
 }
 
+export interface IxWarehouseCutOffMain {
+	ix: number;
+	xi: number;
+}
+
 export interface ParamActs {
-	$PiecewiseDetail?: $PiecewiseDetail[];
 	orderMain?: OrderMain[];
 	orderDetail?: OrderDetail[];
-	$Piecewise?: $Piecewise[];
 	warehouse?: Warehouse[];
 	deliverMain?: DeliverMain[];
 	deliverDetail?: DeliverDetail[];
+	deliverMainEx?: DeliverMainEx[];
+	cutOffMain?: CutOffMain[];
 	dxOrderDetail?: ActParamDxOrderDetail[];
 	dxReturnDetail?: ActParamDxReturnDetail[];
 	orderDetailX?: ActParamOrderDetailX[];
-	dxDeliver?: ActParamDxDeliver[];
+	dxDeliverMain?: ActParamDxDeliverMain[];
+	dXDeliverDetail?: ActParamDXDeliverDetail[];
+	dxCutOffMain?: ActParamDxCutOffMain[];
 	ixPendingDeliver?: IxPendingDeliver[];
-	ixCustomerPendingReturn?: IxCustomerPendingReturn[];
 	ixUserWarehouse?: IxUserWarehouse[];
 	ixWarehouseDeliverMain?: IxWarehouseDeliverMain[];
+	ixWarehouseCutOffMain?: IxWarehouseCutOffMain[];
 }
 
 
@@ -308,28 +426,36 @@ export interface UqExt extends Uq {
 
 	$user: UqTuid<Tuid$user>;
 	$sheet: UqTuid<Tuid$sheet>;
-	DoneDeliver: UqAction<ParamDoneDeliver, ResultDoneDeliver>;
 	AutoWarehouseDeliver: UqAction<ParamAutoWarehouseDeliver, ResultAutoWarehouseDeliver>;
-	Piling: UqAction<ParamPiling, ResultPiling>;
-	DonePileup: UqAction<ParamDonePileup, ResultDonePileup>;
+	Picking: UqAction<ParamPicking, ResultPicking>;
+	DonePickup: UqAction<ParamDonePickup, ResultDonePickup>;
+	CutOff: UqAction<ParamCutOff, ResultCutOff>;
+	Tallying: UqAction<ParamTallying, ResultTallying>;
+	Tallied: UqAction<ParamTallied, ResultTallied>;
 	$poked: UqQuery<Param$poked, Result$poked>;
 	WarehousePendingDeliver: UqQuery<ParamWarehousePendingDeliver, ResultWarehousePendingDeliver>;
 	CustomerPendingDeliver: UqQuery<ParamCustomerPendingDeliver, ResultCustomerPendingDeliver>;
 	WarehouseDeliverMain: UqQuery<ParamWarehouseDeliverMain, ResultWarehouseDeliverMain>;
 	GetDeliver: UqQuery<ParamGetDeliver, ResultGetDeliver>;
-	$PiecewiseDetail: UqID<any>;
+	GetReadyCutOffList: UqQuery<ParamGetReadyCutOffList, ResultGetReadyCutOffList>;
+	GetCutOffMainList: UqQuery<ParamGetCutOffMainList, ResultGetCutOffMainList>;
+	WarehouseCutOffMain: UqQuery<ParamWarehouseCutOffMain, ResultWarehouseCutOffMain>;
+	GetCutOffMain: UqQuery<ParamGetCutOffMain, ResultGetCutOffMain>;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
-	$Piecewise: UqID<any>;
 	Warehouse: UqID<any>;
 	DeliverMain: UqID<any>;
 	DeliverDetail: UqID<any>;
+	DeliverMainEx: UqID<any>;
+	CutOffMain: UqID<any>;
 	DxOrderDetail: UqIDX<any>;
 	DxReturnDetail: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
-	DxDeliver: UqIDX<any>;
+	DxDeliverMain: UqIDX<any>;
+	DXDeliverDetail: UqIDX<any>;
+	DxCutOffMain: UqIDX<any>;
 	IxPendingDeliver: UqIX<any>;
-	IxCustomerPendingReturn: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;
 	IxWarehouseDeliverMain: UqIX<any>;
+	IxWarehouseCutOffMain: UqIX<any>;
 }

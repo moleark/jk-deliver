@@ -19,6 +19,8 @@ import * as Address from './Address.ui';
 import * as Domain from './Domain.ui';
 import * as ProductX from './ProductX.ui';
 import * as Brand from './Brand.ui';
+import * as CustomerSettingType from './CustomerSettingType.ui';
+import * as VIPCardType from './VIPCardType.ui';
 
 export function setUI(uq: Uq) {
 	Object.assign(uq.Currency, Currency);
@@ -41,5 +43,7 @@ export function setUI(uq: Uq) {
 	Object.assign(uq.Domain, Domain);
 	Object.assign(uq.ProductX, ProductX);
 	Object.assign(uq.Brand, Brand);
+	Object.assign(uq.CustomerSettingType, CustomerSettingType);
+	Object.assign(uq.VIPCardType, VIPCardType);
 }
 export * from './JkCustomer';

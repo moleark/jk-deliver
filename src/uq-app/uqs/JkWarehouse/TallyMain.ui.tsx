@@ -1,7 +1,7 @@
 import { Res, setRes, TFunc, UI } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { DxDeliverMain } from "./JkDeliver";
+import { TallyMain } from "./JkWarehouse";
 
 /*--fields--*/
 const fields = {
@@ -11,40 +11,44 @@ const fields = {
 		"isKey": false,
 		"label": "Id"
 	} as FieldItemId,
-	staff: {
-		"name": "staff",
+	no: {
+		"name": "no",
+		"type": "string",
+		"isKey": true,
+		"widget": "string",
+		"label": "No"
+	} as FieldItemString,
+	warehouse: {
+		"name": "warehouse",
 		"type": "id",
 		"isKey": false,
-		"label": "Staff"
+		"label": "Warehouse"
 	} as FieldItemId,
-	rows: {
-		"name": "rows",
-		"type": "integer",
+	tallyer: {
+		"name": "tallyer",
+		"type": "id",
 		"isKey": false,
-		"widget": "updown",
-		"label": "Rows"
-	} as FieldItemInt,
-	pickRows: {
-		"name": "pickRows",
-		"type": "integer",
+		"label": "Tallyer"
+	} as FieldItemId,
+	startTime: {
+		"name": "startTime",
 		"isKey": false,
-		"widget": "updown",
-		"label": "PickRows"
-	} as FieldItemInt,
-	deliverTime: {
-		"name": "deliverTime",
+		"label": "StartTime"
+	} as undefined,
+	finishTime: {
+		"name": "finishTime",
 		"isKey": false,
-		"label": "DeliverTime"
+		"label": "FinishTime"
 	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.staff, fields.rows, fields.pickRows, fields.deliverTime,
+	fields.no, fields.warehouse, fields.tallyer, fields.startTime, fields.finishTime, 
 ];
 
 export const ui: UI = {
-	label: "DxDeliverMain",
+	label: "TallyMain",
 	fieldArr,
 	fields,
 };
@@ -58,10 +62,10 @@ const resRaw: Res<any> = {
 const res: any = {};
 setRes(res, resRaw);
 
-export const t: TFunc = (str: string | JSX.Element): string | JSX.Element => {
+export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: DxDeliverMain): JSX.Element {
+export function render(item: TallyMain):JSX.Element {
 	return <>{JSON.stringify(item)}</>;
 };

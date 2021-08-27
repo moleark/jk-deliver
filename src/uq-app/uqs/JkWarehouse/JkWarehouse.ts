@@ -1,4 +1,4 @@
-//=== UqApp builder created on Sat Jul 03 2021 15:05:11 GMT-0400 (北美东部夏令时间) ===//
+//=== UqApp builder created on Thu Aug 26 2021 17:50:50 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -142,6 +142,7 @@ export interface TuidShelfBlock {
 	no: string;
 	code: string;
 	shelfLayer: number;
+	isValid: number;
 }
 
 export interface TuidStorageCondition {
@@ -191,7 +192,6 @@ export interface ParamOutBoundCut {
 }
 export interface ReturnOutBoundCutRet {
 	outBoundOrderId: number;
-	$id: number;
 }
 export interface ResultOutBoundCut {
 	ret: ReturnOutBoundCutRet[];
@@ -204,12 +204,10 @@ export interface ParamPick {
 export interface ReturnPickPickups {
 	id: number;
 	no: string;
-	$id: number;
 }
 export interface ReturnPickDelivers {
 	id: number;
 	no: string;
-	$id: number;
 }
 export interface ResultPick {
 	pickups: ReturnPickPickups[];
@@ -249,6 +247,32 @@ export interface ParamPicking {
 export interface ResultPicking {
 }
 
+export interface ParamMergeToTally {
+	warehouse: number;
+	pickups: {
+		pickup: number;
+	}[];
+
+}
+export interface ReturnMergeToTallyTallys {
+	id: number;
+	no: string;
+}
+export interface ResultMergeToTally {
+	tallys: ReturnMergeToTallyTallys[];
+}
+
+export interface ParamTally {
+	tally: number;
+	detail: {
+		orderDetail: number;
+		quantity: number;
+	}[];
+
+}
+export interface ResultTally {
+}
+
 export interface ParamGetInventoryAllocation {
 	product: number;
 	pack: number;
@@ -263,7 +287,6 @@ export interface ReturnGetInventoryAllocationRet {
 	minDeliveryDays: number;
 	maxDeliveryDays: number;
 	deliveryTimeDescription: string;
-	$id: number;
 }
 export interface ResultGetInventoryAllocation {
 	ret: ReturnGetInventoryAllocationRet[];
@@ -280,7 +303,6 @@ export interface ReturnGetShippingPlanRet {
 	pack: number;
 	warehouse: number;
 	quantity: number;
-	$id: number;
 }
 export interface ResultGetShippingPlan {
 	ret: ReturnGetShippingPlanRet[];
@@ -293,7 +315,6 @@ export interface ReturnSearchWarehouseByKeyRet {
 	id: number;
 	name: string;
 	no: string;
-	$id: number;
 }
 export interface ResultSearchWarehouseByKey {
 	ret: ReturnSearchWarehouseByKeyRet[];
@@ -309,7 +330,6 @@ export interface ReturnSearchWarehouseRoomRet {
 	name: string;
 	warehouse: number;
 	isValid: number;
-	$id: number;
 }
 export interface ResultSearchWarehouseRoom {
 	ret: ReturnSearchWarehouseRoomRet[];
@@ -325,7 +345,6 @@ export interface ReturnSearchShelfRet {
 	name: string;
 	warehouseRoom: number;
 	isValid: number;
-	$id: number;
 }
 export interface ResultSearchShelf {
 	ret: ReturnSearchShelfRet[];
@@ -341,7 +360,6 @@ export interface ReturnSearchShelfLayerRet {
 	name: string;
 	shelf: number;
 	isValid: number;
-	$id: number;
 }
 export interface ResultSearchShelfLayer {
 	ret: ReturnSearchShelfLayerRet[];
@@ -356,7 +374,6 @@ export interface ReturnSearchShelfBlockRet {
 	no: string;
 	name: string;
 	shelfLayer: number;
-	$id: number;
 }
 export interface ResultSearchShelfBlock {
 	ret: ReturnSearchShelfBlockRet[];
@@ -366,7 +383,6 @@ export interface Param$poked {
 }
 export interface Return$pokedRet {
 	poke: number;
-	$id: number;
 }
 export interface Result$poked {
 	ret: Return$pokedRet[];
@@ -384,7 +400,6 @@ export interface ReturnSearchReadyOutBoundCutTastListRet {
 	outBoundTime: any;
 	warehouse: number;
 	outBoundReason: number;
-	$id: number;
 }
 export interface ResultSearchReadyOutBoundCutTastList {
 	ret: ReturnSearchReadyOutBoundCutTastListRet[];
@@ -427,7 +442,6 @@ export interface ReturnSearchOutBoundOrderDetailRet {
 	trayNumber: number;
 	handOverTime: any;
 	outBoundTime: any;
-	$id: number;
 }
 export interface ResultSearchOutBoundOrderDetail {
 	ret: ReturnSearchOutBoundOrderDetailRet[];
@@ -442,7 +456,6 @@ export interface ReturnSearchOutBoundOrderListRet {
 	state: number;
 	operator: number;
 	createTime: any;
-	$id: number;
 }
 export interface ResultSearchOutBoundOrderList {
 	ret: ReturnSearchOutBoundOrderListRet[];
@@ -454,7 +467,6 @@ export interface ReturnGetValidWarehouseListRet {
 	id: number;
 	name: string;
 	no: string;
-	$id: number;
 }
 export interface ResultGetValidWarehouseList {
 	ret: ReturnGetValidWarehouseListRet[];
@@ -468,7 +480,6 @@ export interface ReturnWarehousePickupsRet {
 	no: string;
 	create: any;
 	picker: number;
-	$id: number;
 }
 export interface ResultWarehousePickups {
 	ret: ReturnWarehousePickupsRet[];
@@ -484,7 +495,6 @@ export interface ReturnGetPickupMain {
 	picker: number;
 	startTime: any;
 	finishTime: any;
-	$id: number;
 }
 export interface ReturnGetPickupDetail {
 	id: number;
@@ -494,11 +504,22 @@ export interface ReturnGetPickupDetail {
 	item: number;
 	product: number;
 	shouldQuantity: number;
-	$id: number;
 }
 export interface ResultGetPickup {
 	main: ReturnGetPickupMain[];
 	detail: ReturnGetPickupDetail[];
+}
+
+export interface ParamWarehouseTallys {
+}
+export interface ReturnWarehouseTallysRet {
+	warehouse: number;
+	tallymain: number;
+	no: string;
+	create: any;
+}
+export interface ResultWarehouseTallys {
+	ret: ReturnWarehouseTallysRet[];
 }
 
 export interface ParamProductInventory {
@@ -700,8 +721,6 @@ export interface Pickup {
 	picker: number;
 	startTime: any;
 	finishTime: any;
-	$owner?: number;
-	$create?: any;
 }
 
 export interface OrderDetail {
@@ -741,6 +760,33 @@ export interface ItemProductPackLot {
 	lot: string;
 }
 
+export interface TallyDetail {
+	id?: number;
+	main?: number;
+	orderDetail: number;
+	quantity: number;
+}
+
+export interface TallyMain {
+	id?: number;
+	no?: string;
+	warehouse: number;
+	tallyer: number;
+	startTime: any;
+	finishTime: any;
+}
+
+export interface Contact {
+	id?: number;
+	name: string;
+	organizationName: string;
+	mobile: string;
+	telephone: string;
+	email: string;
+	addressString: string;
+	address: number;
+}
+
 export interface DxPicking {
 	id: number;
 	$act?: number;
@@ -749,6 +795,14 @@ export interface DxPicking {
 export interface OrderDetailX {
 	id: number;
 	needInsuredWhenDelivery?: number;
+	showPrice?: number;
+	lotNumber?: string;
+	json?: string;
+	$act?: number;
+}
+
+export interface DxTallyMain {
+	id: number;
 	$act?: number;
 }
 
@@ -760,6 +814,14 @@ export interface ActParamDxPicking {
 export interface ActParamOrderDetailX {
 	id: number|IDXValue;
 	needInsuredWhenDelivery?: number|IDXValue;
+	showPrice?: number|IDXValue;
+	lotNumber?: string|IDXValue;
+	json?: string|IDXValue;
+	$act?: number;
+}
+
+export interface ActParamDxTallyMain {
+	id: number|IDXValue;
 	$act?: number;
 }
 
@@ -799,8 +861,12 @@ export interface ParamActs {
 	itemResearch?: ItemResearch[];
 	itemProductPack?: ItemProductPack[];
 	itemProductPackLot?: ItemProductPackLot[];
+	tallyDetail?: TallyDetail[];
+	tallyMain?: TallyMain[];
+	contact?: Contact[];
 	dxPicking?: ActParamDxPicking[];
 	orderDetailX?: ActParamOrderDetailX[];
+	dxTallyMain?: ActParamDxTallyMain[];
 	warehouseSection?: WarehouseSection[];
 	itemStore?: ItemStore[];
 	ixUserWarehouse?: IxUserWarehouse[];
@@ -841,6 +907,8 @@ export interface UqExt extends Uq {
 	AutoPick: UqAction<ParamAutoPick, ResultAutoPick>;
 	Picked: UqAction<ParamPicked, ResultPicked>;
 	Picking: UqAction<ParamPicking, ResultPicking>;
+	MergeToTally: UqAction<ParamMergeToTally, ResultMergeToTally>;
+	Tally: UqAction<ParamTally, ResultTally>;
 	ProductInventory: UqBook<ParamProductInventory, ResultProductInventory>;
 	ShelfBlockInventory: UqBook<ParamShelfBlockInventory, ResultShelfBlockInventory>;
 	ShelfBlockLotInventory: UqBook<ParamShelfBlockLotInventory, ResultShelfBlockLotInventory>;
@@ -858,6 +926,7 @@ export interface UqExt extends Uq {
 	GetValidWarehouseList: UqQuery<ParamGetValidWarehouseList, ResultGetValidWarehouseList>;
 	WarehousePickups: UqQuery<ParamWarehousePickups, ResultWarehousePickups>;
 	GetPickup: UqQuery<ParamGetPickup, ResultGetPickup>;
+	WarehouseTallys: UqQuery<ParamWarehouseTallys, ResultWarehouseTallys>;
 	ShippingAreaInclusionProvince: UqMap;
 	ShippingAreaInclusionCity: UqMap;
 	WarehouseSupportProvince: UqMap;
@@ -882,8 +951,12 @@ export interface UqExt extends Uq {
 	ItemResearch: UqID<any>;
 	ItemProductPack: UqID<any>;
 	ItemProductPackLot: UqID<any>;
+	TallyDetail: UqID<any>;
+	TallyMain: UqID<any>;
+	Contact: UqID<any>;
 	DxPicking: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
+	DxTallyMain: UqIDX<any>;
 	WarehouseSection: UqIX<any>;
 	ItemStore: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;
