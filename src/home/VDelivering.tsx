@@ -4,7 +4,7 @@ import { CHome } from "./CHome";
 
 export class VDelivering extends VPage<CHome> {
 	private main: ReturnGetDeliverMain;
-	private detail: ReturnGetDeliverDetail[];
+	private detail: any[];
 
 	init(param: [ReturnGetDeliverMain, ReturnGetDeliverDetail[]]) {
 		let [main, detail] = param;
@@ -22,25 +22,37 @@ export class VDelivering extends VPage<CHome> {
 		let { JkDeliver, JkProduct } = this.controller.uqs;
 		let { ProductX } = JkProduct;
 		let PackX = ProductX.div('packx');
-		let { id, product, item, pickDone, deliverShould } = deliverItem;
+		let { id, product, item, deliverDone, productExt, deliverShould } = deliverItem;
+		console.log(productExt);
 		let pack = PackX.getObj(item);
 
+
+		// let productExt = await getProductExtention(product);
+		// console.log(productExt);
+		let storage = "";
+
 		let right = <div>
-			<span className="text-muted">应发:</span><span className="text-info">{deliverShould}</span> &nbsp;
-			<span className="text-muted">实发:</span><span className="text-info">{pickDone}</span>
+			<div className="row px-1">
+				<label className="text-muted">应发：</label ><span className="text-info">{deliverShould}</span>
+			</div>
+			<div className="row px-1 text-justify">
+				<label className="text-muted">实发：</label >
+				<input type="text" className="form-control input-sm col-5" onChange={o => deliverItem.deliverShould = o.target.value} defaultValue={deliverShould} />
+			</div>
 		</div>;
 
 		return <LMR key={id} right={right}>
-
-			<div className="row col-12 py-1">
-				<span className="col-8 pl-1">{ProductX.tv(product)} </span>
-				<span className="col-4 pl-1">{tvPackx(pack)}</span>
-			</div>
-			<div className="row col-12 py-1">
-				<span className="col-12 pl-1">？{"xxx℃"}</span>
-			</div>
-			<div className="row col-12 py-1">
-				<span className="col-12 pl-1"> 名称？：{tv(product, v => v.description)}</span>
+			<div className="">
+				<div className="row col-12 py-1">
+					<span className="col-8 pl-1">{ProductX.tv(product)} </span>
+					<span className="col-4 pl-1">{tvPackx(pack)}</span>
+				</div>
+				<div className="row col-12 py-1">
+					<span className="col-12 pl-1"> 名称？：{ProductX.tv(product)}</span>
+				</div>
+				<div className="row col-12 py-1">
+					<span className="col-12 pl-1">{productExt}</span>
+				</div>
 			</div>
 		</LMR>;
 	}
@@ -48,8 +60,11 @@ export class VDelivering extends VPage<CHome> {
 	content() {
 
 		let deliverTotal: number = 0;
-		this.detail.forEach(element => {
+		let { getProductExtention } = this.controller;
+		this.detail.forEach(async element => {
 			deliverTotal += element.deliverShould;
+			element.productExt = await getProductExtention(element.product);
+			console.log(element.productExt);
 		});
 
 		let { openDeliveryReceiptList } = this.controller;
@@ -69,26 +84,27 @@ export class VDelivering extends VPage<CHome> {
 				</div>
 				<div className="col-12 px-1 py-1">收货人邮箱</div>
 				<div className="col-12 px-1 py-1">收货人地址</div>
-				<div className="col-12 px-1 py-1">发运方式 从扩展信息中获取</div>
-				<div className="col-12 px-1 py-1">订单备注 从扩展信息中获取</div>
+				<div className="col-12 px-1 py-1">订单备注</div>
 			</div>
 			<hr />
-			<div className="px-1 py-1">
+			<div>
 				<List items={this.detail} item={{ render: this.renderDeliverItem }} none="无拣货数据" />
 			</div>
-			<div className="float-left py-2">
+			<div className="float-right py-2">
 				<span className="px-2 text-info small">应发总瓶数：<strong>{deliverTotal}</strong></span>
 			</div>
-			{footer}
+			{ }
 		</div>;
+		// <div className="col-12 px-1 py-1">发运方式</div>
 	}
 
 	private doneDeliver = async () => {
 
 		let { id } = this.main;
 		this.detail.forEach(v => v.deliverDone = v.deliverShould);
-		await this.controller.doneDeliver(id, this.detail);
-		this.closePage();
+		console.log(this.detail);
+		//await this.controller.doneDeliver(id, this.detail);
+		//this.closePage();
 	}
 }
 

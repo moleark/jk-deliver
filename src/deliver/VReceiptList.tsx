@@ -98,7 +98,7 @@ export class VReceiptList extends VPage<COutBound> {
 
     content() {
 
-        let { id, no } = this.main;
+        let { no } = this.main;
         let top = <div className="top">
             <table cellPadding={0} cellSpacing={0}>
                 <tr>

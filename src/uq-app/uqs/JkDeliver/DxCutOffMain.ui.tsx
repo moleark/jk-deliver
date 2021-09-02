@@ -17,11 +17,21 @@ const fields = {
 		"isKey": false,
 		"label": "Staff"
 	} as FieldItemId,
+	startTime: {
+		"name": "startTime",
+		"isKey": false,
+		"label": "StartTime"
+	} as undefined,
+	finishTime: {
+		"name": "finishTime",
+		"isKey": false,
+		"label": "FinishTime"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.staff, 
+	fields.staff, fields.startTime, fields.finishTime, 
 ];
 
 export const ui: UI = {

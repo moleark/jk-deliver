@@ -16,7 +16,7 @@ export class VTallying extends VPage<CHome> {
     header() { return '理货单：' + this.main.no }
 
     // 修改当前选中行颜色
-    private onClickPickItem = (rowIndex: number) => {
+    private onClickTallyItem = (rowIndex: number) => {
 
         let tallyListLiDiv = document.getElementById("tallyListDiv").getElementsByTagName("ul")[0].getElementsByTagName("li");
 
@@ -57,7 +57,7 @@ export class VTallying extends VPage<CHome> {
             </div>
         </div>;
 
-        return <LMR className="px-1 py-1" key={id} right={right} onClick={() => this.onClickPickItem(index)}>
+        return <LMR className="px-1 py-1" key={id} right={right} onClick={() => this.onClickTallyItem(index)}>
             <div className="row col-12 py-1">
                 <span className="col-2 text-muted px-1">编号: </span>
                 <span className="col-5 pl-1">{ProductX.tv(product)} </span>

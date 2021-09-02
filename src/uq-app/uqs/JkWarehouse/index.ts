@@ -33,7 +33,6 @@ import * as ItemProductPack from './ItemProductPack.ui';
 import * as ItemProductPackLot from './ItemProductPackLot.ui';
 import * as TallyDetail from './TallyDetail.ui';
 import * as TallyMain from './TallyMain.ui';
-import * as Contact from './Contact.ui';
 import * as DxPicking from './DxPicking.ui';
 import * as OrderDetailX from './OrderDetailX.ui';
 import * as DxTallyMain from './DxTallyMain.ui';
@@ -77,7 +76,6 @@ export function setUI(uq: Uq) {
 	Object.assign(uq.ItemProductPackLot, ItemProductPackLot);
 	Object.assign(uq.TallyDetail, TallyDetail);
 	Object.assign(uq.TallyMain, TallyMain);
-	Object.assign(uq.Contact, Contact);
 	Object.assign(uq.DxPicking, DxPicking);
 	Object.assign(uq.OrderDetailX, OrderDetailX);
 	Object.assign(uq.DxTallyMain, DxTallyMain);

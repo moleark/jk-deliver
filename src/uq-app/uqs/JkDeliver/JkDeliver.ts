@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Aug 26 2021 17:50:50 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Thu Sep 02 2021 13:56:01 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -144,8 +144,6 @@ export interface ReturnGetDeliverMain {
 	customer: number;
 	contact: number;
 	warehouse: number;
-	cutOffMain: number;
-	trayNumber: number;
 	staff: number;
 	rows: number;
 	pickRows: number;
@@ -153,7 +151,6 @@ export interface ReturnGetDeliverMain {
 }
 export interface ReturnGetDeliverDetail {
 	id: number;
-	main: number;
 	delivermain: number;
 	item: number;
 	product: number;
@@ -219,11 +216,18 @@ export interface ReturnGetCutOffMainMain {
 export interface ReturnGetCutOffMainDetail {
 	delivermain: number;
 	trayNumber: number;
-	id: number;
-	main: number;
+	contact: number;
+	customer: number;
+	carrier: number;
+	waybillNumber: string;
+	deliverTime: any;
+	deliverDetail: number;
 	item: number;
 	product: number;
 	tallyShould: number;
+	lotNumber: string;
+	apointCarrier: number;
+	content: string;
 }
 export interface ResultGetCutOffMain {
 	main: ReturnGetCutOffMainMain[];
@@ -246,6 +250,8 @@ export interface OrderDetail {
 	amount: number;
 	price: number;
 	warehouse: number;
+	lotNumber: string;
+	carrier: number;
 }
 
 export interface Warehouse {
@@ -280,7 +286,6 @@ export interface CutOffMain {
 	no?: string;
 	warehouse: number;
 	cutter: number;
-	staff: number;
 }
 
 export interface DxOrderDetail {
@@ -328,6 +333,8 @@ export interface DXDeliverDetail {
 export interface DxCutOffMain {
 	id: number;
 	staff?: number;
+	startTime?: any;
+	finishTime?: any;
 	$act?: number;
 }
 
@@ -376,6 +383,8 @@ export interface ActParamDXDeliverDetail {
 export interface ActParamDxCutOffMain {
 	id: number|IDXValue;
 	staff?: number|IDXValue;
+	startTime?: any|IDXValue;
+	finishTime?: any|IDXValue;
 	$act?: number;
 }
 

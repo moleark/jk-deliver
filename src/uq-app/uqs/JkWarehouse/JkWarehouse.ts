@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Aug 26 2021 17:50:50 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Thu Sep 02 2021 13:56:01 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -522,6 +522,16 @@ export interface ResultWarehouseTallys {
 	ret: ReturnWarehouseTallysRet[];
 }
 
+export interface ParamGetExpressLogisticsList {
+}
+export interface ReturnGetExpressLogisticsListRet {
+	id: number;
+	name: string;
+}
+export interface ResultGetExpressLogisticsList {
+	ret: ReturnGetExpressLogisticsListRet[];
+}
+
 export interface ParamProductInventory {
 	warehouse: number;
 	product: number;
@@ -674,21 +684,6 @@ export interface ResultTransportTracking {
 	$page: ReturnTransportTracking$page[];
 }
 
-export interface $PiecewiseDetail {
-	id?: number;
-	main?: number;
-	sec: number;
-	value: number;
-}
-
-export interface $Piecewise {
-	id?: number;
-	name: string;
-	ratio: number;
-	offset: number;
-	asc: number;
-}
-
 export interface StorePoint {
 	id?: number;
 	warehouse: number;
@@ -704,7 +699,6 @@ export interface Item {
 
 export interface Section {
 	id?: number;
-	parent: number;
 	name: string;
 	warehouse: number;
 }
@@ -712,6 +706,8 @@ export interface Section {
 export interface OrderMain {
 	id?: number;
 	no?: string;
+	customer: number;
+	currency: number;
 }
 
 export interface Pickup {
@@ -729,6 +725,8 @@ export interface OrderDetail {
 	item: number;
 	product: number;
 	quantity: number;
+	amount: number;
+	price: number;
 	warehouse: number;
 }
 
@@ -774,17 +772,6 @@ export interface TallyMain {
 	tallyer: number;
 	startTime: any;
 	finishTime: any;
-}
-
-export interface Contact {
-	id?: number;
-	name: string;
-	organizationName: string;
-	mobile: string;
-	telephone: string;
-	email: string;
-	addressString: string;
-	address: number;
 }
 
 export interface DxPicking {
@@ -848,8 +835,6 @@ export interface IxPendingPickup {
 }
 
 export interface ParamActs {
-	$PiecewiseDetail?: $PiecewiseDetail[];
-	$Piecewise?: $Piecewise[];
 	storePoint?: StorePoint[];
 	item?: Item[];
 	section?: Section[];
@@ -863,7 +848,6 @@ export interface ParamActs {
 	itemProductPackLot?: ItemProductPackLot[];
 	tallyDetail?: TallyDetail[];
 	tallyMain?: TallyMain[];
-	contact?: Contact[];
 	dxPicking?: ActParamDxPicking[];
 	orderDetailX?: ActParamOrderDetailX[];
 	dxTallyMain?: ActParamDxTallyMain[];
@@ -927,6 +911,7 @@ export interface UqExt extends Uq {
 	WarehousePickups: UqQuery<ParamWarehousePickups, ResultWarehousePickups>;
 	GetPickup: UqQuery<ParamGetPickup, ResultGetPickup>;
 	WarehouseTallys: UqQuery<ParamWarehouseTallys, ResultWarehouseTallys>;
+	GetExpressLogisticsList: UqQuery<ParamGetExpressLogisticsList, ResultGetExpressLogisticsList>;
 	ShippingAreaInclusionProvince: UqMap;
 	ShippingAreaInclusionCity: UqMap;
 	WarehouseSupportProvince: UqMap;
@@ -938,8 +923,6 @@ export interface UqExt extends Uq {
 	TransportTracking: UqHistory<ParamTransportTracking, ResultTransportTracking>;
 	OutBoundReadyCutTask: UqPending<any, any>;
 	OutBoundHandoverTask: UqPending<any, any>;
-	$PiecewiseDetail: UqID<any>;
-	$Piecewise: UqID<any>;
 	StorePoint: UqID<any>;
 	Item: UqID<any>;
 	Section: UqID<any>;
@@ -953,7 +936,6 @@ export interface UqExt extends Uq {
 	ItemProductPackLot: UqID<any>;
 	TallyDetail: UqID<any>;
 	TallyMain: UqID<any>;
-	Contact: UqID<any>;
 	DxPicking: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
 	DxTallyMain: UqIDX<any>;

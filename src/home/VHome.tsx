@@ -10,7 +10,7 @@ export class VHome extends VPage<CHome> {
 	content() {
 		return React.createElement(observer(() => {
 			// 这个页面每10秒刷一次。因为很少人用，每次数据库查询很小
-			let { uqs, warehousePending, onOpenCutOffPage, onCutOffMain, onPickup, onDeliverMain } = this.controller;
+			let { uqs, warehousePending, onOpenCutOffPage, onOpenCutOffHistory, onCutOffMain, onPickup, onDeliverMain } = this.controller;
 			let { JkWarehouse } = uqs;
 			let content: any;
 			if (!warehousePending) {
@@ -22,7 +22,8 @@ export class VHome extends VPage<CHome> {
 					return <div key={warehouse} className="my-3">
 						<div className="my-1 px-3 text-info font-weight-bold">
 							{JkWarehouse.Warehouse.tv(warehouse)} &nbsp;&nbsp;
-							<span className="small text-muted" onClick={() => onOpenCutOffPage(warehouse)}>截单</span>
+							<span className="small text-muted" onClick={() => onOpenCutOffPage(warehouse)}>截单</span>&nbsp;
+							<span className="small text-muted" onClick={() => onOpenCutOffHistory(warehouse)}>……</span>
 						</div>
 						<List className="my-1" items={cutOffMains} none="无理货单"
 							item={{ render: this.renderCutOffMain, onClick: onCutOffMain }} />

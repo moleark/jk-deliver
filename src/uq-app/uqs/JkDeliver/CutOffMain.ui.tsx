@@ -30,17 +30,11 @@ const fields = {
 		"isKey": false,
 		"label": "Cutter"
 	} as FieldItemId,
-	staff: {
-		"name": "staff",
-		"type": "id",
-		"isKey": false,
-		"label": "Staff"
-	} as FieldItemId,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, fields.warehouse, fields.cutter, fields.staff, 
+	fields.no, fields.warehouse, fields.cutter,
 ];
 
 export const ui: UI = {
@@ -58,10 +52,10 @@ const resRaw: Res<any> = {
 const res: any = {};
 setRes(res, resRaw);
 
-export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
+export const t: TFunc = (str: string | JSX.Element): string | JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: CutOffMain):JSX.Element {
+export function render(item: CutOffMain): JSX.Element {
 	return <>{JSON.stringify(item)}</>;
 };

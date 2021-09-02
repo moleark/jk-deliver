@@ -1,7 +1,7 @@
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase, JkDeliver } from "uq-app";
 import { ReturnCustomerPendingDeliverRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
-import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
+import { ReturnGetExpressLogisticsListRet, ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
 import { VHome } from "./VHome";
@@ -12,6 +12,8 @@ import { VTallySheet } from "./VTallySheet";
 import { VPicking } from "./VPicking";
 import { VPickSheet } from "./VPickSheet";
 import { VReceiptList } from "../deliver/VReceiptList";
+import { VCutOffHistory } from "./VCutOffHistory";
+import { VCutOffSheetDetail } from "./VCutOffSheetDetail";
 
 export interface CustomerPendingDeliver extends ReturnCustomerPendingDeliverRet {
 	deliverQuantity: number;
@@ -22,6 +24,7 @@ export class WarehousePending {
 	cutOffMains: ReturnWarehouseCutOffMainRet[];
 	pickups: ReturnWarehousePickupsRet[];
 	deliverMains: ReturnWarehouseDeliverMainRet[];
+
 	constructor() {
 		makeObservable(this, {
 			cutOffMains: observable.shallow,
@@ -51,6 +54,7 @@ export class CHome extends CUqBase {
 	customer: number;
 	customerOrderDetails: CustomerPendingDeliver[];
 	warehousePending: WarehousePending[];
+	expressLogisticsList: ReturnGetExpressLogisticsListRet[];
 
 	constructor(cApp: CApp) {
 		super(cApp);
@@ -125,6 +129,43 @@ export class CHome extends CUqBase {
 		let { list } = ret;
 		let vPageParam = { warehouse: warehouse, taskList: list };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
+	}
+
+	onOpenCutOffHistory = async (warehouse: number) => {
+		let { JkDeliver } = this.uqs;
+		let ret = await JkDeliver.GetCutOffMainList.query({ warehouse });
+		let { list } = ret;
+		let vPageParam = { warehouse: warehouse, historyList: list };
+		this.openVPage(VCutOffHistory, vPageParam);
+	}
+
+	onOpenCutOffDetail = async (cutOffMain: number) => {
+
+		let { JkDeliver, JkWarehouse } = this.uqs;
+		let ret = await JkDeliver.GetCutOffMain.query({ cutOffMain });
+		let { main, detail } = ret;
+		let promises: PromiseLike<any>[] = [];
+		// let shouldExpressLogisticsArray: any[];
+		this.expressLogisticsList = await JkWarehouse.GetExpressLogisticsList.table('');
+
+		promises.push();
+		detail.forEach((element: any) => {
+			let jsonContect = JSON.parse(element.content);
+			/*shouldExpressLogisticsArray = jsonContect.shouldExpressLogistics.split(",");
+			shouldExpressLogisticsArray.forEach((logistics: any) => {
+				promises.push(this.getExpresslogisticsByNo(logistics).then((data: string) => {
+					if (element.shouldExpressLogistics === undefined) {
+						element.shouldExpressLogistics = '';
+					}
+					element.shouldExpressLogistics += data;
+				}));
+			});*/
+			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
+		});
+		await Promise.all(promises);
+		let cutOff = main[0];
+		let vPageParam = [cutOff, detail];
+		this.openVPage(VCutOffSheetDetail, vPageParam);
 	}
 
 	onCutOff = async (warehouse: number) => {
@@ -244,5 +285,16 @@ export class CHome extends CUqBase {
 	openDeliveryReceiptList = async (main: any, detail: any) => {
 		let vPageParam = [main, detail]
 		this.openVPage(VReceiptList, vPageParam);
+	}
+
+	/**
+	 * 获取产品扩展信息
+	 * @param product 
+	 * @returns 
+	 */
+	getProductExtention = async (product: number) => {
+		let { JkProduct } = this.uqs;
+		let extention = await JkProduct.ProductExtention.obj({ product: 56998 });
+		return extention?.content;
 	}
 }
