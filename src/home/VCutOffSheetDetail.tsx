@@ -1,4 +1,4 @@
-import { VPage, List, LMR } from 'tonva-react';
+import { VPage, List, LMR, FA, DropdownAction, DropdownActions } from 'tonva-react';
 import { CDeliver } from "../deliver/CDeliver";
 import { ReturnGetCutOffMainMain, ReturnGetCutOffMainDetail } from "uq-app/uqs/JkDeliver";
 import { CHome } from './CHome';
@@ -26,12 +26,36 @@ export class VCutOffSheetDetail extends VPage<CHome> {
     }
 
     header() {
-        let { id, no } = this.main;
+        let { no } = this.main;
         return '截单号：' + no
     }
 
     right() {
-        return <div></div>
+        let { id } = this.main;
+        let actions: DropdownAction[] = [
+            {
+                icon: 'print',
+                caption: '京东',
+                action: undefined
+            }, {
+                icon: 'print',
+                caption: '韵达',
+                action: undefined
+            }, {
+                icon: 'print',
+                caption: '宅急送',
+                action: undefined
+            }, {
+                icon: 'print',
+                caption: '顺丰',
+                action: undefined
+            }, {
+                icon: 'print',
+                caption: '回执单',
+                action: undefined
+            }
+        ];
+        return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="tasks" actions={actions} />;
     }
 
     // 修改当前选中行颜色
@@ -60,11 +84,10 @@ export class VCutOffSheetDetail extends VPage<CHome> {
         let { deliverMain, trayNumber, contact, customer, apointCarrier, carrier, waybillNumber, deliverTime, deliverDetail,
             item, product, tallyShould, content, productExt } = cutOffItem;
         let pack = PackX.getObj(item);
-        let right = <div></div>;
         let jsonContect = JSON.parse(content);
         let note = jsonContect.deliverNotes;
 
-        let expressLogistics = <select className="form-control col-6 px-0 mx-0" defaultValue={carrier ? apointCarrier : 0} onChange={o => { alert(o.target.value); cutOffItem.carrier = o.target.value; }}>
+        let expressLogistics = <select className="form-control col-8 px-0 mx-0" defaultValue={carrier ? apointCarrier : 0} onChange={o => { alert(o.target.value); cutOffItem.carrier = o.target.value; }}>
             {expressLogisticsList.map((el: any) => {
                 return <option value={el.id}>{el.name}</option>
             })}
@@ -77,73 +100,69 @@ export class VCutOffSheetDetail extends VPage<CHome> {
             hazard = jsonProductExt.Hazard;
             symbol = SymbolSrcs.map((o: any, ind: number) => {
                 if (hazard.indexOf(o.name) > -1) {
-                    return <img key={ind} className="w-3c mr-1" src={"/image/security/" + o.src} alt="" />;
+                    return <img key={ind} className="w-3c pr-1" src={"/image/security/" + o.src} alt="危险标识" />;
                 }
                 return '';
             });
         }
 
-        return <LMR key={deliverDetail} right={right} onClick={() => this.onClickCutOffItem(index)} >
-            <div className="py-1">
+        let left = <div className="px-1 py-1">{index + 1}</div>;
+        let right = <div className="m-auto">
+            <div className="py-1 float-right">{symbol}</div>
+            <div className="float-center">
+                <div><button className="btn btn-primary py-1 my-1" onClick={e => alert('打印')}>打印</button></div>
+                <div><button className="btn btn-primary py-1 my-1" onClick={e => alert('发运')}>发运</button></div>
+            </div>
+        </div>;
 
-                <div className="row col-12 py-1">
-                    <div className="col-6">
-                        <label className="text-muted">产品: </label>
-                        <span>{ProductX.tv(product)}</span>
-                    </div>
-                    <div className="col-6">
-                        <label className="text-muted">包装: </label>
-                        <span> {tvPackx(pack)}</span>
-                    </div>
+        return <LMR key={deliverDetail} left={left} right={right} onClick={() => this.onClickCutOffItem(index)}>
+
+            <div className="row col-12 py-1 pr-0">
+                <div className="col-5 pr-0">
+                    <label className="text-muted">编号： </label>
+                    <span>{ProductX.tv(product)}</span>
                 </div>
-                <div className="row col-12 py-1">
-                    <div className="col-6">
-                        <label className="text-muted">数量：</label>
-                        <span><b>{tallyShould}</b></span>
-                    </div>
-                    <div className="col-6">
-                        <label className="text-muted">危险标志：</label>
-                        <span> {symbol}</span>
-                    </div>
+                <div className="col-4 pr-0">
+                    <label className="text-muted">包装： </label>
+                    <span> {tvPackx(pack)}</span>
                 </div>
-                <div className="row col-12 py-1">
-                    <div className="col-6 form-inline">
-                        <label className="text-muted">发运方式：</label>
-                        {expressLogistics}
-                    </div>
-                    <div className="col-6">
-                        <label className="text-muted">保价：</label>
-                        <span> { }</span>
-                    </div>
+                <div className="col-3 pl-0 pr-0">
+                    <label className="text-muted">数量： </label>
+                    {tallyShould}
                 </div>
-                <div className="row col-12 py-1">
-                    <div className="col-6 form-inline">
-                        <label className="text-muted">快递单号：</label >
-                        <input type="text" className="form-control col-6 px-0 mx-0" onChange={o => cutOffItem.waybillNumber = o.target.value} defaultValue={waybillNumber} />
-                    </div>
-                    <div className="col-6">
-                        <label className="text-muted">发运时间：</label>
-                        <span >{deliverTime}</span>
-                    </div>
+            </div>
+            <div className="row col-12 py-1 pr-0">
+                <div className="col-9 form-inline pr-0">
+                    <label className="text-muted">承运商：</label>
+                    {expressLogistics}
                 </div>
-                <div className="row col-12 py-1">
-                    <div className="col-12">
-                        <label className="text-muted">备注：</label>
-                        <span >{note}</span>
-                    </div>
+                <div className="col-3 pl-0 pr-0">
+                    <label className="text-muted">保价：</label>
+                    <span> {'是'}</span>
+                </div>
+            </div>
+            <div className="row col-12 py-1 pr-0">
+                <div className="col-9 form-inline pr-0">
+                    <label className="text-muted">运单号：</label >
+                    <input type="text" className="form-control col-8 px-0 mx-0"
+                        onKeyUp={o => {
+                            if (o.key === 'Enter') {
+                                cutOffItem.waybillNumber = (o.target as HTMLInputElement).value;
+                                alert((o.target as HTMLInputElement).value)
+                            }
+                        }} defaultValue={waybillNumber} />
+                </div>
+                <div className="col-3 pl-0 pr-0 form-inline">
+                    <span className="text-muted small">{deliverTime} 2021/09/02 15:58:01</span>
+                </div>
+            </div>
+            <div className="row col-12 py-1 pr-0">
+                <div className="col-12 pr-0">
+                    <label className="text-muted">备注：</label>
+                    <span className="small">{note}</span>
                 </div>
             </div>
         </ LMR >;
-        /*
-         <div className="row col-12 py-1">
-                    <span className="col-9">单位：{ } </span>
-                    <span className="col-3">订货人：{Customer.tv(customer)}</span>
-                </div>
-                <div className="row col-12 py-1">
-                    <span className="col-12">地址：{Contact.tv(contact)} </span>
-                </div>
-                <span className="col-6"> 收货人：{Contact.tv(contact)}</span>
-        */
     }
 
     content() {

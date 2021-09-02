@@ -8,13 +8,13 @@ export class VCutOffSuccess extends VPage<CHome> {
     }
 
     private page = (cutOffMain: any) => {
-        //let {  } = this.controller;
 
+        let { onOpenCutOffDetail } = this.controller;
         return <Page header="截单成功" back="close">
             <div className="p-3 bg-white mb-3">
                 <div className="mb-3">截单成功！</div>
                 <p className="">
-                    截单号: <span onClick={() => undefined} className="h5 text-info"> {cutOffMain.no}</span><br /><br />
+                    截单号: <span onClick={() => onOpenCutOffDetail(cutOffMain.id)} className="h5 text-info"> {cutOffMain.no}</span><br /><br />
                     点击单号可跳转到详情界面统一打印单据。
                 </p>
             </div>
