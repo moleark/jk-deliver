@@ -39,25 +39,25 @@ export class VTallying extends VPage<CHome> {
         let { id, trayNumber, product, item, tallyShould, lot } = tallyItem;
         let pack = PackX.getObj(item);
 
-        let right = <div>
-            <div className="row px-1">
+        let left = <div className="m-auto px-2 py-1 bg"><strong>{trayNumber}</strong></div>;
+        /**
+         * <div className="row px-1">
                 <label className="text-muted">应理：</label ><span className="text-info">{tallyShould}</span>
             </div>
             <div className="row px-1 text-justify">
                 <label className="text-muted">实理：</label >
-                <input type="text" className="form-control col-5 px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
+                <input type="text" className="form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
             </div>
-            <div className="row px-1">
-                <label className="small text-muted">
-                    <input type="checkbox"
-                        defaultChecked={false}
-                        onChange={e => this.doneTallyItem(mainId, id, tallyShould)} />
-                    &nbsp;完成
-                </label>
-            </div>
-        </div>;
+         */
+        let right = <div className="m-auto pr-3">
+            <label className="small text-muted">
+                <input type="checkbox"
+                    defaultChecked={false}
+                    onChange={e => this.doneTallyItem(mainId, id, tallyItem.tallyShould)} />
+            </label>
+        </div>
 
-        return <LMR className="px-1 py-1" key={id} right={right} onClick={() => this.onClickTallyItem(index)}>
+        return <LMR className="row" key={id} left={left} right={right} onClick={() => this.onClickTallyItem(index)}>
             <div className="row col-12 py-1">
                 <span className="col-2 text-muted px-1">编号: </span>
                 <span className="col-5 pl-1">{ProductX.tv(product)} </span>
@@ -65,10 +65,14 @@ export class VTallying extends VPage<CHome> {
                 <span className="col-3 pl-1">{tvPackx(pack)}</span>
             </div>
             <div className="row col-12 py-1">
-                <span className="col-2 text-muted px-1">理货号: </span>
-                <span className="col-5 pl-1">{trayNumber}</span>
+                <span className="col-2 text-muted px-1">应理：</span >
+                <span className="col-5 pl-1 text-info">{tallyShould}</span>
                 <span className="col-2 text-muted px-1">Lot: </span>
                 <span className="col-3 pl-1">{lot}</span>
+            </div>
+            <div className="row col-12 py-1">
+                <span className="col-2 text-muted px-1">实理：</span >
+                <input type="text" className="col-4 form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
             </div>
         </LMR>;
 
@@ -88,7 +92,7 @@ export class VTallying extends VPage<CHome> {
             pickTotal += element.tallyShould;
         });
 
-        return <div id="tallyListDiv" className="p-1 bg-white">
+        return <div id="tallyListDiv" className="col-12 bg-white">
             <List items={this.detail} item={{ render: this.renderTallyItem }} none="无理货数据" />
             <div className="float-right py-3">
                 <span className="px-2 text-info small">理货总瓶数：<strong>{pickTotal}</strong></span>
@@ -97,7 +101,6 @@ export class VTallying extends VPage<CHome> {
     }
 
     private async doneTallyItem(cutOffMain: number, orderDetail: number, tallyQuantity: number) {
-
         alert("cutOffMain：" + cutOffMain + ",orderDetail：" + orderDetail + ",tallyQuantity：" + tallyQuantity);
     }
 }

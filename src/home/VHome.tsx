@@ -31,7 +31,7 @@ export class VHome extends VPage<CHome> {
 							item={{ render: this.renderPickup, onClick: onPickup }} />
 						<List className="my-1" items={deliverMains} none="无发货单"
 							item={{ render: this.renderDeliverMain, onClick: onDeliverMain }} />
-					</div >
+					</div>
 				});
 			}
 			return <div className="my-3">{content}</div>;

@@ -150,16 +150,6 @@ export class CHome extends CUqBase {
 
 		promises.push();
 		detail.forEach((element: any) => {
-			let jsonContect = JSON.parse(element.content);
-			/*shouldExpressLogisticsArray = jsonContect.shouldExpressLogistics.split(",");
-			shouldExpressLogisticsArray.forEach((logistics: any) => {
-				promises.push(this.getExpresslogisticsByNo(logistics).then((data: string) => {
-					if (element.shouldExpressLogistics === undefined) {
-						element.shouldExpressLogistics = '';
-					}
-					element.shouldExpressLogistics += data;
-				}));
-			});*/
 			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
 		});
 		await Promise.all(promises);
@@ -222,10 +212,17 @@ export class CHome extends CUqBase {
 		let { deliverMain } = row;
 		let ret = await JkDeliver.GetDeliver.query({ deliver: deliverMain });
 		let { main: mainArr, detail } = ret;
+		let promises: PromiseLike<any>[] = [];
 		if (mainArr.length === 0) {
 			alert(`id ${deliverMain} 没有取到发运单据`);
 			return;
 		}
+
+		detail.forEach((element: any) => {
+			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
+		});
+		await Promise.all(promises);
+
 		let main = mainArr[0];
 		let { staff } = main;
 		let vPageParam = [main, detail];
@@ -294,7 +291,7 @@ export class CHome extends CUqBase {
 	 */
 	getProductExtention = async (product: number) => {
 		let { JkProduct } = this.uqs;
-		let extention = await JkProduct.ProductExtention.obj({ product: 56998 });
+		let extention = await JkProduct.ProductExtention.obj({ product: product }); // 56998
 		return extention?.content;
 	}
 }

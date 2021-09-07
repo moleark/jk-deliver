@@ -3,18 +3,32 @@ import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliv
 import { CHome } from "./CHome";
 
 export class VDelivering extends VPage<CHome> {
-	private main: ReturnGetDeliverMain;
+	private main: any;
 	private detail: any[];
 
-	init(param: [ReturnGetDeliverMain, ReturnGetDeliverDetail[]]) {
+	init(param: [any, any[]]) {
 		let [main, detail] = param;
 		this.main = main;
 		this.detail = detail;
 	}
 
-	header() { return this.main.no + ' 发前确认' }
+	header() { return '发运单：' + this.main.no }
 	right() {
 		return <button className="btn btn-sm btn-primary mr-2" onClick={this.doneDeliver}>确认发货</button>;
+	}
+
+	// 修改当前选中行颜色
+	private onClickDeliverItem = (rowIndex: number) => {
+
+		let deliverListDiv = document.getElementById("deliverProductList").getElementsByTagName("ul")[0].getElementsByTagName("li");
+
+		for (let index = 0; index < deliverListDiv.length; index++) {
+			if (index == rowIndex) {
+				deliverListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFF99";
+			} else {
+				deliverListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFFFF";
+			}
+		}
 	}
 
 	private renderDeliverItem = (deliverItem: any, index: number) => {
@@ -26,11 +40,13 @@ export class VDelivering extends VPage<CHome> {
 		console.log(productExt);
 		let pack = PackX.getObj(item);
 
+		let storageCondition: string = '';
+		if (productExt) {
+			let jsonProductExt = JSON.parse(productExt);
+			storageCondition = jsonProductExt.SpecialRequirement;
+		}
 
-		// let productExt = await getProductExtention(product);
-		// console.log(productExt);
-		let storage = "";
-
+		let left = <div className="py-1 pr-2">{index + 1}</div>;
 		let right = <div>
 			<div className="row px-1">
 				<label className="text-muted">应发：</label ><span className="text-info">{deliverShould}</span>
@@ -41,17 +57,23 @@ export class VDelivering extends VPage<CHome> {
 			</div>
 		</div>;
 
-		return <LMR key={id} right={right}>
+		return <LMR key={id} left={left} onClick={() => this.onClickDeliverItem(index)}>
 			<div className="">
 				<div className="row col-12 py-1">
-					<span className="col-8 pl-1">{ProductX.tv(product)} </span>
-					<span className="col-4 pl-1">{tvPackx(pack)}</span>
+					<span className="col-2 text-muted px-1">编号: </span>
+					<span className="col-5 pl-1">{ProductX.tv(product)} </span>
+					<span className="col-2 text-muted px-1">包装: </span>
+					<span className="col-3 pl-1">{tvPackx(pack)}</span>
 				</div>
 				<div className="row col-12 py-1">
-					<span className="col-12 pl-1"> 名称？：{ProductX.tv(product)}</span>
+					<span className="col-2 text-muted px-1">储存条件: </span>
+					<span className="col-12 pl-1">{storageCondition}</span>
 				</div>
 				<div className="row col-12 py-1">
-					<span className="col-12 pl-1">{productExt}</span>
+					<span className="col-2 text-muted px-1">应发: </span>
+					<span className="col-5 text-info">{deliverShould}</span>
+					<span className="col-2 text-muted px-1">实发: </span>
+					<input type="text" className="form-control input-sm col-3" onChange={o => deliverItem.deliverShould = o.target.value} defaultValue={deliverShould} />
 				</div>
 			</div>
 		</LMR>;
@@ -66,11 +88,6 @@ export class VDelivering extends VPage<CHome> {
 			element.productExt = await getProductExtention(element.product);
 			console.log(element.productExt);
 		});
-
-		let { openDeliveryReceiptList } = this.controller;
-		let footer = <div className="fixed-bottom">
-			<button type="button" className="btn btn-primary w-100" onClick={() => openDeliveryReceiptList(this.main, this.detail)} >回执单</button>
-		</div>;
 
 		return <div className="p-1 bg-white" >
 			<div className="px-2 py-1">
@@ -87,13 +104,12 @@ export class VDelivering extends VPage<CHome> {
 				<div className="col-12 px-1 py-1">订单备注</div>
 			</div>
 			<hr />
-			<div>
+			<div id='deliverProductList'>
 				<List items={this.detail} item={{ render: this.renderDeliverItem }} none="无拣货数据" />
 			</div>
 			<div className="float-right py-2">
 				<span className="px-2 text-info small">应发总瓶数：<strong>{deliverTotal}</strong></span>
 			</div>
-			{ }
 		</div>;
 		// <div className="col-12 px-1 py-1">发运方式</div>
 	}

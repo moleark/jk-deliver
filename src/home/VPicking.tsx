@@ -22,13 +22,13 @@ export class VPicking extends VPage<CHome> {
 	// 修改当前选中行颜色
 	private onClickPickItem = (rowIndex: number) => {
 
-		let pickListLiDiv = document.getElementById("pickListDiv").getElementsByTagName("ul")[0].getElementsByTagName("li");
+		let pickListDiv = document.getElementById("pickListDiv").getElementsByTagName("ul")[0].getElementsByTagName("li");
 
-		for (let index = 0; index < pickListLiDiv.length; index++) {
+		for (let index = 0; index < pickListDiv.length; index++) {
 			if (index == rowIndex) {
-				pickListLiDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFF99";
+				pickListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFF99";
 			} else {
-				pickListLiDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFFFF";
+				pickListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFFFF";
 			}
 		}
 	}
@@ -44,26 +44,26 @@ export class VPicking extends VPage<CHome> {
 		let pack = PackX.getObj(item);	// JSON.stringify(pack)
 
 		// <input className="box" type="checkbox" defaultChecked={false}></input>&nbsp;
-		let right = <div>
-			<div className="row px-1">
+		/**
+		 * <div className="row px-1">
 				<label className="text-muted">应捡：</label ><span className="text-info">{shouldQuantity}</span>
 			</div>
 			<div className="row px-1 text-justify">
 				<label className="text-muted">实捡：</label >
 				<input type="text" className="form-control col-5 px-0 mx-0" onChange={o => pickItem.quantity = o.target.value} defaultValue={quantity} />
 			</div>
-			<div className="row px-1">
-				<label className="small text-muted">
-					<input type="checkbox"
-						defaultChecked={false}
-						onChange={e => this.donePickupItem(mainId, id, pickItem.quantity)} />
-					&nbsp;完成
-				</label>
-			</div>
+		 */
+		let left = <div className="py-1 pr-2">{index + 1}</div>;
+		let right = <div className="m-auto pr-2">
+			<label className="small text-muted">
+				<input type="checkbox"
+					defaultChecked={false}
+					onChange={e => this.donePickupItem(mainId, id, pickItem.quantity)} />
+			</label>
 		</div>;
 
 		// {JkDeliver.OrderDetail.render(id)}	ProductX.tv(product)	tv(product, v => v.origin)	JSON.stringify(pack)
-		return <LMR className="px-1 py-1" key={id} right={right} onClick={() => this.onClickPickItem(index)}>
+		return <LMR className="px-1 py-1" key={id} left={left} right={right} onClick={() => this.onClickPickItem(index)}>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">编号: </span>
 				<span className="col-5 pl-1">{ProductX.tv(product)} </span>
@@ -75,6 +75,12 @@ export class VPicking extends VPage<CHome> {
 				<span className="col-5 pl-1">{'xxxxxxxxxxx'}</span>
 				<span className="col-2 text-muted px-1">Lot: </span>
 				<span className="col-3 pl-1">{'lotxxxxx'}</span>
+			</div>
+			<div className="row col-12 py-1">
+				<span className="col-2 text-muted px-1">应拣: </span>
+				<span className="col-5 text-info">{shouldQuantity}</span>
+				<span className="col-2 text-muted px-1">实捡: </span>
+				<input type="text" className="form-control col-3 text-info" onChange={o => pickItem.quantity = o.target.value} defaultValue={quantity} />
 			</div>
 		</LMR>;
 	};

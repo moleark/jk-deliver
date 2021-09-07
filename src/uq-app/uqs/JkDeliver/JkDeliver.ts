@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Sep 02 2021 13:56:01 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Sep 03 2021 11:47:16 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -225,6 +225,7 @@ export interface ReturnGetCutOffMainDetail {
 	item: number;
 	product: number;
 	tallyShould: number;
+	price: number;
 	lotNumber: string;
 	apointCarrier: number;
 	content: string;
