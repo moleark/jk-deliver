@@ -1,4 +1,4 @@
-//=== UqApp builder created on Fri Sep 03 2021 11:47:16 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Wed Sep 08 2021 10:48:32 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -184,6 +184,7 @@ export interface ParamGetCutOffMainList {
 export interface ReturnGetCutOffMainListList {
 	id: number;
 	no: string;
+	cutter: number;
 }
 export interface ResultGetCutOffMainList {
 	list: ReturnGetCutOffMainListList[];
@@ -233,6 +234,30 @@ export interface ReturnGetCutOffMainDetail {
 export interface ResultGetCutOffMain {
 	main: ReturnGetCutOffMainMain[];
 	detail: ReturnGetCutOffMainDetail[];
+}
+
+export interface ParamGetCutOffType {
+	cutOffType: number;
+}
+export interface ReturnGetCutOffTypeRet {
+	cutOffType: number;
+	name: string;
+	customer: number;
+	outInBoundReason: number;
+	createTime: any;
+}
+export interface ResultGetCutOffType {
+	ret: ReturnGetCutOffTypeRet[];
+}
+
+export interface ParamGetCutOffTypeList {
+}
+export interface ReturnGetCutOffTypeListRet {
+	cutOffType: number;
+	name: string;
+}
+export interface ResultGetCutOffTypeList {
+	ret: ReturnGetCutOffTypeListRet[];
 }
 
 export interface OrderMain {
@@ -289,6 +314,13 @@ export interface CutOffMain {
 	cutter: number;
 }
 
+export interface CutOffType {
+	id?: number;
+	name: string;
+	customer: number;
+	outInBoundReason: number;
+}
+
 export interface DxOrderDetail {
 	id: number;
 	deliverShould?: number;
@@ -325,8 +357,9 @@ export interface DxDeliverMain {
 	$act?: number;
 }
 
-export interface DXDeliverDetail {
+export interface DxDeliverDetail {
 	id: number;
+	pickDone?: number;
 	deliverDone?: number;
 	$act?: number;
 }
@@ -375,8 +408,9 @@ export interface ActParamDxDeliverMain {
 	$act?: number;
 }
 
-export interface ActParamDXDeliverDetail {
+export interface ActParamDxDeliverDetail {
 	id: number|IDXValue;
+	pickDone?: number|IDXValue;
 	deliverDone?: number|IDXValue;
 	$act?: number;
 }
@@ -418,11 +452,12 @@ export interface ParamActs {
 	deliverDetail?: DeliverDetail[];
 	deliverMainEx?: DeliverMainEx[];
 	cutOffMain?: CutOffMain[];
+	cutOffType?: CutOffType[];
 	dxOrderDetail?: ActParamDxOrderDetail[];
 	dxReturnDetail?: ActParamDxReturnDetail[];
 	orderDetailX?: ActParamOrderDetailX[];
 	dxDeliverMain?: ActParamDxDeliverMain[];
-	dXDeliverDetail?: ActParamDXDeliverDetail[];
+	dxDeliverDetail?: ActParamDxDeliverDetail[];
 	dxCutOffMain?: ActParamDxCutOffMain[];
 	ixPendingDeliver?: IxPendingDeliver[];
 	ixUserWarehouse?: IxUserWarehouse[];
@@ -451,6 +486,8 @@ export interface UqExt extends Uq {
 	GetCutOffMainList: UqQuery<ParamGetCutOffMainList, ResultGetCutOffMainList>;
 	WarehouseCutOffMain: UqQuery<ParamWarehouseCutOffMain, ResultWarehouseCutOffMain>;
 	GetCutOffMain: UqQuery<ParamGetCutOffMain, ResultGetCutOffMain>;
+	GetCutOffType: UqQuery<ParamGetCutOffType, ResultGetCutOffType>;
+	GetCutOffTypeList: UqQuery<ParamGetCutOffTypeList, ResultGetCutOffTypeList>;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
 	Warehouse: UqID<any>;
@@ -458,11 +495,12 @@ export interface UqExt extends Uq {
 	DeliverDetail: UqID<any>;
 	DeliverMainEx: UqID<any>;
 	CutOffMain: UqID<any>;
+	CutOffType: UqID<any>;
 	DxOrderDetail: UqIDX<any>;
 	DxReturnDetail: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
 	DxDeliverMain: UqIDX<any>;
-	DXDeliverDetail: UqIDX<any>;
+	DxDeliverDetail: UqIDX<any>;
 	DxCutOffMain: UqIDX<any>;
 	IxPendingDeliver: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;

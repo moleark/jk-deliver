@@ -73,7 +73,6 @@ export class VCutOffSheetDetail extends VPage<CHome> {
                 });
             }
         }
-
         let { openDeliveryReceiptList } = this.controller;
         await openDeliveryReceiptList(this.main, trayNumberListInfo);
     }

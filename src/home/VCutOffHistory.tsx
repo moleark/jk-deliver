@@ -15,10 +15,14 @@ export class VCutOffHistory extends VPage<CHome> {
 
     private renderCutOffHistory = (cutOffHistory: any) => {
 
-        let { id, no } = cutOffHistory;
+        let { JkWarehouse } = this.controller.uqs;
+        let { WebUser } = JkWarehouse;
+        let { id, no, cutter } = cutOffHistory;
         let { onOpenCutOffDetail } = this.controller;
 
-        return <LMR className="px-1 py-1" onClick={() => onOpenCutOffDetail(id)}>
+        let right = <div className="text-muted">{cutter}</div>
+
+        return <LMR className="px-1 py-1" right={right} onClick={() => onOpenCutOffDetail(id)}>
             <div className="row col-12 py-1">
                 <span className="col-12 pl-1">{no}</span>
             </div>
