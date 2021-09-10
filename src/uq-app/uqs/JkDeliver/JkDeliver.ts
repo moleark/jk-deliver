@@ -1,4 +1,4 @@
-//=== UqApp builder created on Wed Sep 08 2021 10:48:32 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Sep 10 2021 18:58:15 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -54,7 +54,7 @@ export interface ResultDonePickup {
 }
 
 export interface ParamCutOff {
-	currentWarehouse: number;
+	cutWarehouse: number;
 }
 export interface ReturnCutOffMain {
 	id: number;
@@ -228,7 +228,6 @@ export interface ReturnGetCutOffMainDetail {
 	tallyShould: number;
 	price: number;
 	lotNumber: string;
-	apointCarrier: number;
 	content: string;
 }
 export interface ResultGetCutOffMain {
@@ -240,10 +239,10 @@ export interface ParamGetCutOffType {
 	cutOffType: number;
 }
 export interface ReturnGetCutOffTypeRet {
-	cutOffType: number;
-	name: string;
+	id: number;
+	no: string;
 	customer: number;
-	outInBoundReason: number;
+	tradeType: string;
 	createTime: any;
 }
 export interface ResultGetCutOffType {
@@ -252,12 +251,14 @@ export interface ResultGetCutOffType {
 
 export interface ParamGetCutOffTypeList {
 }
-export interface ReturnGetCutOffTypeListRet {
+export interface ReturnGetCutOffTypeListList {
 	cutOffType: number;
-	name: string;
+	no: string;
+	customer: number;
+	tradetype: string;
 }
 export interface ResultGetCutOffTypeList {
-	ret: ReturnGetCutOffTypeListRet[];
+	list: ReturnGetCutOffTypeListList[];
 }
 
 export interface OrderMain {
@@ -277,7 +278,6 @@ export interface OrderDetail {
 	price: number;
 	warehouse: number;
 	lotNumber: string;
-	carrier: number;
 }
 
 export interface Warehouse {
@@ -312,13 +312,15 @@ export interface CutOffMain {
 	no?: string;
 	warehouse: number;
 	cutter: number;
+	$create?: any;
 }
 
 export interface CutOffType {
 	id?: number;
-	name: string;
+	no?: string;
 	customer: number;
-	outInBoundReason: number;
+	tradeType: string;
+	$create?: any;
 }
 
 export interface DxOrderDetail {
@@ -359,7 +361,6 @@ export interface DxDeliverMain {
 
 export interface DxDeliverDetail {
 	id: number;
-	pickDone?: number;
 	deliverDone?: number;
 	$act?: number;
 }
@@ -410,7 +411,6 @@ export interface ActParamDxDeliverMain {
 
 export interface ActParamDxDeliverDetail {
 	id: number|IDXValue;
-	pickDone?: number|IDXValue;
 	deliverDone?: number|IDXValue;
 	$act?: number;
 }

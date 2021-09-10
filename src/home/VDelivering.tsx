@@ -66,7 +66,7 @@ export class VDelivering extends VPage<CHome> {
 					<span className="col-3 pl-1">{tvPackx(pack)}</span>
 				</div>
 				<div className="row col-12 py-1">
-					<span className="col-2 text-muted px-1">储存条件: </span>
+					<span className="col-2 text-muted px-1">储存: </span>
 					<span className="col-12 pl-1">{storageCondition}</span>
 				</div>
 				<div className="row col-12 py-1">
@@ -105,7 +105,7 @@ export class VDelivering extends VPage<CHome> {
 			</div>
 			<hr />
 			<div id='deliverProductList'>
-				<List items={this.detail} item={{ render: this.renderDeliverItem }} none="无拣货数据" />
+				<List items={this.detail} item={{ render: this.renderDeliverItem }} none="发货数据" />
 			</div>
 			<div className="float-right py-2">
 				<span className="px-2 text-info small">应发总瓶数：<strong>{deliverTotal}</strong></span>
@@ -119,6 +119,7 @@ export class VDelivering extends VPage<CHome> {
 		let { id } = this.main;
 		this.detail.forEach(v => v.deliverDone = v.deliverShould);
 		console.log(this.detail);
+		alert("deliveryConfirm");
 		//await this.controller.doneDeliver(id, this.detail);
 		//this.closePage();
 	}

@@ -2,20 +2,26 @@ import { Prop, PropGrid, VPage, IconText } from "tonva-react";
 import { CFind } from "./CFind";
 
 export class VFind extends VPage<CFind> {
-	header() { return '发现'; }
-	content() {
-		let arr:[string, ()=>void][] = [
-			['库存查询', null],
-			['发货查询', null],
-			['出库单', null],
-			['入库单', null],
-		];
+
+    header() { return '发现'; }
+
+    content() {
+        let { onOpenCutOffTypeSetting } = this.controller;
+
+        let arr: [string, () => void][] = [
+            //['库存查询', null],
+            //['发货查询', null],
+            //['出库单', null],
+            //['入库单', null],
+            ['截单类型设置', onOpenCutOffTypeSetting]
+        ];
+
         let rows: Prop[] = arr.map(v => ({
-			type: 'component',
-			component: <IconText iconClass="text-info mr-2" icon="info-circle" text={v[0]} />,
-			onClick: v[1]
-		}));
-		/*
+            type: 'component',
+            component: <IconText iconClass="text-info mr-2" icon="info-circle" text={v[0]} />,
+            onClick: v[1]
+        }));
+        /*
         rows = [
             {
                 type: 'component',
@@ -50,14 +56,14 @@ export class VFind extends VPage<CFind> {
                 onClick: null
             }
         ]
-		*/
+        */
 
         return <PropGrid className="px-2" rows={rows} values={{}} />;
-		/*
-		return <div>
-			<div>查询1</div>
-			<div>查询2</div>
-		</div>;
-		*/
-	}
+        /*
+        return <div>
+            <div>查询1</div>
+            <div>查询2</div>
+        </div>;
+        */
+    }
 }

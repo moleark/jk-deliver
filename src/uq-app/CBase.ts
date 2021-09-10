@@ -1,4 +1,4 @@
-//=== UqApp builder created on Wed Sep 08 2021 10:48:30 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Sep 10 2021 18:58:13 GMT+0800 (中国标准时间) ===//
 import { CSub, CBase, CAppBase, IConstructor } from 'tonva-react';
 import { UQs } from './uqs';
 import { CApp } from './CApp';

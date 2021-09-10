@@ -1,20 +1,42 @@
-import { tv, Page, VPage, LMR, List } from "tonva-react";
+import { tv, Page, VPage, LMR, List, DropdownAction, DropdownActions } from "tonva-react";
 import { CHome } from "./CHome";
 
 export class VReadyCutOffSheet extends VPage<CHome> {
 
     private readyCutOffList: any[];
     private warehouse: number;
+    private cutOffTypeList: any[];
     init(param: any) {
-        let { warehouse, taskList } = param;
+        let { warehouse, taskList, cutOffTypeList } = param;
         this.warehouse = warehouse;
         this.readyCutOffList = taskList;
+        this.cutOffTypeList = cutOffTypeList;
     }
 
     header() { return '待截单列表' }
-    right() {
+
+    /**
+     * 截单
+     * @param warehouse 库房
+     * @param customer 客户id
+     * @param tradeType 贸易类型（xx2,xx3,xx4,xx5）
+     */
+    private onCutOff = async (warehouse: number, customer: number, tradeType: any) => {
         let { onCutOff } = this.controller;
-        return <button className="btn btn-sm btn-primary mr-2" onClick={() => onCutOff(this.warehouse)}> 截单</button>;
+        alert('warehouse:' + warehouse + ',customer:' + customer + ',tradeType:' + tradeType);
+        //await onCutOff(warehouse);
+    }
+
+    right() {
+        let actions: DropdownAction[] = [];
+        if (this.cutOffTypeList.length) {
+            let dropdownAction: any[] = this.cutOffTypeList.map((v: any, index) => {
+                return { icon: 'cut', caption: v.name, action: () => this.onCutOff(this.warehouse, v.customer, v.tradetype) };
+            });
+            actions = dropdownAction;
+        }
+        return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="navicon" actions={actions} />;
+        // return <button className="btn btn-sm btn-primary mr-2" onClick={() => onCutOff(this.warehouse)}> 截单</button>;
     }
 
     private renderReadyCutOffItem = (cutOffItem: any) => {

@@ -128,17 +128,19 @@ export class VCutOffSheetDetail extends VPage<CHome> {
         let { Customer, Contact } = JkCustomer;
         let { ExpressLogistics } = JkWarehouse;
 
-        let { deliverMain, trayNumber, contact, customer, apointCarrier, carrier, waybillNumber, deliverTime, deliverDetail,
+        let { deliverMain, trayNumber, contact, customer, carrier, waybillNumber, deliverTime, deliverDetail,
             item, product, tallyShould, content, productExt } = cutOffItem;
         let pack = PackX.getObj(item);
 
         let note: string = '';
+        let apointCarrier: string = '';
         if (content) {
             let jsonContect = JSON.parse(content);
             note = jsonContect.deliverNotes;
+            apointCarrier = jsonContect.shouldExpressLogistics[0];
         }
 
-        let expressLogistics = <select className="form-control col-8 px-0 mx-0" defaultValue={carrier == undefined ? apointCarrier : 0} onChange={o => { alert(o.target.value); cutOffItem.carrier = o.target.value; }}>
+        let expressLogistics = <select className="form-control col-8 px-0 mx-0" defaultValue={carrier == undefined ? apointCarrier : carrier} onChange={o => { alert(o.target.value); cutOffItem.carrier = o.target.value; }}>
             {expressLogisticsList.map((el: any) => {
                 return <option value={el.id}>{el.name}</option>
             })}

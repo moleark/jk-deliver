@@ -125,9 +125,10 @@ export class CHome extends CUqBase {
 
 	onOpenCutOffPage = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let ret = await JkDeliver.GetReadyCutOffList.query({ warehouse });
-		let { list } = ret;
-		let vPageParam = { warehouse: warehouse, taskList: list };
+		let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse });
+		// let { list } = readyCutOffRet;
+		let cutOffTypeRet = await JkDeliver.GetCutOffTypeList.query({});
+		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet.list };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
 	}
 
@@ -160,7 +161,7 @@ export class CHome extends CUqBase {
 
 	onCutOff = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let ret = await JkDeliver.CutOff.submit({ currentWarehouse: warehouse });
+		let ret = await JkDeliver.CutOff.submit({ cutWarehouse: warehouse });
 		let { id, no } = ret;
 		if (id === undefined) {
 			alert(`当前截单失败！`);
