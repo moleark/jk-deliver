@@ -6,7 +6,7 @@ import { CFind } from "./CFind";
 
 const schema: Schema = [
     { name: 'id', type: 'number', required: false },
-    { name: 'name', type: 'string', required: true },
+    { name: 'no', type: 'string', required: true },
     { name: 'customer', type: 'number', required: false },
     { name: 'tradeType', type: 'number', required: false }
 ];
@@ -37,7 +37,7 @@ export class VCutOffTypeEdit extends VPage<CFind> {
     private uiSchema: UiSchema = {
         items: {
             id: { widget: 'text', label: '截单类型Id', visible: false } as UiInputItem,
-            name: { widget: 'text', label: '截单类型名称', placeholder: '请输入截单类型名称' } as UiInputItem,
+            no: { widget: 'text', label: '截单类型名称', placeholder: '请输入截单类型名称' } as UiInputItem,
             customer: { widget: 'text', label: '客户id', placeholder: '请输入客户id' } as UiInputItem,
             tradeType: { widget: 'select', label: '出库类型', list: this.tradeTypeList } as UiSelect,
             submit: { widget: 'button', label: '新增', className: 'btn btn-primary w-8c' }

@@ -35,13 +35,13 @@ export class VCutOffTypeSetting extends VPage<CFind> {
     private renderType = (item: any) => {
 
         //let { deleteCutOfftype } = this.controller;
-        let { cutOffType, name } = item;
+        let { cutOffType, no } = item;
         let right = <div className="p-1 cursor-pointer text-info" onClick={() => this.editCutOffType(cutOffType)}>
             <FA name="edit" className="align-self-center" />
         </div>
         return <div className="p-2 d-block">
             <LMR right={right} >
-                {name}
+                {no}
             </LMR>
         </div >
     }

@@ -1,7 +1,7 @@
-import { tv, Page, VPage, LMR, List } from "tonva-react";
-import { CHome } from "../home";
+import { VPage, LMR, List } from "tonva-react";
+import { CDeliver } from "./CDeliver";
 
-export class VCutOffHistory extends VPage<CHome> {
+export class VCutOffHistory extends VPage<CDeliver> {
 
     private cutOffHistoryList: any[];
     private warehouse: number;
@@ -16,7 +16,7 @@ export class VCutOffHistory extends VPage<CHome> {
     private renderCutOffHistory = (cutOffHistory: any) => {
 
         let { JkWarehouse } = this.controller.uqs;
-        let { WebUser } = JkWarehouse;
+        // let { WebUser } = JkWarehouse;
         let { id, no, cutter } = cutOffHistory;
         let { onOpenCutOffDetail } = this.controller;
 

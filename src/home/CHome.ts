@@ -6,14 +6,11 @@ import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
 import { VHome } from "./VHome";
 import { VReadyCutOffSheet } from "./VReadyCutOff";
-import { VCutOffSuccess } from "./VCutOffSuccess";
+import { VCutOffSuccess } from "../deliver/VCutOffSuccess";
 import { VTallying } from "./VTallying";
 import { VTallySheet } from "./VTallySheet";
 import { VPicking } from "./VPicking";
 import { VPickSheet } from "./VPickSheet";
-import { VReceiptList } from "../deliver/VReceiptList";
-import { VCutOffHistory } from "./VCutOffHistory";
-import { VCutOffSheetDetail } from "./VCutOffSheetDetail";
 
 export interface CustomerPendingDeliver extends ReturnCustomerPendingDeliverRet {
 	deliverQuantity: number;
@@ -137,26 +134,8 @@ export class CHome extends CUqBase {
 		let ret = await JkDeliver.GetCutOffMainList.query({ warehouse });
 		let { list } = ret;
 		let vPageParam = { warehouse: warehouse, historyList: list };
-		this.openVPage(VCutOffHistory, vPageParam);
-	}
-
-	onOpenCutOffDetail = async (cutOffMain: number) => {
-
-		let { JkDeliver, JkWarehouse } = this.uqs;
-		let ret = await JkDeliver.GetCutOffMain.query({ cutOffMain });
-		let { main, detail } = ret;
-		let promises: PromiseLike<any>[] = [];
-		// let shouldExpressLogisticsArray: any[];
-		this.expressLogisticsList = await JkWarehouse.GetExpressLogisticsList.table('');
-
-		promises.push();
-		detail.forEach((element: any) => {
-			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
-		});
-		await Promise.all(promises);
-		let cutOff = main[0];
-		let vPageParam = [cutOff, detail];
-		this.openVPage(VCutOffSheetDetail, vPageParam);
+		this.cApp.cDeliver.openCutOffHistory(vPageParam);
+		// this.openVPage(VCutOffHistory, vPageParam);
 	}
 
 	onCutOff = async (warehouse: number) => {
@@ -280,11 +259,6 @@ export class CHome extends CUqBase {
 		await this.load();
 	}
 	*/
-	openDeliveryReceiptList = async (main: any, detail: any) => {
-		let vPageParam = [main, detail]
-		this.openVPage(VReceiptList, vPageParam);
-	}
-
 	/**
 	 * 获取产品扩展信息
 	 * @param product 

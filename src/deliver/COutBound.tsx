@@ -1,7 +1,6 @@
 import { observable } from 'mobx';
 import { isUndefined } from 'lodash';
 import { CUqBase } from 'uq-app';
-//import { COutInBound } from '../COutInBound';
 import { VOutBound } from './VOutBound';
 import { VReadyOutBoundCut } from './VReadyOutBoundCut';
 import { VCutOffSuccess } from './VCutOffSuccess';
@@ -249,7 +248,7 @@ export class COutBound extends CUqBase {
     getProductExtention = (productId: number): Promise<any> => {
         //let result: any = this.uqs.product.ProductExtention.obj({ product: productId });
         //return result;
-		return;
+        return;
     }
 
 }
