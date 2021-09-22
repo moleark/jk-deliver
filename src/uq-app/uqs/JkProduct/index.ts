@@ -1,4 +1,4 @@
-import { UqExt as Uq } from './JkProduct';
+import { UqExt as Uq, assign } from './JkProduct';
 import * as Chemical from './Chemical.ui';
 import * as SalesRegion from './SalesRegion.ui';
 import * as Currency from './Currency.ui';
@@ -10,18 +10,18 @@ import * as ProductX from './ProductX.ui';
 import * as ProductCategory from './ProductCategory.ui';
 import * as Lot from './Lot.ui';
 import * as PackSalesLevel from './PackSalesLevel.ui';
-
+	
 export function setUI(uq: Uq) {
-	Object.assign(uq.Chemical, Chemical);
-	Object.assign(uq.SalesRegion, SalesRegion);
-	Object.assign(uq.Currency, Currency);
-	Object.assign(uq.PackType, PackType);
-	Object.assign(uq.Language, Language);
-	Object.assign(uq.Brand, Brand);
-	Object.assign(uq.Stuff, Stuff);
-	Object.assign(uq.ProductX, ProductX);
-	Object.assign(uq.ProductCategory, ProductCategory);
-	Object.assign(uq.Lot, Lot);
-	Object.assign(uq.PackSalesLevel, PackSalesLevel);
+	assign(uq, 'Chemical', Chemical);
+	assign(uq, 'SalesRegion', SalesRegion);
+	assign(uq, 'Currency', Currency);
+	assign(uq, 'PackType', PackType);
+	assign(uq, 'Language', Language);
+	assign(uq, 'Brand', Brand);
+	assign(uq, 'Stuff', Stuff);
+	assign(uq, 'ProductX', ProductX);
+	assign(uq, 'ProductCategory', ProductCategory);
+	assign(uq, 'Lot', Lot);
+	assign(uq, 'PackSalesLevel', PackSalesLevel);
 }
 export * from './JkProduct';

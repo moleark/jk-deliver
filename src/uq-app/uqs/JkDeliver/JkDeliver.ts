@@ -1,6 +1,6 @@
-//=== UqApp builder created on Fri Sep 10 2021 18:58:15 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Sat Sep 18 2021 13:17:08 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
+import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqMap, UqID, UqIDX, UqIX } from "tonva-react";
 
 
 //===============================
@@ -29,6 +29,102 @@ export interface Tuid$sheet {
 	discription: string;
 	data: string;
 	processing: number;
+}
+
+export interface TuidCarrier {
+	id?: number;
+	name: string;
+	no: string;
+	isValid: number;
+}
+
+export interface TuidCustomer {
+	id?: number;
+	name: string;
+}
+
+export interface TuidAddress {
+	id?: number;
+	country: number;
+	province: number;
+	city: number;
+	county: number;
+	description: string;
+}
+
+export interface TuidContact {
+	id?: number;
+	name: string;
+	organizationName: string;
+	mobile: string;
+	telephone: string;
+	email: string;
+	address: number;
+	addressString: string;
+}
+
+export interface TuidCity {
+	id?: number;
+	province: number;
+	englishName: string;
+	chineseName: string;
+	no: string;
+}
+
+export interface TuidCounty {
+	id?: number;
+	city: number;
+	englishName: string;
+	chineseName: string;
+	no: string;
+}
+
+export interface TuidCountry {
+	id?: number;
+	code: string;
+	englishName: string;
+	chineseName: string;
+	no: string;
+}
+
+export interface TuidBrand {
+	id?: number;
+	name: string;
+	no: string;
+}
+
+export interface TuidProvince {
+	id?: number;
+	country: number;
+	englishName: string;
+	chineseName: string;
+	no: string;
+}
+
+export interface TuidOrganization {
+	id?: number;
+	name: string;
+}
+
+export interface TuidProductX {
+	id?: number;
+	brand: number;
+	origin: string;
+	description: string;
+	descriptionC: string;
+}
+
+export interface ParamDoneDeliver {
+	customer: number;
+	contact: number;
+	warehouse: number;
+	detail: {
+		orderDetail: number;
+		quantity: number;
+	}[];
+
+}
+export interface ResultDoneDeliver {
 }
 
 export interface ParamAutoWarehouseDeliver {
@@ -125,7 +221,7 @@ export interface ReturnWarehouseDeliverMainRet {
 	warehouse: number;
 	deliverMain: number;
 	no: string;
-	customer: number;
+	customerAccount: number;
 	create: any;
 	rows: number;
 	pickRows: number;
@@ -141,19 +237,37 @@ export interface ParamGetDeliver {
 export interface ReturnGetDeliverMain {
 	id: number;
 	no: string;
-	customer: number;
+	customerAccount: number;
+	organizationname: string;
 	contact: number;
 	warehouse: number;
 	staff: number;
 	rows: number;
 	pickRows: number;
+	contactName: string;
+	contactOrganization: string;
+	mobile: string;
+	telephone: string;
+	email: string;
+	addressstring: string;
+	province: string;
+	city: string;
+	county: string;
+	carrier: number;
+	waybillNumber: string;
 	deliverTime: any;
 }
 export interface ReturnGetDeliverDetail {
 	id: number;
 	delivermain: number;
 	item: number;
+	radiox: number;
+	radioy: number;
+	unit: string;
 	product: number;
+	origin: string;
+	descriptionc: string;
+	description: string;
 	deliverShould: number;
 	pickDone: number;
 	deliverDone: number;
@@ -172,7 +286,7 @@ export interface ReturnGetReadyCutOffListList {
 	product: number;
 	item: number;
 	shouldQuantity: number;
-	customer: number;
+	customerAccount: number;
 }
 export interface ResultGetReadyCutOffList {
 	list: ReturnGetReadyCutOffListList[];
@@ -218,7 +332,7 @@ export interface ReturnGetCutOffMainDetail {
 	delivermain: number;
 	trayNumber: number;
 	contact: number;
-	customer: number;
+	customerAccount: number;
 	carrier: number;
 	waybillNumber: string;
 	deliverTime: any;
@@ -235,36 +349,23 @@ export interface ResultGetCutOffMain {
 	detail: ReturnGetCutOffMainDetail[];
 }
 
-export interface ParamGetCutOffType {
-	cutOffType: number;
+export interface ParamGetOrderDetailTransportation {
+	orderDetail: number;
 }
-export interface ReturnGetCutOffTypeRet {
-	id: number;
-	no: string;
-	customer: number;
-	tradeType: string;
-	createTime: any;
+export interface ReturnGetOrderDetailTransportationRet {
+	orderDetail: number;
+	carrier: number;
+	waybillNumber: string;
+	deliverTime: any;
 }
-export interface ResultGetCutOffType {
-	ret: ReturnGetCutOffTypeRet[];
-}
-
-export interface ParamGetCutOffTypeList {
-}
-export interface ReturnGetCutOffTypeListList {
-	cutOffType: number;
-	no: string;
-	customer: number;
-	tradetype: string;
-}
-export interface ResultGetCutOffTypeList {
-	list: ReturnGetCutOffTypeListList[];
+export interface ResultGetOrderDetailTransportation {
+	ret: ReturnGetOrderDetailTransportationRet[];
 }
 
 export interface OrderMain {
 	id?: number;
 	no?: string;
-	customer: number;
+	customerAccount: number;
 	contact: number;
 }
 
@@ -288,16 +389,19 @@ export interface Warehouse {
 export interface DeliverMain {
 	id?: number;
 	no?: string;
-	customer: number;
+	customerAccount: number;
 	contact: number;
 	warehouse: number;
 	cutOffMain: number;
 	trayNumber: number;
+	$create?: any;
 }
 
 export interface DeliverDetail {
 	id?: number;
 	main?: number;
+	orderDetail: number;
+	quantity: number;
 }
 
 export interface DeliverMainEx {
@@ -317,10 +421,15 @@ export interface CutOffMain {
 
 export interface CutOffType {
 	id?: number;
-	no?: string;
-	customer: number;
-	tradeType: string;
+	name: string;
+	description: string;
 	$create?: any;
+}
+
+export interface DeliverType {
+	id?: number;
+	name: string;
+	description: string;
 }
 
 export interface DxOrderDetail {
@@ -444,6 +553,12 @@ export interface IxWarehouseCutOffMain {
 	xi: number;
 }
 
+export interface IxCutoffTypeDefinition {
+	ixx: number;
+	ix: number;
+	xi: number;
+}
+
 export interface ParamActs {
 	orderMain?: OrderMain[];
 	orderDetail?: OrderDetail[];
@@ -453,6 +568,7 @@ export interface ParamActs {
 	deliverMainEx?: DeliverMainEx[];
 	cutOffMain?: CutOffMain[];
 	cutOffType?: CutOffType[];
+	deliverType?: DeliverType[];
 	dxOrderDetail?: ActParamDxOrderDetail[];
 	dxReturnDetail?: ActParamDxReturnDetail[];
 	orderDetailX?: ActParamOrderDetailX[];
@@ -463,6 +579,7 @@ export interface ParamActs {
 	ixUserWarehouse?: IxUserWarehouse[];
 	ixWarehouseDeliverMain?: IxWarehouseDeliverMain[];
 	ixWarehouseCutOffMain?: IxWarehouseCutOffMain[];
+	ixCutoffTypeDefinition?: IxCutoffTypeDefinition[];
 }
 
 
@@ -471,6 +588,18 @@ export interface UqExt extends Uq {
 
 	$user: UqTuid<Tuid$user>;
 	$sheet: UqTuid<Tuid$sheet>;
+	Carrier: UqTuid<TuidCarrier>;
+	Customer: UqTuid<TuidCustomer>;
+	Address: UqTuid<TuidAddress>;
+	Contact: UqTuid<TuidContact>;
+	City: UqTuid<TuidCity>;
+	County: UqTuid<TuidCounty>;
+	Country: UqTuid<TuidCountry>;
+	Brand: UqTuid<TuidBrand>;
+	Province: UqTuid<TuidProvince>;
+	Organization: UqTuid<TuidOrganization>;
+	ProductX: UqTuid<TuidProductX>;
+	DoneDeliver: UqAction<ParamDoneDeliver, ResultDoneDeliver>;
 	AutoWarehouseDeliver: UqAction<ParamAutoWarehouseDeliver, ResultAutoWarehouseDeliver>;
 	Picking: UqAction<ParamPicking, ResultPicking>;
 	DonePickup: UqAction<ParamDonePickup, ResultDonePickup>;
@@ -486,8 +615,8 @@ export interface UqExt extends Uq {
 	GetCutOffMainList: UqQuery<ParamGetCutOffMainList, ResultGetCutOffMainList>;
 	WarehouseCutOffMain: UqQuery<ParamWarehouseCutOffMain, ResultWarehouseCutOffMain>;
 	GetCutOffMain: UqQuery<ParamGetCutOffMain, ResultGetCutOffMain>;
-	GetCutOffType: UqQuery<ParamGetCutOffType, ResultGetCutOffType>;
-	GetCutOffTypeList: UqQuery<ParamGetCutOffTypeList, ResultGetCutOffTypeList>;
+	GetOrderDetailTransportation: UqQuery<ParamGetOrderDetailTransportation, ResultGetOrderDetailTransportation>;
+	OrganizationCustomer: UqMap;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
 	Warehouse: UqID<any>;
@@ -496,6 +625,7 @@ export interface UqExt extends Uq {
 	DeliverMainEx: UqID<any>;
 	CutOffMain: UqID<any>;
 	CutOffType: UqID<any>;
+	DeliverType: UqID<any>;
 	DxOrderDetail: UqIDX<any>;
 	DxReturnDetail: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
@@ -506,4 +636,9 @@ export interface UqExt extends Uq {
 	IxUserWarehouse: UqIX<any>;
 	IxWarehouseDeliverMain: UqIX<any>;
 	IxWarehouseCutOffMain: UqIX<any>;
+	IxCutoffTypeDefinition: UqIX<any>;
+}
+
+export function assign(uq: any, to:string, from:any): void {
+	Object.assign((uq as any)[to], from);
 }

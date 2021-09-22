@@ -1,4 +1,4 @@
-//=== UqApp builder created on Fri Sep 10 2021 18:58:15 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Sat Sep 18 2021 13:17:08 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -954,4 +954,8 @@ export interface UqExt extends Uq {
 	ItemStore: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;
 	IxPendingPickup: UqIX<any>;
+}
+
+export function assign(uq: any, to:string, from:any): void {
+	Object.assign((uq as any)[to], from);
 }
