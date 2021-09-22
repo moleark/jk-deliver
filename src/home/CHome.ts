@@ -124,7 +124,7 @@ export class CHome extends CUqBase {
 		let { JkDeliver } = this.uqs;
 		let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse });
 		// let { list } = readyCutOffRet;
-		let cutOffTypeRet = await JkDeliver.GetCutOffTypeList.query({});
+		let cutOffTypeRet = { list: {} }; // await JkDeliver.GetCutOffTypeList.query({});
 		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet.list };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
 	}

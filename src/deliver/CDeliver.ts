@@ -78,6 +78,8 @@ export class CDeliver extends CUqBase {
 		promises.push();
 		detail.forEach((element: any) => {
 			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
+			promises.push(this.getCustomerOrganization(element.customerAccount).then(data => element.organization = data));
+
 		});
 		await Promise.all(promises);
 		let cutOff = main[0];
@@ -95,5 +97,11 @@ export class CDeliver extends CUqBase {
 		let extention = await JkProduct.ProductExtention.obj({ product: product }); // 56998
 		return extention?.content;
 	};
+
+	getCustomerOrganization = async (customer: number) => {
+		let { JkCustomer } = this.uqs;
+		let organization = await JkCustomer.GetCustomerOrganization.obj({ customerId: customer });
+		return organization?.organization;
+	}
 
 }

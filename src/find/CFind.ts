@@ -20,7 +20,7 @@ export class CFind extends CUqBase {
 	onOpenCutOffTypeSetting = async () => {
 
 		let { JkDeliver } = this.uqs;
-		let ret: any = await JkDeliver.GetCutOffTypeList.query({});
+		let ret: any = { list: {} }; //await JkDeliver.GetCutOffTypeList.query({});
 		let { list } = ret;
 		this.openVPage(VCutOffTypeSetting, list);
 	};
@@ -43,7 +43,7 @@ export class CFind extends CUqBase {
 	 * @param cutOffType 
 	 */
 	saveCutOffType = async (cutOffType: CutOffType) => {
-
+		/*
 		if (cutOffType.tradeType === '') {
 			cutOffType.tradeType = undefined;
 		}
@@ -55,6 +55,7 @@ export class CFind extends CUqBase {
 		console.log(r);
 		this.closePage(2);
 		this.onOpenCutOffTypeSetting();
+		*/
 	};
 
 	/**
@@ -69,7 +70,7 @@ export class CFind extends CUqBase {
 		// this.outBoundReasonList = outBoundReasonRet.list;
 		//this.cutOffTypeCustomerList = customerRet.list;
 		console.log(this.cutOffTypeCustomerList);
-		let result = await JkDeliver.GetCutOffType.query({ cutOffType: cutOffTypeId });
+		let result = { ret: [{}] }; // await JkDeliver.GetCutOffType.query({ cutOffType: cutOffTypeId });
 		let cutOffType = result.ret[0];
 		this.openVPage(VCutOffTypeEdit, cutOffType);
 	};
