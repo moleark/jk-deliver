@@ -1,3 +1,4 @@
+import { QueryPager } from "tonva-react";
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase, JkDeliver } from "uq-app";
 import { ReturnCustomerPendingDeliverRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
@@ -131,16 +132,20 @@ export class CHome extends CUqBase {
 
 	onOpenCutOffHistory = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let ret = await JkDeliver.GetCutOffMainList.query({ warehouse });
-		let { list } = ret;
-		let vPageParam = { warehouse: warehouse, historyList: list };
+		let cutOffMainLists: QueryPager<any> = new QueryPager<any>(this.uqs.JkDeliver.GetCutOffMainList, 15, 15);
+		// let ret = await JkDeliver.GetCutOffMainList.first({ warehouse });
+		// let { list } = ret;
+		await cutOffMainLists.first({ warehouse });
+		console.log(cutOffMainLists);
+
+		let vPageParam = { warehouse: warehouse, historyList: cutOffMainLists };
 		this.cApp.cDeliver.openCutOffHistory(vPageParam);
 		// this.openVPage(VCutOffHistory, vPageParam);
 	}
 
 	onCutOff = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let ret = await JkDeliver.CutOff.submit({ cutWarehouse: warehouse });
+		let ret = await JkDeliver.CutOff.submit({ aWarehouse: warehouse, cutOffType: 1 });
 		let { id, no } = ret;
 		if (id === undefined) {
 			alert(`当前截单失败！`);

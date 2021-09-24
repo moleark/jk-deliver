@@ -1,4 +1,5 @@
-import { Res, setRes, TFunc, UI } from "tonva-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
 import { OrderMain } from "./JkDeliver";
@@ -18,11 +19,11 @@ const fields = {
 		"widget": "string",
 		"label": "No"
 	} as FieldItemString,
-	customer: {
-		"name": "customer",
+	customerAccount: {
+		"name": "customerAccount",
 		"type": "id",
 		"isKey": false,
-		"label": "Customer"
+		"label": "CustomerAccount"
 	} as FieldItemId,
 	contact: {
 		"name": "contact",
@@ -30,11 +31,17 @@ const fields = {
 		"isKey": false,
 		"label": "Contact"
 	} as FieldItemId,
+	currency: {
+		"name": "currency",
+		"type": "id",
+		"isKey": false,
+		"label": "Currency"
+	} as FieldItemId,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, fields.customer, fields.contact, 
+	fields.no, fields.customerAccount, fields.contact, fields.currency, 
 ];
 
 export const ui: UI = {
@@ -57,5 +64,5 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 }
 
 export function render(item: OrderMain):JSX.Element {
-	return <>{JSON.stringify(item)}</>;
+	return <>{uqStringify(item)}</>;
 };

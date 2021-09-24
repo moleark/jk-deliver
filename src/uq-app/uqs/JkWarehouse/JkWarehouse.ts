@@ -1,4 +1,4 @@
-//=== UqApp builder created on Sat Sep 18 2021 13:17:08 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Sep 24 2021 10:59:56 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -226,6 +226,8 @@ export interface ResultTrySchedule1 {
 }
 
 export interface ParamAutoPick {
+	aWarehouse: number;
+	cutOffMain: number;
 }
 export interface ResultAutoPick {
 }
@@ -499,7 +501,9 @@ export interface ReturnGetPickupMain {
 export interface ReturnGetPickupDetail {
 	id: number;
 	main: number;
+	deliverDetail: number;
 	orderDetail: number;
+	shelfBlock: number;
 	quantity: number;
 	item: number;
 	product: number;
@@ -716,7 +720,7 @@ export interface Section {
 export interface OrderMain {
 	id?: number;
 	no?: string;
-	customer: number;
+	customerAccount: number;
 	currency: number;
 }
 
@@ -737,7 +741,6 @@ export interface OrderDetail {
 	quantity: number;
 	amount: number;
 	price: number;
-	warehouse: number;
 }
 
 export interface WarehouseN {
@@ -747,7 +750,9 @@ export interface WarehouseN {
 export interface PickupDetail {
 	id?: number;
 	main?: number;
+	deliverDetail: number;
 	orderDetail: number;
+	shelfBlock: number;
 	quantity: number;
 }
 
@@ -840,8 +845,12 @@ export interface IxUserWarehouse {
 }
 
 export interface IxPendingPickup {
+	ixx: number;
 	ix: number;
 	xi: number;
+	orderDetail: number;
+	quantity: number;
+	lotNumber: string;
 }
 
 export interface ParamActs {

@@ -161,8 +161,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                         console.log(element.ExpressStatus);
                     }
                 });
+
                 // printaction(PdfInfos);
-                // \\211.5.2.14 王雅静电脑ip
+                // \\211.5.2.14 王亚静电脑ip
                 // var url = "http://127.0.0.1:9090/ydecx/service/mailpx/printDirect.pdf?t=" + new Date().getTime();
                 var url = "http://211.5.2.14:9090/ydecx/service/mailpx/printDirect.pdf?t=" + new Date().getTime();
                 var pdfform = document.createElement("form");
@@ -207,7 +208,6 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let requestData = { data: dataList };
         let formData = JSON.stringify(requestData);
 
-
         try {
             let res = await window.fetch('http://localhost:38311/api/warehouse/GetZJSExpressCode', {
                 method: 'post',
@@ -221,6 +221,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 let jsonResult: any[] = result.ret; // JSON.parse(ret);
                 let PdfInfos: string = "";
                 jsonResult.forEach((element: any) => {
+
                     if (element.ExpressStatus === "0") {
                         this.updateWaybillNumber('运单号', '快递单号');	//更新快递单号
                         // $("#barcodeTarget2").empty().barcode(element.ExpressCode, "code128", { barWidth: 2, barHeight: 50, fontSize: 14, fontOptions: "bold", showHRI: true });
@@ -339,10 +340,8 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                     document.getElementById('SF_remark').innerHTML = element.remark + "\n提醒注意：（汽运禁航） （务必本人或专人签收）";
                     JsBarcode("#SF_waybillNumber_col", element.waybillNumber, { format: "CODE128A", height: 30, width: 2, displayValue: false });
 
-
                     var testDiv = document.getElementById("SF_waybillNumber_col");
                     testDiv.style.float = "left";
-
 
                     var printhtml = document.getElementById("#PrintSFHtml").innerHTML;
                     document.getElementById("PrintSFHtml").style.display = "";//显示

@@ -1,11 +1,12 @@
-import { VPage, LMR, List } from "tonva-react";
+import { VPage, LMR, List, Scroller } from "tonva-react";
 import { CDeliver } from "./CDeliver";
 
 export class VCutOffHistory extends VPage<CDeliver> {
 
-    private cutOffHistoryList: any[];
+    private cutOffHistoryList: any;
     private warehouse: number;
     init(param: any) {
+        console.log(param);
         let { warehouse, historyList } = param;
         this.warehouse = warehouse;
         this.cutOffHistoryList = historyList;
@@ -29,8 +30,12 @@ export class VCutOffHistory extends VPage<CDeliver> {
         </LMR>;
     }
 
-    content() {
+    onPageScrollBottom = async (scroller: Scroller) => {
+        scroller.scrollToBottom();
+        this.cutOffHistoryList.more();
+    }
 
+    content() {
         return <div id="pickListDiv" className="p-1 bg-white">
             <List items={this.cutOffHistoryList} item={{ render: this.renderCutOffHistory }} none="无截单历史" />
         </div>;

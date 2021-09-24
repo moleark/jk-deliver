@@ -21,16 +21,16 @@ export class VCustomerDeliver extends VPage<CDeliver> {
 		this.closePage();
 		this.openPageElement(<Page header="发货提交成功" back="close">
 			<div className="px-3 my-2">customer: {customer}</div>
-			<List items={customerOrderDetails.filter(v => v.deliverDone >= 0)}
-				item={{ render: this.renderDoneDetail }} />
 		</Page>);
+		//<List items={customerOrderDetails.filter(v => v.deliverDone >= 0)}
+		// item={{ render: this.renderDoneDetail }} />
 	}
 
 	private renderDoneDetail = (row: CustomerPendingDeliver, index: number): JSX.Element => {
-		let { product, item, quantity, deliverDone } = row;
+		let { product, item, quantity } = row;
 		let right = <div className="d-flex align-items-center">
 			<div>实发</div>
-			<div className="w-min-8c">{deliverDone}</div>
+			<div className="w-min-8c">{ }</div>
 		</div>
 		return <LMR className="px-3 py-2" right={right}>
 			product:{product} pack:{item} 应发:{quantity}

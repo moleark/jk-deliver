@@ -1,10 +1,17 @@
-import { Res, setRes, TFunc, UI } from "tonva-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { IxWarehouseDeliverMain } from "./JkDeliver";
+import { CutOffProcessing } from "./JkDeliver";
 
 /*--fields--*/
 const fields = {
+	ixx: {
+		"name": "ixx",
+		"type": "id",
+		"isKey": false,
+		"label": "Ixx"
+	} as FieldItemId,
 	ix: {
 		"name": "ix",
 		"type": "id",
@@ -21,11 +28,11 @@ const fields = {
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.xi, 
+	fields.ixx, fields.xi, 
 ];
 
 export const ui: UI = {
-	label: "IxWarehouseDeliverMain",
+	label: "CutOffProcessing",
 	fieldArr,
 	fields,
 };
@@ -43,6 +50,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: IxWarehouseDeliverMain):JSX.Element {
-	return <>{JSON.stringify(item)}</>;
+export function render(item: CutOffProcessing):JSX.Element {
+	return <>{uqStringify(item)}</>;
 };

@@ -68,7 +68,7 @@ export class VHome extends VPage<CHome> {
 	private renderDeliverMain = (row: ReturnWarehouseDeliverMainRet, index: number): JSX.Element => {
 		let { JkCustomer } = this.controller.uqs;
 		let { Customer } = JkCustomer;
-		let { deliverMain, no, customerAccount, create, rows, pickRows, staff } = row;
+		let { deliverMain, no, customer, create, rows, pickRows, staff } = row;
 		let left = <div className="w-8c text-primary">发运单</div>;
 		let right = pickRows === rows ?
 			(
@@ -81,7 +81,7 @@ export class VHome extends VPage<CHome> {
 			<span className="text-muted">待拣货</span>;
 		return <LMR className="px-3 py-2" left={left} right={right}>
 			<b>{no}</b> &nbsp;
-			客户: {Customer.tv(customerAccount)}
+			客户: {Customer.tv(customer)}
 		</LMR>
 	}
 }
