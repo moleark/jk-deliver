@@ -248,11 +248,12 @@ export class CHome extends CUqBase {
 	async doneDeliver(deliver: number,
 		detail: {
 			id: number;
+			orderDetail: number;
 			deliverShould: number;
 		}[]) {
 		await this.uqs.JkDeliver.Delivered.submit({
 			deliver,
-			detail: detail.map(v => ({ deliverDetail: v.id, quantity: v.deliverShould }))
+			detail: detail.map(v => ({ deliverDetail: v.id, orderDetail: v.orderDetail, quantity: v.deliverShould }))
 		});
 		this.warehousePending.forEach(v => v.removeDeliver(deliver));
 	}
