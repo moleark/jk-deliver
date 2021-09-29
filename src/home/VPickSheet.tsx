@@ -23,7 +23,7 @@ export class VPickSheet extends VPage<CHome> {
 
 		let pickTotal: number = 0;
 		this.detail.forEach(element => {
-			pickTotal += element.quantity;
+			pickTotal += element.shouldQuantity;
 		});
 
 		/*

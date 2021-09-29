@@ -20,10 +20,12 @@ export class VHome extends VPage<CHome> {
 				content = warehousePending.map(v => {
 					let { warehouse, cutOffMains, pickups, deliverMains } = v;
 					return <div key={warehouse} className="my-3">
-						<div className="my-1 px-3 text-info font-weight-bold">
+						<div className="my-1 px-2 text-info font-weight-bold">
 							{JkWarehouse.Warehouse.tv(warehouse)} &nbsp;&nbsp;
 							<span className="small text-muted" onClick={() => onOpenCutOffPage(warehouse)}>截单</span>&nbsp;
-							<span className="small text-muted" onClick={() => onOpenCutOffHistory(warehouse)}>……</span>
+							<span className="small float-right mr-1" onClick={() => onOpenCutOffHistory(warehouse)}>
+								<FA className="mr-1 cursor-pointer text-muted" name="ellipsis-v" />
+							</span>
 						</div>
 						<List className="my-1" items={cutOffMains} none="无理货单"
 							item={{ render: this.renderCutOffMain, onClick: onCutOffMain }} />
@@ -45,9 +47,10 @@ export class VHome extends VPage<CHome> {
 		let { no, staff } = row;
 		let left = <div className="w-8c text-info">理货单</div>;
 		let right: any;
-		if (staff) {
-			right = <span>{this.renderUser(staff)}在理</span>
-		}
+		right = (staff) ?
+			<span className="text-success">{this.renderUser(staff)} </span>
+			:
+			<span className="text-danger">待处理</span>;
 		return <LMR className="px-3 py-2" left={left} right={right}>
 			<b>{no}</b>
 		</LMR>
@@ -57,9 +60,10 @@ export class VHome extends VPage<CHome> {
 		let { no, picker } = row;
 		let left = <div className="w-8c text-success">拣货单</div>;
 		let right: any;
-		if (picker) {
-			right = <span>{this.renderUser(picker)}在拣</span>
-		}
+		right = (picker) ?
+			<span className="text-success">{this.renderUser(picker)}</span>
+			:
+			<span className="text-danger">待处理</span>;
 		return <LMR className="px-3 py-2" left={left} right={right}>
 			<b>{no}</b>
 		</LMR>
@@ -70,15 +74,17 @@ export class VHome extends VPage<CHome> {
 		let { Customer } = JkCustomer;
 		let { deliverMain, no, customer, create, rows, pickRows, staff } = row;
 		let left = <div className="w-8c text-primary">发运单</div>;
-		let right = pickRows === rows ?
-			(
-				staff ?
+		/*let right = pickRows === rows ?
+			(staff ?
 					<span>{this.renderUser(staff)} <span className="text-success">发前确认</span></span>
 					:
 					<span className="text-danger">可发运</span>
-			)
+			):<span className="text-muted">待拣货</span>;*/
+		let right = staff ?
+			<span className="text-success">{this.renderUser(staff)}</span>
 			:
-			<span className="text-muted">待拣货</span>;
+			<span className="text-danger">待处理</span>;
+
 		return <LMR className="px-3 py-2" left={left} right={right}>
 			<b>{no}</b> &nbsp;
 			客户: {Customer.tv(customer)}

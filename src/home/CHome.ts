@@ -12,6 +12,7 @@ import { VTallying } from "./VTallying";
 import { VTallySheet } from "./VTallySheet";
 import { VPicking } from "./VPicking";
 import { VPickSheet } from "./VPickSheet";
+import { TuidContact } from "uq-app/uqs/JkCustomer";
 
 export interface CustomerPendingDeliver extends ReturnCustomerPendingDeliverRet {
 	deliverQuantity: number;
@@ -123,29 +124,24 @@ export class CHome extends CUqBase {
 
 	onOpenCutOffPage = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse });
-		// let { list } = readyCutOffRet;
-		let cutOffTypeRet = { list: {} }; // await JkDeliver.GetCutOffTypeList.query({});
-		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet.list };
+		let cutOffType: number = 1;
+		let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse, cutOffType });
+		let cutOffTypeRet = { "截单类型1": "1", "截单类型2": "2" };	// await JkDeliver.GetCutOffTypeList.query({})
+		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
 	}
 
 	onOpenCutOffHistory = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let cutOffMainLists: QueryPager<any> = new QueryPager<any>(this.uqs.JkDeliver.GetCutOffMainList, 15, 15);
-		// let ret = await JkDeliver.GetCutOffMainList.first({ warehouse });
-		// let { list } = ret;
+		let cutOffMainLists: QueryPager<any> = new QueryPager<any>(JkDeliver.GetCutOffMainList, 15, 15);
 		await cutOffMainLists.first({ warehouse });
-		console.log(cutOffMainLists);
-
 		let vPageParam = { warehouse: warehouse, historyList: cutOffMainLists };
 		this.cApp.cDeliver.openCutOffHistory(vPageParam);
-		// this.openVPage(VCutOffHistory, vPageParam);
 	}
 
-	onCutOff = async (warehouse: number) => {
+	onCutOff = async (warehouse: number, cutOffType: number) => {
 		let { JkDeliver } = this.uqs;
-		let ret = await JkDeliver.CutOff.submit({ aWarehouse: warehouse, cutOffType: 1 });
+		let ret = await JkDeliver.CutOff.submit({ aWarehouse: warehouse, cutOffType: cutOffType });
 		let { id, no } = ret;
 		if (id === undefined) {
 			alert(`当前截单失败！`);
@@ -202,6 +198,9 @@ export class CHome extends CUqBase {
 			alert(`id ${deliverMain} 没有取到发运单据`);
 			return;
 		}
+		mainArr.forEach((element: any) => {
+			promises.push(this.getContant(88750 || element.contact).then(data => element.contactInfo = data));
+		});
 
 		detail.forEach((element: any) => {
 			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
@@ -225,11 +224,16 @@ export class CHome extends CUqBase {
 		await this.uqs.JkWarehouse.Picking.submit({ pickup: pickupId });
 	}
 
-	async donePickup(pickupId: number,
+	donePickSingle = async (pickupDetail: number, quantity: number) => {
+		let { JkWarehouse } = this.uqs;
+		await JkWarehouse.PickedSingle.submit({ pickupDetail: pickupDetail, quantity: quantity });
+	}
+
+	donePickup = async (pickupId: number,
 		pickDetail: {
-			orderDetail: number;
+			deliverDetail: number;
 			quantity: number;
-		}[]) {
+		}[]) => {
 		await this.uqs.JkWarehouse.Picked.submit({
 			pickup: pickupId,
 			detail: pickDetail
@@ -237,19 +241,19 @@ export class CHome extends CUqBase {
 		this.warehousePending.forEach(v => v.removePickup(pickupId));
 	}
 
-	async piling(deliverMain: number) {
-		/*await this.uqs.JkDeliver.Piling.submit({ deliver: deliverMain });*/
+	async Delivering(deliverMain: number) {
+		await this.uqs.JkDeliver.Delivering.submit({ deliver: deliverMain });
 	}
 
 	async doneDeliver(deliver: number,
 		detail: {
 			id: number;
-			deliverDone: number;
+			deliverShould: number;
 		}[]) {
-		/*await this.uqs.JkDeliver.DonePileup.submit({
+		await this.uqs.JkDeliver.Delivered.submit({
 			deliver,
-			detail: detail.map(v => ({ id: v.id, quantity: v.deliverDone }))
-		});*/
+			detail: detail.map(v => ({ deliverDetail: v.id, quantity: v.deliverShould }))
+		});
 		this.warehousePending.forEach(v => v.removeDeliver(deliver));
 	}
 	/*
@@ -264,6 +268,25 @@ export class CHome extends CUqBase {
 		await this.load();
 	}
 	*/
+
+	doneTallySingle = async (deliverMain: number, deliverDetail: number, quantity: number) => {
+		let { JkDeliver } = this.uqs;
+		await JkDeliver.TallyDoneSingle.submit({
+			deliverMain: deliverMain,
+			deliverDetail: deliverDetail,
+			quantity: quantity
+		});
+	}
+	doneTally = async (warehouse: number, cutOffMain: number) => {
+		let { JkDeliver } = this.uqs;
+		await JkDeliver.TallyDone.submit({
+			// warehouse: warehouse,
+			cutOffMain: cutOffMain
+			// cutOffType: cutOffType
+		});
+		this.warehousePending.forEach(v => v.removeCutOffMain(cutOffMain));
+	}
+
 	/**
 	 * 获取产品扩展信息
 	 * @param product 
@@ -274,4 +297,13 @@ export class CHome extends CUqBase {
 		let extention = await JkProduct.ProductExtention.obj({ product: product }); // 56998
 		return extention?.content;
 	}
+	/**
+	 * 获取收货人信息
+	 * @param content 
+	 */
+	getContant = async (contactId: number) => {
+		let { JkCustomer } = this.uqs;
+		return await JkCustomer.Contact.load(contactId);
+	}
+
 }

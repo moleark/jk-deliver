@@ -1,7 +1,7 @@
 ///+++import AppUQs+++///
 import {UQs as AppUQs} from '../appUQs';
 ///###import AppUQs###///
-//=== UqApp builder created on Fri Sep 24 2021 10:59:56 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Wed Sep 29 2021 16:24:22 GMT+0800 (中国标准时间) ===//
 import * as JkDeliver from './JkDeliver';
 import * as JkWarehouse from './JkWarehouse';
 import * as JkProduct from './JkProduct';

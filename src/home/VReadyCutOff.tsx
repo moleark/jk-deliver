@@ -21,13 +21,18 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      * @param customer 客户id
      * @param tradeType 贸易类型（xx2,xx3,xx4,xx5）
      */
-    private onCutOff = async (warehouse: number, customer: number, tradeType: any) => {
+    private onCutOff_需要修改 = async (warehouse: number, customer: number, tradeType: any) => {
         let { onCutOff } = this.controller;
         alert('warehouse:' + warehouse + ',customer:' + customer + ',tradeType:' + tradeType);
         //await onCutOff(warehouse);
     }
+    private onCutOff = async (warehouse: number, cutOffType: number) => {
+        let { onCutOff } = this.controller;
+        await onCutOff(warehouse, cutOffType);
+    }
 
     right() {
+        /*
         let actions: DropdownAction[] = [];
         if (this.cutOffTypeList.length) {
             let dropdownAction: any[] = this.cutOffTypeList.map((v: any, index) => {
@@ -36,7 +41,8 @@ export class VReadyCutOffSheet extends VPage<CHome> {
             actions = dropdownAction;
         }
         return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="navicon" actions={actions} />;
-        // return <button className="btn btn-sm btn-primary mr-2" onClick={() => onCutOff(this.warehouse)}> 截单</button>;
+        */
+        return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, 1)}> 截单类型1</button>;
     }
 
     private renderReadyCutOffItem = (cutOffItem: any) => {

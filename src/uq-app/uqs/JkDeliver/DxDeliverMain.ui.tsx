@@ -12,12 +12,6 @@ const fields = {
 		"isKey": false,
 		"label": "Id"
 	} as FieldItemId,
-	staff: {
-		"name": "staff",
-		"type": "id",
-		"isKey": false,
-		"label": "Staff"
-	} as FieldItemId,
 	rows: {
 		"name": "rows",
 		"type": "integer",
@@ -50,11 +44,27 @@ const fields = {
 		"isKey": false,
 		"label": "DeliverTime"
 	} as undefined,
+	staff: {
+		"name": "staff",
+		"type": "id",
+		"isKey": false,
+		"label": "Staff"
+	} as FieldItemId,
+	startTime: {
+		"name": "startTime",
+		"isKey": false,
+		"label": "StartTime"
+	} as undefined,
+	finishTime: {
+		"name": "finishTime",
+		"isKey": false,
+		"label": "FinishTime"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.staff, fields.rows, fields.pickRows, fields.carrier, fields.waybillNumber, fields.deliverTime, 
+	fields.rows, fields.pickRows, fields.carrier, fields.waybillNumber, fields.deliverTime, fields.staff, fields.startTime, fields.finishTime, 
 ];
 
 export const ui: UI = {

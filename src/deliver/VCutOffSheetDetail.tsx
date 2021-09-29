@@ -440,15 +440,17 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             item, product, tallyShould, content, productExt } = cutOffItem;
         let pack = PackX.getObj(item);
 
-        let note: string = '';
-        let apointCarrier: string = '';
+        let note: string;
+        let apointCarrierId: any;
         if (content) {
-            let jsonContect = JSON.parse(content);
+            let formatContent: string = String(content).replace(/\r\n/g, "").replace(/\r/g, "").replace(/\n/g, "");
+            let jsonContect: any = JSON.parse(formatContent);
             note = jsonContect.deliverNotes;
-            apointCarrier = jsonContect.shouldExpressLogistics[0];
+            let apointCarrier: any = jsonContect.shouldExpressLogistics[0];
+            apointCarrierId = expressLogisticsList.find((e: any) => e.no === apointCarrier)?.id;
         }
 
-        let expressLogistics = <select className="form-control col-8 px-0 mx-0" defaultValue={carrier == undefined ? apointCarrier : carrier} onChange={o => { alert(o.target.value); cutOffItem.carrier = o.target.value; }}>
+        let expressLogistics = <select className="form-control col-8 px-0 mx-0" defaultValue={carrier == undefined ? apointCarrierId : carrier} onChange={o => { alert(o.target.value); cutOffItem.carrier = o.target.value; }}>
             {expressLogisticsList.map((el: any) => {
                 return <option value={el.id}>{el.name}</option>
             })}

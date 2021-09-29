@@ -1,4 +1,4 @@
-//=== UqApp builder created on Fri Sep 24 2021 10:59:56 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Wed Sep 29 2021 16:24:22 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -14,6 +14,7 @@ export interface Tuid$user {
 	icon: string;
 	assigned: string;
 	poke: number;
+	role: number;
 }
 
 export interface Tuid$sheet {
@@ -197,23 +198,6 @@ export interface ResultOutBoundCut {
 	ret: ReturnOutBoundCutRet[];
 }
 
-export interface ParamPick {
-	warehouse: number;
-	pickupMaxRows: number;
-}
-export interface ReturnPickPickups {
-	id: number;
-	no: string;
-}
-export interface ReturnPickDelivers {
-	id: number;
-	no: string;
-}
-export interface ResultPick {
-	pickups: ReturnPickPickups[];
-	delivers: ReturnPickDelivers[];
-}
-
 export interface ParamTrySchedule {
 	p: number;
 }
@@ -235,7 +219,7 @@ export interface ResultAutoPick {
 export interface ParamPicked {
 	pickup: number;
 	detail: {
-		orderDetail: number;
+		deliverDetail: number;
 		quantity: number;
 	}[];
 
@@ -273,6 +257,37 @@ export interface ParamTally {
 
 }
 export interface ResultTally {
+}
+
+export interface ParamAutoOutBound {
+	aWarehouse: number;
+	cutOffMain: number;
+}
+export interface ResultAutoOutBound {
+}
+
+export interface ParamOutBound {
+	warehouse: number;
+	pickupMaxRows: number;
+}
+export interface ReturnOutBoundPickups {
+	id: number;
+	no: string;
+}
+export interface ReturnOutBoundDelivers {
+	id: number;
+	no: string;
+}
+export interface ResultOutBound {
+	pickups: ReturnOutBoundPickups[];
+	delivers: ReturnOutBoundDelivers[];
+}
+
+export interface ParamPickedSingle {
+	pickupDetail: number;
+	quantity: number;
+}
+export interface ResultPickedSingle {
 }
 
 export interface ParamGetInventoryAllocation {
@@ -504,10 +519,12 @@ export interface ReturnGetPickupDetail {
 	deliverDetail: number;
 	orderDetail: number;
 	shelfBlock: number;
-	quantity: number;
 	item: number;
 	product: number;
 	shouldQuantity: number;
+	pickdone: number;
+	pickstate: number;
+	lotNumber: string;
 }
 export interface ResultGetPickup {
 	main: ReturnGetPickupMain[];
@@ -531,6 +548,7 @@ export interface ParamGetExpressLogisticsList {
 export interface ReturnGetExpressLogisticsListRet {
 	id: number;
 	name: string;
+	no: string;
 }
 export interface ResultGetExpressLogisticsList {
 	ret: ReturnGetExpressLogisticsListRet[];
@@ -741,6 +759,7 @@ export interface OrderDetail {
 	quantity: number;
 	amount: number;
 	price: number;
+	lotNumber: string;
 }
 
 export interface WarehouseN {
@@ -754,6 +773,8 @@ export interface PickupDetail {
 	orderDetail: number;
 	shelfBlock: number;
 	quantity: number;
+	pickDone: number;
+	pickState: number;
 }
 
 export interface ItemResearch {
@@ -849,6 +870,16 @@ export interface IxPendingPickup {
 	ix: number;
 	xi: number;
 	orderDetail: number;
+	shelfBlock: number;
+	quantity: number;
+	lotNumber: string;
+}
+
+export interface IxPendingOutBound {
+	ixx: number;
+	ix: number;
+	xi: number;
+	orderDetail: number;
 	quantity: number;
 	lotNumber: string;
 }
@@ -874,6 +905,7 @@ export interface ParamActs {
 	itemStore?: ItemStore[];
 	ixUserWarehouse?: IxUserWarehouse[];
 	ixPendingPickup?: IxPendingPickup[];
+	ixPendingOutBound?: IxPendingOutBound[];
 }
 
 
@@ -904,7 +936,6 @@ export interface UqExt extends Uq {
 	OutInBoundReason: UqTuid<TuidOutInBoundReason>;
 	WebUser: UqTuid<TuidWebUser>;
 	OutBoundCut: UqAction<ParamOutBoundCut, ResultOutBoundCut>;
-	Pick: UqAction<ParamPick, ResultPick>;
 	TrySchedule: UqAction<ParamTrySchedule, ResultTrySchedule>;
 	TrySchedule1: UqAction<ParamTrySchedule1, ResultTrySchedule1>;
 	AutoPick: UqAction<ParamAutoPick, ResultAutoPick>;
@@ -912,6 +943,9 @@ export interface UqExt extends Uq {
 	Picking: UqAction<ParamPicking, ResultPicking>;
 	MergeToTally: UqAction<ParamMergeToTally, ResultMergeToTally>;
 	Tally: UqAction<ParamTally, ResultTally>;
+	AutoOutBound: UqAction<ParamAutoOutBound, ResultAutoOutBound>;
+	OutBound: UqAction<ParamOutBound, ResultOutBound>;
+	PickedSingle: UqAction<ParamPickedSingle, ResultPickedSingle>;
 	ProductInventory: UqBook<ParamProductInventory, ResultProductInventory>;
 	ShelfBlockInventory: UqBook<ParamShelfBlockInventory, ResultShelfBlockInventory>;
 	ShelfBlockLotInventory: UqBook<ParamShelfBlockLotInventory, ResultShelfBlockLotInventory>;
@@ -963,6 +997,7 @@ export interface UqExt extends Uq {
 	ItemStore: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;
 	IxPendingPickup: UqIX<any>;
+	IxPendingOutBound: UqIX<any>;
 }
 
 export function assign(uq: any, to:string, from:any): void {

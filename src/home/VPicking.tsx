@@ -35,12 +35,13 @@ export class VPicking extends VPage<CHome> {
 
 	private renderPickItem = (pickItem: any, index: number) => {
 
-		let { JkProduct } = this.controller.uqs;
+		let { JkProduct, JkWarehouse } = this.controller.uqs;
 		let { ProductX } = JkProduct;
+		let { ShelfBlock } = JkWarehouse;
 		let PackX = ProductX.div('packx');
 
 		let { id: mainId } = this.main;
-		let { id, product, item, quantity, shouldQuantity } = pickItem;
+		let { id: pickupDetail, product, deliverDetail, orderDetail, shelfBlock, lotNumber, item, shouldQuantity, pickdone, pickstate } = pickItem;
 		let pack = PackX.getObj(item);	// JSON.stringify(pack)
 
 		// <input className="box" type="checkbox" defaultChecked={false}></input>&nbsp;
@@ -54,16 +55,18 @@ export class VPicking extends VPage<CHome> {
 			</div>
 		 */
 		let left = <div className="py-1 pr-2">{index + 1}</div>;
+		let isDone: boolean = (pickstate === 0) ? false : true;
+		pickItem.pickstate = isDone;
 		let right = <div className="m-auto pr-2">
 			<label className="small text-muted">
 				<input type="checkbox"
-					defaultChecked={false}
-					onChange={e => this.donePickupItem(mainId, id, pickItem.quantity)} />
+					defaultChecked={isDone}
+					onChange={e => { if (e.target.checked === false) { return }; pickItem.pickstate = e.target.checked; this.donePickupItem(pickupDetail, shouldQuantity) }} />
 			</label>
 		</div>;
 
 		// {JkDeliver.OrderDetail.render(id)}	ProductX.tv(product)	tv(product, v => v.origin)	JSON.stringify(pack)
-		return <LMR className="px-1 py-1" key={id} left={left} right={right} onClick={() => this.onClickPickItem(index)}>
+		return <LMR className="px-1 py-1" key={pickupDetail} left={left} right={right} onClick={() => this.onClickPickItem(index)}>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">编号: </span>
 				<span className="col-5 pl-1">{ProductX.tv(product)} </span>
@@ -72,15 +75,15 @@ export class VPicking extends VPage<CHome> {
 			</div>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">货位: </span>
-				<span className="col-5 pl-1">{'xxxxxxxxxxx'}</span>
+				<span className="col-5 pl-1">{ShelfBlock.tv(shelfBlock)}</span>
 				<span className="col-2 text-muted px-1">Lot: </span>
-				<span className="col-3 pl-1">{'lotxxxxx'}</span>
+				<span className="col-3 pl-1">{lotNumber}</span>
 			</div>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">应拣: </span>
 				<span className="col-5 text-info">{shouldQuantity}</span>
 				<span className="col-2 text-muted px-1">实捡: </span>
-				<input type="text" className="form-control col-3 text-info" onChange={o => pickItem.quantity = o.target.value} defaultValue={quantity} />
+				<input type="text" className="form-control col-3 text-info" onChange={o => pickItem.shouldQuantity = o.target.value} defaultValue={pickstate === 0 ? shouldQuantity : pickdone} />
 			</div>
 		</LMR>;
 	};
@@ -90,7 +93,7 @@ export class VPicking extends VPage<CHome> {
 		// let [pickupMain, pickupDetail] = this.pickupData;
 		let pickTotal: number = 0;
 		this.detail.forEach(element => {
-			pickTotal += element.quantity;
+			pickTotal += element.shouldQuantity;
 		});
 
 		return <div id="pickListDiv" className="p-1 bg-white">
@@ -101,15 +104,23 @@ export class VPicking extends VPage<CHome> {
 		</div>;
 	}
 
-	private async donePickupItem(pickupId: number, orderDetail: number, pickQuantity: number) {
+	private async donePickupItem(pickupDetail: number, pickQuantity: number) {
 
-		alert("pickupId:" + pickupId + ",orderDetail:" + orderDetail + ",pickQuantity:" + pickQuantity);
+		let { donePickSingle, donePickup } = this.controller;
+		let { id: pickupId } = this.main;
+		await donePickSingle(pickupDetail, pickQuantity);
+
+		let isAllCheck: boolean = this.detail.every((e: any) => e.pickstate === true);
+		if (isAllCheck) {
+			let pickDetail: any[] = [];
+			this.detail.forEach((d: any) => {
+				pickDetail.push({ deliverDetail: d.deliverDetail, quantity: d.shouldQuantity });
+			});
+			await donePickup(pickupId, pickDetail);
+			this.closePage();
+		}
 	}
 
-	private async donePickup(pickupId: number) {
-		await this.controller.donePickup(pickupId, this.detail);
-		this.closePage();
-	}
 }
 
 const tvPackx = (values: any) => {

@@ -2,44 +2,31 @@
 import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { ItemProductPackLot } from "./JkWarehouse";
+import { DeliverDetailOrderDetail } from "./JkDeliver";
 
 /*--fields--*/
 const fields = {
-	id: {
-		"name": "id",
+	ix: {
+		"name": "ix",
 		"type": "id",
 		"isKey": false,
-		"label": "Id"
+		"label": "Ix"
 	} as FieldItemId,
-	product: {
-		"name": "product",
+	xi: {
+		"name": "xi",
 		"type": "id",
-		"isKey": true,
-		"label": "Product"
+		"isKey": false,
+		"label": "Xi"
 	} as FieldItemId,
-	pack: {
-		"name": "pack",
-		"type": "id",
-		"isKey": true,
-		"label": "Pack"
-	} as FieldItemId,
-	lot: {
-		"name": "lot",
-		"type": "string",
-		"isKey": true,
-		"widget": "string",
-		"label": "Lot"
-	} as FieldItemString,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.product, fields.pack, fields.lot, 
+	fields.xi, 
 ];
 
 export const ui: UI = {
-	label: "ItemProductPackLot",
+	label: "DeliverDetailOrderDetail",
 	fieldArr,
 	fields,
 };
@@ -57,6 +44,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: ItemProductPackLot):JSX.Element {
+export function render(item: DeliverDetailOrderDetail):JSX.Element {
 	return <>{uqStringify(item)}</>;
 };

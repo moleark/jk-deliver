@@ -26,6 +26,18 @@ const fields = {
 		"widget": "number",
 		"label": "PickDone"
 	} as FieldItemNum,
+	tallyDone: {
+		"name": "tallyDone",
+		"type": "number",
+		"isKey": false,
+		"widget": "number",
+		"label": "TallyDone"
+	} as FieldItemNum,
+	tallyState: {
+		"name": "tallyState",
+		"isKey": false,
+		"label": "TallyState"
+	} as undefined,
 	deliverReturn: {
 		"name": "deliverReturn",
 		"type": "number",
@@ -40,11 +52,21 @@ const fields = {
 		"widget": "number",
 		"label": "ReturnDone"
 	} as FieldItemNum,
+	showPrice: {
+		"name": "showPrice",
+		"isKey": false,
+		"label": "ShowPrice"
+	} as undefined,
+	json: {
+		"name": "json",
+		"isKey": false,
+		"label": "Json"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.deliverDone, fields.pickDone, fields.deliverReturn, fields.returnDone, 
+	fields.deliverDone, fields.pickDone, fields.tallyDone, fields.tallyState, fields.deliverReturn, fields.returnDone, fields.showPrice, fields.json, 
 ];
 
 export const ui: UI = {

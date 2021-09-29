@@ -2,26 +2,41 @@
 import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { OrderDetailX } from "./JkDeliver";
+import { IxPendingOutBound } from "./JkWarehouse";
 
 /*--fields--*/
 const fields = {
-	id: {
-		"name": "id",
+	ixx: {
+		"name": "ixx",
 		"type": "id",
 		"isKey": false,
-		"label": "Id"
+		"label": "Ixx"
 	} as FieldItemId,
-	needInsuredWhenDelivery: {
-		"name": "needInsuredWhenDelivery",
+	ix: {
+		"name": "ix",
+		"type": "id",
 		"isKey": false,
-		"label": "NeedInsuredWhenDelivery"
-	} as undefined,
-	showPrice: {
-		"name": "showPrice",
+		"label": "Ix"
+	} as FieldItemId,
+	xi: {
+		"name": "xi",
+		"type": "id",
 		"isKey": false,
-		"label": "ShowPrice"
-	} as undefined,
+		"label": "Xi"
+	} as FieldItemId,
+	orderDetail: {
+		"name": "orderDetail",
+		"type": "id",
+		"isKey": false,
+		"label": "OrderDetail"
+	} as FieldItemId,
+	quantity: {
+		"name": "quantity",
+		"type": "number",
+		"isKey": false,
+		"widget": "number",
+		"label": "Quantity"
+	} as FieldItemNum,
 	lotNumber: {
 		"name": "lotNumber",
 		"type": "string",
@@ -29,20 +44,15 @@ const fields = {
 		"widget": "string",
 		"label": "LotNumber"
 	} as FieldItemString,
-	json: {
-		"name": "json",
-		"isKey": false,
-		"label": "Json"
-	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.needInsuredWhenDelivery, fields.showPrice, fields.lotNumber, fields.json, 
+	fields.ixx, fields.xi, fields.orderDetail, fields.quantity, fields.lotNumber, 
 ];
 
 export const ui: UI = {
-	label: "OrderDetailX",
+	label: "IxPendingOutBound",
 	fieldArr,
 	fields,
 };
@@ -60,6 +70,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: OrderDetailX):JSX.Element {
+export function render(item: IxPendingOutBound):JSX.Element {
 	return <>{uqStringify(item)}</>;
 };

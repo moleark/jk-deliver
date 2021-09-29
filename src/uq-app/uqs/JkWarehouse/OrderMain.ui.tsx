@@ -1,4 +1,5 @@
-import { Res, setRes, TFunc, UI } from "tonva-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
 import { OrderMain } from "./JkWarehouse";
@@ -18,11 +19,23 @@ const fields = {
 		"widget": "string",
 		"label": "No"
 	} as FieldItemString,
+	customerAccount: {
+		"name": "customerAccount",
+		"type": "id",
+		"isKey": false,
+		"label": "CustomerAccount"
+	} as FieldItemId,
+	currency: {
+		"name": "currency",
+		"type": "id",
+		"isKey": false,
+		"label": "Currency"
+	} as FieldItemId,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, 
+	fields.no, fields.customerAccount, fields.currency, 
 ];
 
 export const ui: UI = {
@@ -45,5 +58,5 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 }
 
 export function render(item: OrderMain):JSX.Element {
-	return <>{JSON.stringify(item)}</>;
+	return <>{uqStringify(item)}</>;
 };

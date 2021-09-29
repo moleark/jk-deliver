@@ -21,6 +21,7 @@ import * as ProductX from './ProductX.ui';
 import * as Brand from './Brand.ui';
 import * as CustomerSettingType from './CustomerSettingType.ui';
 import * as VIPCardType from './VIPCardType.ui';
+import * as CustomerSalesman from './CustomerSalesman.ui';
 	
 export function setUI(uq: Uq) {
 	assign(uq, 'Currency', Currency);
@@ -45,5 +46,6 @@ export function setUI(uq: Uq) {
 	assign(uq, 'Brand', Brand);
 	assign(uq, 'CustomerSettingType', CustomerSettingType);
 	assign(uq, 'VIPCardType', VIPCardType);
+	assign(uq, 'CustomerSalesman', CustomerSalesman);
 }
 export * from './JkCustomer';

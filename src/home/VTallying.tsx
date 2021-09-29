@@ -2,6 +2,7 @@ import { LMR, VPage, List } from "tonva-react";
 import { ReturnGetCutOffMainDetail, ReturnGetCutOffMainMain } from "uq-app/uqs/JkDeliver";
 import { CHome } from "./CHome";
 import '../deliver/printStyle/TallyList.css';
+import { tvPackx } from "tools/tvPackx";
 
 export class VTallying extends VPage<CHome> {
     private main: ReturnGetCutOffMainMain;
@@ -35,8 +36,7 @@ export class VTallying extends VPage<CHome> {
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
 
-        let { id: mainId } = this.main;
-        let { id, trayNumber, product, item, tallyShould, lot } = tallyItem;
+        let { delivermain, deliverDetail, trayNumber, product, item, tallyShould, tallyDone, tallyState, lotNumber } = tallyItem;
         let pack = PackX.getObj(item);
 
         let left = <div className="m-auto px-2 py-1 bg"><strong>{trayNumber}</strong></div>;
@@ -49,15 +49,17 @@ export class VTallying extends VPage<CHome> {
                 <input type="text" className="form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
             </div>
          */
+        let isDone: boolean = (tallyState === 0) ? false : true;
+        tallyItem.tallyState = isDone;
         let right = <div className="m-auto pr-3">
             <label className="small text-muted">
                 <input type="checkbox"
-                    defaultChecked={false}
-                    onChange={e => this.doneTallyItem(mainId, id, tallyItem.tallyShould)} />
+                    defaultChecked={isDone}
+                    onChange={o => { if (o.target.checked === false) { return }; tallyItem.tallyState = o.target.checked; this.doneTallyItem(delivermain, deliverDetail, tallyItem.tallyShould) }} />
             </label>
         </div>
 
-        return <LMR className="row" key={id} left={left} right={right} onClick={() => this.onClickTallyItem(index)}>
+        return <LMR className="row" key={deliverDetail} left={left} right={right} onClick={() => this.onClickTallyItem(index)}>
             <div className="row col-12 py-1">
                 <span className="col-2 text-muted px-1">编号: </span>
                 <span className="col-5 pl-1">{ProductX.tv(product)} </span>
@@ -68,11 +70,11 @@ export class VTallying extends VPage<CHome> {
                 <span className="col-2 text-muted px-1">应理：</span >
                 <span className="col-5 pl-1 text-info">{tallyShould}</span>
                 <span className="col-2 text-muted px-1">Lot: </span>
-                <span className="col-3 pl-1">{lot}</span>
+                <span className="col-3 pl-1">{lotNumber}</span>
             </div>
             <div className="row col-12 py-1">
                 <span className="col-2 text-muted px-1">实理：</span >
-                <input type="text" className="col-4 form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
+                <input type="text" className="col-4 form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyState === 0 ? tallyShould : tallyDone} />
             </div>
         </LMR>;
 
@@ -100,13 +102,15 @@ export class VTallying extends VPage<CHome> {
         </div>;
     }
 
-    private async doneTallyItem(cutOffMain: number, orderDetail: number, tallyQuantity: number) {
-        alert("cutOffMain：" + cutOffMain + ",orderDetail：" + orderDetail + ",tallyQuantity：" + tallyQuantity);
-    }
-}
+    private async doneTallyItem(delivermain: number, deliverDetail: number, tallyQuantity: number) {
+        let { doneTallySingle, doneTally } = this.controller;
+        let { warehouse, id } = this.main
+        await doneTallySingle(delivermain, deliverDetail, tallyQuantity);
 
-const tvPackx = (values: any) => {
-    let { radiox, radioy, unit } = values;
-    if (radiox !== 1) return <>{radiox} * {radioy}{unit}</>;
-    return <>{radioy}{unit}</>;
+        let isAllCheck: boolean = this.detail.every((e: any) => e.tallyState === true);
+        if (isAllCheck) {
+            await doneTally(warehouse, id);
+            this.closePage();
+        }
+    }
 }

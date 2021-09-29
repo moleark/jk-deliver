@@ -9,16 +9,17 @@ import * as DeliverMainEx from './DeliverMainEx.ui';
 import * as CutOffMain from './CutOffMain.ui';
 import * as CutOffType from './CutOffType.ui';
 import * as DeliverType from './DeliverType.ui';
-import * as DxReturnDetail from './DxReturnDetail.ui';
-import * as OrderDetailX from './OrderDetailX.ui';
 import * as DxDeliverMain from './DxDeliverMain.ui';
 import * as DxDeliverDetail from './DxDeliverDetail.ui';
 import * as DxCutOffMain from './DxCutOffMain.ui';
 import * as DxDelivering from './DxDelivering.ui';
+import * as Talling from './Talling.ui';
 import * as IxPendingDeliver from './IxPendingDeliver.ui';
 import * as IxUserWarehouse from './IxUserWarehouse.ui';
 import * as IxCutoffTypeDefinition from './IxCutoffTypeDefinition.ui';
 import * as CutOffProcessing from './CutOffProcessing.ui';
+import * as DeliverDetailExchangeDetail from './DeliverDetailExchangeDetail.ui';
+import * as DeliverDetailOrderDetail from './DeliverDetailOrderDetail.ui';
 	
 export function setUI(uq: Uq) {
 	assign(uq, 'Carrier', Carrier);
@@ -31,15 +32,16 @@ export function setUI(uq: Uq) {
 	assign(uq, 'CutOffMain', CutOffMain);
 	assign(uq, 'CutOffType', CutOffType);
 	assign(uq, 'DeliverType', DeliverType);
-	assign(uq, 'DxReturnDetail', DxReturnDetail);
-	assign(uq, 'OrderDetailX', OrderDetailX);
 	assign(uq, 'DxDeliverMain', DxDeliverMain);
 	assign(uq, 'DxDeliverDetail', DxDeliverDetail);
 	assign(uq, 'DxCutOffMain', DxCutOffMain);
 	assign(uq, 'DxDelivering', DxDelivering);
+	assign(uq, 'Talling', Talling);
 	assign(uq, 'IxPendingDeliver', IxPendingDeliver);
 	assign(uq, 'IxUserWarehouse', IxUserWarehouse);
 	assign(uq, 'IxCutoffTypeDefinition', IxCutoffTypeDefinition);
 	assign(uq, 'CutOffProcessing', CutOffProcessing);
+	assign(uq, 'DeliverDetailExchangeDetail', DeliverDetailExchangeDetail);
+	assign(uq, 'DeliverDetailOrderDetail', DeliverDetailOrderDetail);
 }
 export * from './JkDeliver';

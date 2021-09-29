@@ -27,14 +27,17 @@ export class VDeliverSheet extends VPage<CHome> {
 		let { id, no, staff, rows, pickRows } = this.main;
 		let state: any;
 		if (staff) {
-			state = <>{this.renderUser(staff)} 在理货</>;
+			state = <>{this.renderUser(staff)} 在打包发运</>;
+		} else {
+			state = <button className="btn btn-success" onClick={() => this.piling(id)}>开始理货</button>;
 		}
-		else if (rows === pickRows) {
+		// 拣货状态的判断，取消不限制
+		/*else if (rows === pickRows) {
 			state = <button className="btn btn-success" onClick={() => this.piling(id)}>开始理货</button>;
 		}
 		else {
 			state = <>拣货中...</>;
-		}
+		}*/
 
 		let deliverTotal: number = 0;
 		this.detail.forEach(element => {
@@ -54,7 +57,7 @@ export class VDeliverSheet extends VPage<CHome> {
 	}
 
 	private piling = async (id: number) => {
-		await this.controller.piling(id);
+		await this.controller.Delivering(id);
 		this.closePage();
 		this.openVPage(VDelivering, [this.main, this.detail])
 	}

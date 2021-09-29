@@ -2,32 +2,31 @@
 import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { DxReturnDetail } from "./JkDeliver";
+import { DeliverDetailExchangeDetail } from "./JkDeliver";
 
 /*--fields--*/
 const fields = {
-	id: {
-		"name": "id",
+	ix: {
+		"name": "ix",
 		"type": "id",
 		"isKey": false,
-		"label": "Id"
+		"label": "Ix"
 	} as FieldItemId,
-	quantityDone: {
-		"name": "quantityDone",
-		"type": "number",
+	xi: {
+		"name": "xi",
+		"type": "id",
 		"isKey": false,
-		"widget": "number",
-		"label": "QuantityDone"
-	} as FieldItemNum,
+		"label": "Xi"
+	} as FieldItemId,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.quantityDone, 
+	fields.xi, 
 ];
 
 export const ui: UI = {
-	label: "DxReturnDetail",
+	label: "DeliverDetailExchangeDetail",
 	fieldArr,
 	fields,
 };
@@ -45,6 +44,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: DxReturnDetail):JSX.Element {
+export function render(item: DeliverDetailExchangeDetail):JSX.Element {
 	return <>{uqStringify(item)}</>;
 };
