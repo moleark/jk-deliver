@@ -36,6 +36,10 @@ export class CDeliver extends CUqBase {
 		this.warehousePendingDeliver = ret.ret;
 	}
 
+	/**
+	 * ?
+	 * @param row 
+	 */
 	loadCustomerPendingDeliver = async (row: ReturnWarehousePendingDeliverRet) => {
 		let { warehouse } = row;
 		let customer = 0;
@@ -45,6 +49,9 @@ export class CDeliver extends CUqBase {
 		this.openVPage(VCustomerDeliver);
 	}
 
+	/**
+	 * ?
+	 */
 	doneDeliver = async () => {
 		// let ret = 
 		/*await this.uqs.JkDeliver.DoneDeliver.submit({
@@ -56,6 +63,7 @@ export class CDeliver extends CUqBase {
 		});*/
 		await this.load();
 	}
+
 	/**
 	 * 打开回执单打印界面
 	 * @param main 
@@ -110,6 +118,11 @@ export class CDeliver extends CUqBase {
 		return extention?.content;
 	};
 
+	/**
+	 * 获取客户单位
+	 * @param customer 
+	 * @returns 
+	 */
 	getCustomerOrganization = async (customer: number) => {
 		let { JkCustomer } = this.uqs;
 		let organization = await JkCustomer.GetCustomerOrganization.obj({ customerId: customer });
@@ -133,5 +146,4 @@ export class CDeliver extends CUqBase {
 		let { JkProduct } = this.uqs;
 		return await JkProduct.ProductX.load(productId);
 	}
-
 }

@@ -1,4 +1,5 @@
 import { VPage, LMR, List, DropdownAction, DropdownActions } from "tonva-react";
+import { tvPackx } from "tools/tvPackx";
 import { CHome } from "./CHome";
 
 export class VReadyCutOffSheet extends VPage<CHome> {
@@ -21,7 +22,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      * @param customer 客户id
      * @param tradeType 贸易类型（xx2,xx3,xx4,xx5）
      */
-    private onCutOff_需要修改 = async (warehouse: number, customer: number, tradeType: any) => {
+    private onCutOff_将会修改 = async (warehouse: number, customer: number, tradeType: any) => {
         let { onCutOff } = this.controller;
         alert('warehouse:' + warehouse + ',customer:' + customer + ',tradeType:' + tradeType);
         //await onCutOff(warehouse);
@@ -67,7 +68,6 @@ export class VReadyCutOffSheet extends VPage<CHome> {
     }
 
     content() {
-
         let cutOffTotal: number = 0;
         if (this.readyCutOffList.length > 0) {
             this.readyCutOffList.forEach((element: { shouldQuantity: number; }) => {
@@ -82,10 +82,4 @@ export class VReadyCutOffSheet extends VPage<CHome> {
             </div>
         </div>;
     }
-}
-
-const tvPackx = (values: any) => {
-    let { radiox, radioy, unit } = values;
-    if (radiox !== 1) return <>{radiox} * {radioy}{unit}</>;
-    return <>{radioy}{unit}</>;
 }

@@ -1,4 +1,5 @@
 import { LMR, VPage, List } from "tonva-react";
+import { tvPackx } from "tools/tvPackx";
 import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse";
 import { CHome } from "./CHome";
 
@@ -120,11 +121,4 @@ export class VPicking extends VPage<CHome> {
 			this.closePage();
 		}
 	}
-
-}
-
-const tvPackx = (values: any) => {
-	let { radiox, radioy, unit } = values;
-	if (radiox !== 1) return <>{radiox} * {radioy}{unit}</>;
-	return <>{radioy}{unit}</>;
 }

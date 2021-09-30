@@ -1,17 +1,16 @@
 import { observer } from 'mobx-react';
 import { List, Page, VPage, tv, FA, PropGrid, EasyDate, LMR } from 'tonva-react';
-import { COutBound } from './COutBound';
+import { CDeliver } from './CDeliver';
 import './printStyle/ReceiptList.css';
 import printJS from 'print-js';
 import jklogo from 'images/jklogo.png';
+import { tvPackx } from 'tools/tvPackx';
 
-export class VReceiptList extends VPage<COutBound> {
-
+export class VReceiptList extends VPage<CDeliver> {
     private main: any;
     private detail: any[];
 
     init(param: [any, any[]]) {
-
         let [main, detail] = param;
         this.main = main;
         this.detail = detail;
@@ -201,10 +200,4 @@ export class VReceiptList extends VPage<COutBound> {
             {trayNumberList}
         </div>;
     }
-}
-
-const tvPackx = (values: any) => {
-    let { radiox, radioy, unit } = values;
-    if (radiox !== 1) return <>{radiox} * {radioy}{unit}</>;
-    return <>{radioy}{unit}</>;
 }

@@ -34,7 +34,7 @@ export class VDelivering extends VPage<CHome> {
 
 	private renderDeliverItem = (deliverItem: any, index: number) => {
 
-		let { JkDeliver, JkProduct } = this.controller.uqs;
+		let { JkProduct } = this.controller.uqs;
 		let { ProductX } = JkProduct;
 		let PackX = ProductX.div('packx');
 		let { id, product, item, productExt, deliverShould } = deliverItem;
@@ -47,15 +47,6 @@ export class VDelivering extends VPage<CHome> {
 		}
 
 		let left = <div className="py-1 pr-2">{index + 1}</div>;
-		let right = <div>
-			<div className="row px-1">
-				<label className="text-muted">应发：</label ><span className="text-info">{deliverShould}</span>
-			</div>
-			<div className="row px-1 text-justify">
-				<label className="text-muted">实发：</label >
-				<input type="text" className="form-control input-sm col-5" onChange={o => deliverItem.deliverShould = o.target.value} defaultValue={deliverShould} />
-			</div>
-		</div>;
 
 		return <LMR key={id} left={left} onClick={() => this.onClickDeliverItem(index)}>
 			<div className="">
@@ -88,6 +79,7 @@ export class VDelivering extends VPage<CHome> {
 		});
 
 		// <div className="col-12 px-1 py-1">订单备注:{ }</div>  // 暂时注释
+		// <div className="col-12 px-1 py-1">发运方式</div>
 		return <div className="p-1 bg-white" >
 			<div className="px-2 py-1">
 				<div className="row col-12 px-1 py-1">
@@ -109,11 +101,12 @@ export class VDelivering extends VPage<CHome> {
 				<span className="px-2 text-info small">应发总瓶数：<strong>{deliverTotal}</strong></span>
 			</div>
 		</div>;
-		// <div className="col-12 px-1 py-1">发运方式</div>
 	}
 
+	/**
+	 * 发运完成
+	 */
 	private doneDeliver = async () => {
-
 		let { id: deliverId } = this.main;
 		await this.controller.doneDeliver(deliverId, this.detail);
 		this.closePage();

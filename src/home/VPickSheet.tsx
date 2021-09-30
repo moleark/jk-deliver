@@ -55,6 +55,10 @@ export class VPickSheet extends VPage<CHome> {
 		</div>;
 	}
 
+	/**
+	 * 开始拣货
+	 * @param pickup 拣货单号
+	 */
 	private picking = async (pickup: number) => {
 		await this.controller.picking(pickup);
 		this.closePage();

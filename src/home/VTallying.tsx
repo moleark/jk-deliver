@@ -20,7 +20,6 @@ export class VTallying extends VPage<CHome> {
     private onClickTallyItem = (rowIndex: number) => {
 
         let tallyListLiDiv = document.getElementById("tallyListDiv").getElementsByTagName("ul")[0].getElementsByTagName("li");
-
         for (let index = 0; index < tallyListLiDiv.length; index++) {
             if (index == rowIndex) {
                 tallyListLiDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFF99";
@@ -102,6 +101,12 @@ export class VTallying extends VPage<CHome> {
         </div>;
     }
 
+    /**
+     * 单条完成（会判断是否全部勾选，自动触发全部完成）
+     * @param delivermain 
+     * @param deliverDetail 
+     * @param tallyQuantity 
+     */
     private async doneTallyItem(delivermain: number, deliverDetail: number, tallyQuantity: number) {
         let { doneTallySingle, doneTally } = this.controller;
         let { warehouse, id } = this.main

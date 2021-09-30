@@ -24,7 +24,6 @@ const SymbolSrcs: any[] = [
 ];
 
 export class VCutOffSheetDetail extends VPage<CDeliver> {
-
     private main: any;
     private detail: any[];
     private trayNumberListInfo: any[] = [];
@@ -134,6 +133,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         }
     }
 
+    /**
+     * 打印韵达电子面单
+     */
     private pringYunDa = async () => {
 
         let dataList: any[] = [];
@@ -202,6 +204,10 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             console.log(error);
         }
     }
+
+    /**
+     * 打印宅急送电子面单
+     */
     private pringZhaiJiSong = async () => {
         let dataList: any[] = [];
         this.trayNumberListInfo.forEach((e: any) => {
@@ -296,6 +302,10 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             console.log(error);
         }
     }
+
+    /**
+     * 打印顺丰电子面单
+     */
     private pringShunFeng = async () => {
         let dataList: any[] = [];
         this.trayNumberListInfo.forEach((e: any) => {
@@ -537,11 +547,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         return <div id="cutOffItemListDiv" className="px-1 py-1 bg-white">
             <List items={this.detail} item={{ render: this.renderCutOffItem }} none="无拣货数据" />
 
-
             <div id="hawblayout_print" style={{ display: 'none' }}>
                 <iframe id="mainbody" width="0" height="0"></iframe>
             </div>
-
 
             <div id="PrintZJSHtml" style={{ display: 'none', width: '10cm', fontFamily: '黑体', height: '15cm' }}>
                 <div style={{ width: '10cm', height: '0.5cm' }}>
@@ -762,6 +770,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         </div>;
     }
 
+    /**
+     * webSocket连接
+     */
     private webSocketConnect = () => {
         // 建立w3c标准的websocket对象，传入ws地址
         this.webSocket = new W3CWebSocket('ws://localhost:9113');

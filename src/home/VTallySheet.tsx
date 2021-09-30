@@ -18,7 +18,7 @@ export class VTallySheet extends VPage<CHome> {
     }
 
     content() {
-        let { JkDeliver } = this.controller.uqs;
+        // let { JkDeliver } = this.controller.uqs;
         let { id, no, staff } = this.main;
 
         let pickTotal: number = 0;
@@ -44,6 +44,10 @@ export class VTallySheet extends VPage<CHome> {
         </div>;
     }
 
+    /**
+     * 开始理货
+     * @param cutOffMain 截单号
+     */
     private tallying = async (cutOffMain: number) => {
         await this.controller.tallying(cutOffMain);
         this.closePage();

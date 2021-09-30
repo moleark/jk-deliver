@@ -8,11 +8,9 @@ export class VPickupPage extends VPage<CHome> {
 
     header() { return '待拣货任务' }
 
-
     content() {
 
         return <div id="pickListDiv" className="p-1 bg-white">
-
         </div>;
     }
 }
