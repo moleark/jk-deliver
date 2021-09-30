@@ -38,7 +38,6 @@ export class VDelivering extends VPage<CHome> {
 		let { ProductX } = JkProduct;
 		let PackX = ProductX.div('packx');
 		let { id, product, item, productExt, deliverShould } = deliverItem;
-		console.log(productExt);
 		let pack = PackX.getObj(item);
 
 		let storageCondition: string = '';
@@ -83,7 +82,7 @@ export class VDelivering extends VPage<CHome> {
 	content() {
 
 		let deliverTotal: number = 0;
-		let { contactInfo } = this.main;
+		let { contactDetail } = this.main;
 		this.detail.forEach(async element => {
 			deliverTotal += element.deliverShould;
 		});
@@ -92,15 +91,15 @@ export class VDelivering extends VPage<CHome> {
 		return <div className="p-1 bg-white" >
 			<div className="px-2 py-1">
 				<div className="row col-12 px-1 py-1">
-					<div className="col-6">{contactInfo?.name}</div>
-					<div className="col-6">{contactInfo?.organizationName}</div>
+					<div className="col-6">{contactDetail?.name}</div>
+					<div className="col-6">{contactDetail?.organizationName}</div>
 				</div>
 				<div className="row col-12 px-1 py-1">
-					<div className="col-6">{contactInfo?.mobile}</div>
-					<div className="col-6">{contactInfo?.telephone}</div>
+					<div className="col-6">{contactDetail?.mobile}</div>
+					<div className="col-6">{contactDetail?.telephone}</div>
 				</div>
-				<div className="col-12 px-1 py-1">{contactInfo?.email}</div>
-				<div className="col-12 px-1 py-1">{contactInfo?.addressString}</div>
+				<div className="col-12 px-1 py-1">{contactDetail?.email}</div>
+				<div className="col-12 px-1 py-1">{contactDetail?.addressString}</div>
 			</div>
 			<hr />
 			<div id='deliverProductList'>

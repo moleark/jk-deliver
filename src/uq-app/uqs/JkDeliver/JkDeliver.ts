@@ -1,4 +1,4 @@
-//=== UqApp builder created on Wed Sep 29 2021 16:24:22 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Thu Sep 30 2021 10:18:56 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -14,7 +14,6 @@ export interface Tuid$user {
 	icon: string;
 	assigned: string;
 	poke: number;
-	role: number;
 }
 
 export interface Tuid$sheet {
@@ -85,6 +84,7 @@ export interface ParamDelivered {
 	deliver: number;
 	detail: {
 		deliverDetail: number;
+		orderDetail: number;
 		quantity: number;
 	}[];
 
@@ -174,6 +174,7 @@ export interface ReturnGetDeliverMain {
 }
 export interface ReturnGetDeliverDetail {
 	id: number;
+	orderDetail: number;
 	delivermain: number;
 	item: number;
 	product: number;
@@ -253,6 +254,7 @@ export interface ReturnGetCutOffMainDetail {
 	tallyState: number;
 	price: number;
 	lotNumber: string;
+	showPrice: number;
 	content: string;
 }
 export interface ResultGetCutOffMain {

@@ -8,7 +8,9 @@ import printJS from 'print-js';
 import QRCode from 'qrcodejs2';
 // import { lodopInitMethod } from 'lodop-printer';
 
+// websocket京东打印服务使用
 const W3CWebSocket = require('websocket').w3cwebsocket;
+// 显示产品安全信息
 const SymbolSrcs: any[] = [
     { name: "LK", src: "GHS02.gif" },
     { name: "LM", src: "GSH04.gif" },
@@ -56,13 +58,16 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                         trayProductList.push(cutOffDetail[indexB]);
 
                         trayProductCount += cutOffDetail[indexB]['tallyShould'];
-                        trayProductPrice += cutOffDetail[indexB]['tallyShould'] * cutOffDetail[indexB]['price'];
+                        if (cutOffDetail[indexB]['showPrice'] === 1) {
+                            trayProductPrice += cutOffDetail[indexB]['tallyShould'] * cutOffDetail[indexB]['price'];
+                        }
                     }
                 }
                 arrId.push(cutOffDetail[index]['trayNumber']);
                 this.trayNumberListInfo.push({
                     trayNumber: cutOffDetail[index]['trayNumber'], customer: cutOffDetail[index]['customer'],
-                    contact: cutOffDetail[index]['contact'], deliverMain: cutOffDetail[index]['delivermain'], deliverDetail: cutOffDetail[index]['deliverDetail'],
+                    contactDetail: cutOffDetail[index]['contactDetail'], productDetail: cutOffDetail[index]['productDetail'],
+                    deliverMain: cutOffDetail[index]['delivermain'], deliverDetail: cutOffDetail[index]['deliverDetail'],
                     trayProductCount: trayProductCount, trayProductPrice: trayProductPrice, trayProductList: trayProductList
                 });
             }

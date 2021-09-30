@@ -56,30 +56,42 @@ export class CDeliver extends CUqBase {
 		});*/
 		await this.load();
 	}
-
+	/**
+	 * 打开回执单打印界面
+	 * @param main 
+	 * @param detail 
+	 */
 	openDeliveryReceiptList = async (main: any, detail: any) => {
 		let vPageParam = [main, detail]
 		this.openVPage(VReceiptList, vPageParam);
 	}
 
+	/**
+	 * 打开截单历史界面
+	 * @param vPageParam 
+	 */
 	openCutOffHistory = async (vPageParam: any) => {
 		this.openVPage(VCutOffHistory, vPageParam);
 	}
 
+	/**
+	 *  打开截单详情界面，去统一打印单据
+	 * @param cutOffMain 
+	 */
 	onOpenCutOffDetail = async (cutOffMain: number) => {
 
 		let { JkDeliver, JkWarehouse } = this.uqs;
 		let ret = await JkDeliver.GetCutOffMain.query({ cutOffMain });
 		let { main, detail } = ret;
-		let promises: PromiseLike<any>[] = [];
-		// let shouldExpressLogisticsArray: any[];
 		this.expressLogisticsList = await JkWarehouse.GetExpressLogisticsList.table('');
+		// let shouldExpressLogisticsArray: any[];
 
-		promises.push();
+		let promises: PromiseLike<any>[] = [];
 		detail.forEach((element: any) => {
-			promises.push(this.getProductExtention(element.product).then(data => element.productExt = data));
 			promises.push(this.getCustomerOrganization(element.customerAccount).then(data => element.organization = data));
-
+			promises.push(this.getProductExtention(375209 /*element.product*/).then(data => element.productExt = data));
+			promises.push(this.getContant(88750 || element.contact).then(data => element.contactDetail = data));
+			promises.push(this.getProduct(88750 || element.product).then(data => element.productDetail = data));
 		});
 		await Promise.all(promises);
 		let cutOff = main[0];
@@ -102,6 +114,24 @@ export class CDeliver extends CUqBase {
 		let { JkCustomer } = this.uqs;
 		let organization = await JkCustomer.GetCustomerOrganization.obj({ customerId: customer });
 		return organization?.organization;
+	}
+
+	/**
+	 * 获取contact信息
+	 * @param content 
+	 */
+	getContant = async (contactId: number) => {
+		let { JkCustomer } = this.uqs;
+		return await JkCustomer.Contact.load(contactId);
+	}
+
+	/**
+	 * 获取contact信息
+	 * @param content 
+	 */
+	getProduct = async (productId: number) => {
+		let { JkProduct } = this.uqs;
+		return await JkProduct.ProductX.load(productId);
 	}
 
 }

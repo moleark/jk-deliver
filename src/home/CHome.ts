@@ -12,7 +12,6 @@ import { VTallying } from "./VTallying";
 import { VTallySheet } from "./VTallySheet";
 import { VPicking } from "./VPicking";
 import { VPickSheet } from "./VPickSheet";
-import { TuidContact } from "uq-app/uqs/JkCustomer";
 
 export interface CustomerPendingDeliver extends ReturnCustomerPendingDeliverRet {
 	deliverQuantity: number;
@@ -193,13 +192,14 @@ export class CHome extends CUqBase {
 		let { deliverMain } = row;
 		let ret = await JkDeliver.GetDeliver.query({ deliver: deliverMain });
 		let { main: mainArr, detail } = ret;
-		let promises: PromiseLike<any>[] = [];
 		if (mainArr.length === 0) {
 			alert(`id ${deliverMain} 没有取到发运单据`);
 			return;
 		}
+
+		let promises: PromiseLike<any>[] = [];
 		mainArr.forEach((element: any) => {
-			promises.push(this.getContant(88750 || element.contact).then(data => element.contactInfo = data));
+			promises.push(this.cApp.cDeliver.getContant(88750 || element.contact).then(data => element.contactDetail = data));
 		});
 
 		detail.forEach((element: any) => {
@@ -297,14 +297,6 @@ export class CHome extends CUqBase {
 		let { JkProduct } = this.uqs;
 		let extention = await JkProduct.ProductExtention.obj({ product: product }); // 56998
 		return extention?.content;
-	}
-	/**
-	 * 获取收货人信息
-	 * @param content 
-	 */
-	getContant = async (contactId: number) => {
-		let { JkCustomer } = this.uqs;
-		return await JkCustomer.Contact.load(contactId);
 	}
 
 }
