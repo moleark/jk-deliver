@@ -4,7 +4,6 @@ import { ReturnCustomerPendingDeliverRet, ReturnWarehousePendingDeliverRet } fro
 import { VCustomerDeliver } from "./VCustomerDeliver";
 import { makeObservable, observable } from "mobx";
 import { VReceiptList } from "./VReceiptList";
-import { ReturnGetExpressLogisticsListRet } from "uq-app/uqs/JkWarehouse";
 import { VCutOffSheetDetail } from "./VCutOffSheetDetail";
 import { VCutOffHistory } from "./VCutOffHistory";
 
@@ -17,7 +16,7 @@ export class CDeliver extends CUqBase {
 	warehouse: number;
 	customer: number;
 	customerOrderDetails: CustomerPendingDeliver[];
-	expressLogisticsList: ReturnGetExpressLogisticsListRet[];
+	carrierList: any[];
 
 	constructor(cApp: CApp) {
 		super(cApp);
@@ -88,24 +87,56 @@ export class CDeliver extends CUqBase {
 	 */
 	onOpenCutOffDetail = async (cutOffMain: number) => {
 
-		let { JkDeliver, JkWarehouse } = this.uqs;
+		let { JkDeliver } = this.uqs;
 		let ret = await JkDeliver.GetCutOffMain.query({ cutOffMain });
 		let { main, detail } = ret;
-		this.expressLogisticsList = await JkWarehouse.GetExpressLogisticsList.table('');
+		this.carrierList = await JkDeliver.GetCarrierNo.table('');
 		// let shouldExpressLogisticsArray: any[];
 
 		let promises: PromiseLike<any>[] = [];
+		main.forEach((element: any) => {
+			promises.push(this.getWarehouse(element.warehouse).then(data => element.warehouseDetail = data));
+		});
 		detail.forEach((element: any) => {
-			promises.push(this.getCustomerOrganization(element.customerAccount).then(data => element.organization = data));
+			// promises.push(this.getCustomerOrganization(element.customerAccount).then(data => element.organization = data));
 			promises.push(this.getProductExtention(375209 /*element.product*/).then(data => element.productExt = data));
-			promises.push(this.getContant(88750 || element.contact).then(data => element.contactDetail = data));
-			promises.push(this.getProduct(88750 || element.product).then(data => element.productDetail = data));
+			promises.push(this.getContant(element.contact).then(data => element.contactDetail = data));  // 88703
+			promises.push(this.getProduct(232173 || element.product).then(data => element.productDetail = data));
 		});
 		await Promise.all(promises);
 		let cutOff = main[0];
+		detail.forEach((e: any) => {
+			let apointCarrierId: any = 0;
+			if (e.content) {
+				let formatContent: string = String(e.content).replace(/\r\n/g, "").replace(/\r/g, "").replace(/\n/g, "");
+				let jsonContect: any = JSON.parse(formatContent);
+				let apointCarrier: any = jsonContect.shouldExpressLogistics[0];
+				apointCarrierId = this.carrierList.find((e: any) => e.no === apointCarrier)?.id;
+			}
+			e.carrier = (e.carrier) ? e.carrier : apointCarrierId;
+		});
 		let vPageParam = [cutOff, detail];
 		this.openVPage(VCutOffSheetDetail, vPageParam);
 	};
+
+	/**
+	 * 修改发货单承运商
+	 * @param deliverMain 发货单
+	 * @param carrier 承运商
+	 */
+	updateDeliverCarrier = async (deliverMain: number, carrier: number) => {
+		await this.uqs.JkDeliver.UpdateDeliverCarrier.submit({ deliverMain: deliverMain, carrier: carrier });
+	}
+
+	/**
+	 * 修改发货单承运商和发运单号
+	 * @param deliverMain 发货单
+	 * @param carrier 承运商
+	 * @param waybillNumber 单号
+	 */
+	updateWaybillNumber = async (deliverMain: number, carrier: number, waybillNumber: string) => {
+		await this.uqs.JkDeliver.UpdateWaybillNumber.submit({ deliverMain: deliverMain, carrier: carrier, waybillNumber: waybillNumber });
+	}
 
 	/**
 	 * 获取产品扩展信息
@@ -139,11 +170,21 @@ export class CDeliver extends CUqBase {
 	}
 
 	/**
-	 * 获取contact信息
+	 * 获取产品信息（只需要获取基本产品信息，不需要包装层面）
 	 * @param content 
 	 */
 	getProduct = async (productId: number) => {
 		let { JkProduct } = this.uqs;
 		return await JkProduct.ProductX.load(productId);
+	}
+
+	/**
+	 * 获取库房信息
+	 * @param warehouse 
+	 * @returns 
+	 */
+	getWarehouse = async (warehouse: number) => {
+		let { JkWarehouse } = this.uqs;
+		return await JkWarehouse.Warehouse.load(warehouse);
 	}
 }

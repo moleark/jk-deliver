@@ -1,6 +1,6 @@
 import { LMR, VPage, List } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
-import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse";
+import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { CHome } from "./CHome";
 
 export class VPicking extends VPage<CHome> {

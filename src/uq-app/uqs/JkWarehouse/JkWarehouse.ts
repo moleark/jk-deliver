@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Sep 30 2021 10:18:56 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Thu Sep 30 2021 17:15:47 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -14,7 +14,6 @@ export interface Tuid$user {
 	icon: string;
 	assigned: string;
 	poke: number;
-	role: number;
 }
 
 export interface Tuid$sheet {
@@ -543,17 +542,6 @@ export interface ResultWarehouseTallys {
 	ret: ReturnWarehouseTallysRet[];
 }
 
-export interface ParamGetExpressLogisticsList {
-}
-export interface ReturnGetExpressLogisticsListRet {
-	id: number;
-	name: string;
-	no: string;
-}
-export interface ResultGetExpressLogisticsList {
-	ret: ReturnGetExpressLogisticsListRet[];
-}
-
 export interface ParamGetOutInBoundReasonList {
 }
 export interface ReturnGetOutInBoundReasonListList {
@@ -964,7 +952,6 @@ export interface UqExt extends Uq {
 	WarehousePickups: UqQuery<ParamWarehousePickups, ResultWarehousePickups>;
 	GetPickup: UqQuery<ParamGetPickup, ResultGetPickup>;
 	WarehouseTallys: UqQuery<ParamWarehouseTallys, ResultWarehouseTallys>;
-	GetExpressLogisticsList: UqQuery<ParamGetExpressLogisticsList, ResultGetExpressLogisticsList>;
 	GetOutInBoundReasonList: UqQuery<ParamGetOutInBoundReasonList, ResultGetOutInBoundReasonList>;
 	ShippingAreaInclusionProvince: UqMap;
 	ShippingAreaInclusionCity: UqMap;

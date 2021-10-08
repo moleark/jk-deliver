@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Res, setRes, TFunc, FieldItem, FieldItemNumber, FieldItemString, FieldItemId, UI } from "tonva-react";
+import { Res, setRes, TFunc, FieldItem, FieldItemNumber, FieldItemString, FieldItemId, UI, uqStringify } from "tonva-react";
 import { TuidWarehouse } from "./JkWarehouse";
 
 const resRaw: Res<any> = {
@@ -16,7 +16,6 @@ export const t: TFunc = (str: string | JSX.Element): string | JSX.Element => {
 }
 
 export function render(item: TuidWarehouse): JSX.Element {
-	let { id, no, name } = item;
-	//return <>{name} <small className="text-muted">{id} {no}</small></>;
-	return <>{name}</>;
+	//return <>{uqStringify(item)}</>;
+	return <>{item.name}</>;
 };

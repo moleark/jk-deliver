@@ -1,10 +1,17 @@
-import { Res, setRes, TFunc, UI } from "tonva-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
 import { IxPendingPickup } from "./JkWarehouse";
 
 /*--fields--*/
 const fields = {
+	ixx: {
+		"name": "ixx",
+		"type": "id",
+		"isKey": false,
+		"label": "Ixx"
+	} as FieldItemId,
 	ix: {
 		"name": "ix",
 		"type": "id",
@@ -17,11 +24,37 @@ const fields = {
 		"isKey": false,
 		"label": "Xi"
 	} as FieldItemId,
+	orderDetail: {
+		"name": "orderDetail",
+		"type": "id",
+		"isKey": false,
+		"label": "OrderDetail"
+	} as FieldItemId,
+	shelfBlock: {
+		"name": "shelfBlock",
+		"type": "id",
+		"isKey": false,
+		"label": "ShelfBlock"
+	} as FieldItemId,
+	quantity: {
+		"name": "quantity",
+		"type": "number",
+		"isKey": false,
+		"widget": "number",
+		"label": "Quantity"
+	} as FieldItemNum,
+	lotNumber: {
+		"name": "lotNumber",
+		"type": "string",
+		"isKey": false,
+		"widget": "string",
+		"label": "LotNumber"
+	} as FieldItemString,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.xi, 
+	fields.ixx, fields.xi, fields.orderDetail, fields.shelfBlock, fields.quantity, fields.lotNumber, 
 ];
 
 export const ui: UI = {
@@ -44,5 +77,5 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 }
 
 export function render(item: IxPendingPickup):JSX.Element {
-	return <>{JSON.stringify(item)}</>;
+	return <>{uqStringify(item)}</>;
 };

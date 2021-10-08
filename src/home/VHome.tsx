@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { List, VPage, LMR, FA } from "tonva-react";
 import { ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet, ReturnWarehousePendingDeliverRet } from "uq-app/uqs/JkDeliver";
-import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
+import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { CHome } from "./CHome";
 
 export class VHome extends VPage<CHome> {

@@ -1,5 +1,5 @@
 import { VPage } from "tonva-react";
-import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse";
+import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { CHome } from "./CHome";
 import { VPicking } from "./VPicking";
 

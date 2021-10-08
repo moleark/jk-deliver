@@ -2,7 +2,7 @@ import { QueryPager } from "tonva-react";
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase, JkDeliver } from "uq-app";
 import { ReturnCustomerPendingDeliverRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
-import { ReturnGetExpressLogisticsListRet, ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse";
+import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
 import { VHome } from "./VHome";
@@ -52,7 +52,6 @@ export class CHome extends CUqBase {
 	customer: number;
 	customerOrderDetails: CustomerPendingDeliver[];
 	warehousePending: WarehousePending[];
-	expressLogisticsList: ReturnGetExpressLogisticsListRet[];
 
 	constructor(cApp: CApp) {
 		super(cApp);
