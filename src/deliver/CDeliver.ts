@@ -1,4 +1,4 @@
-import { CApp, CUqBase } from "uq-app";
+import { CApp, CUqBase, JkCustomer } from "uq-app";
 import { VDeliver } from "./VDeliver";
 import { ReturnCustomerPendingDeliverRet, ReturnWarehousePendingDeliverRet } from 'uq-app/uqs/JkDeliver'
 import { VCustomerDeliver } from "./VCustomerDeliver";
@@ -100,10 +100,27 @@ export class CDeliver extends CUqBase {
 		detail.forEach((element: any) => {
 			// promises.push(this.getCustomerOrganization(element.customerAccount).then(data => element.organization = data));
 			promises.push(this.getProductExtention(375209 /*element.product*/).then(data => element.productExt = data));
-			promises.push(this.getContant(element.contact).then(data => element.contactDetail = data));  // 88703
+			promises.push(this.getContant(88703).then(data => element.contactDetail = data));  //  element.contact
 			promises.push(this.getProduct(232173 || element.product).then(data => element.productDetail = data));
 		});
 		await Promise.all(promises);
+
+		let promisesAddress: PromiseLike<any>[] = [];
+		// 可以在uq中写一个统一查询query，能够避免多次循环查询
+		detail.forEach(async (element: any) => {
+			promisesAddress.push(this.getAddressDetail(332).then(data => element.contactDetail.addressDetail = data));
+		});
+		await Promise.all(promisesAddress);
+
+		let promisesArea: PromiseLike<any>[] = [];
+		// 可以在uq中写一个统一查询query，能够避免多次循环查询
+		detail.forEach(async (element: any) => {
+			promisesArea.push(this.getProvinceName(element.contactDetail.addressDetail.province.id).then(data => element.contactDetail.provinceName = data));
+			promisesArea.push(this.getCityName(element.contactDetail.addressDetail.city.id).then(data => element.contactDetail.cityName = data));
+			promisesArea.push(this.getCountyName(element.contactDetail.addressDetail.county.id).then(data => element.contactDetail.countyName = data));
+		});
+		await Promise.all(promisesArea);
+
 		let cutOff = main[0];
 		detail.forEach((e: any) => {
 			let apointCarrierId: any = 0;
@@ -166,6 +183,14 @@ export class CDeliver extends CUqBase {
 	 */
 	getContant = async (contactId: number) => {
 		let { JkCustomer } = this.uqs;
+		/*let a: any = await JkCustomer.Contact.load(101);
+		console.log(a);
+		let b: any = await JkCustomer.Contact.loadMain(101);
+		console.log(b);
+		let c: any = await JkCustomer.Contact.getObj(101);
+		console.log(c);
+		let d: any = await JkCustomer.Contact.all();
+		console.log(d);*/
 		return await JkCustomer.Contact.load(contactId);
 	}
 
@@ -187,4 +212,42 @@ export class CDeliver extends CUqBase {
 		let { JkWarehouse } = this.uqs;
 		return await JkWarehouse.Warehouse.load(warehouse);
 	}
+
+	/**
+	 * 获取address信息
+	 * @param address addressID
+	 * @returns 
+	 */
+	getAddressDetail = async (address: number) => {
+		let { JkCommon } = this.uqs;
+		let addressDetail = await JkCommon.Address.load(address);
+		return addressDetail;
+	};
+	/**
+	 * 获取省份中文名称
+	 * @param province provinceID
+	 */
+	getProvinceName = async (province: number) => {
+		let { JkCommon } = this.uqs;
+		let provinceDetail: any = await JkCommon.Province.load(province);
+		return provinceDetail?.chineseName;
+	};
+	/**
+	 * 获取城市中文名称
+	 * @param city cityID
+	 */
+	getCityName = async (city: number) => {
+		let { JkCommon } = this.uqs;
+		let cityDetail: any = await JkCommon.City.load(city);
+		return cityDetail?.chineseName;
+	};
+	/**
+	 * 获取区县中文名称
+	 * @param county countyID
+	 */
+	getCountyName = async (county: number) => {
+		let { JkCommon } = this.uqs;
+		let countyDetail: any = await JkCommon.County.load(county);
+		return countyDetail?.chineseName;
+	};
 }

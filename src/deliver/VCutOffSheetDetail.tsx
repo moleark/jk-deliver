@@ -106,13 +106,13 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let { no: cutOffMainNo, warehouseDetail } = this.main;
 
         this.trayNumberListInfo.filter(v => v.carrier === 16).forEach((e: any) => {
-            let remark: string = '';
             let warehouseNo = warehouseDetail?.no;
-            if (e.content) {
+            /*if (e.content) {
                 let formatContent: string = String(e.content).replace(/\r\n/g, "").replace(/\r/g, "").replace(/\n/g, "");
                 let jsonContect: any = JSON.parse(formatContent);
                 remark = jsonContect.deliverNotes;
-            }
+            }*/
+            let remark: string = "订单批号:" + cutOffMainNo + ",货号:" + e.trayNumber + ",提醒注意：（汽运禁航）（务必本人或专人签收）";
             dataList.push({
                 Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderId: e.orderMainNo, Oinvoice: cutOffMainNo,
                 TrayNumber: e.trayNumber, WarehouseId: warehouseNo, ConsigneeName: e.contactDetail?.name,
@@ -171,17 +171,15 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let dataList: any[] = [];
         let { no: cutOffMainNo, warehouseDetail } = this.main;
 
-        this.trayNumberListInfo.filter(v => v.carrier === 16).forEach((e: any) => {
-            let remark: string = '';
+
+        this.trayNumberListInfo.filter(v => v.carrier === 1).forEach((e: any) => {
+
             let warehouseNo = warehouseDetail?.no;
-            if (e.content) {
-                let formatContent: string = String(e.content).replace(/\r\n/g, "").replace(/\r/g, "").replace(/\n/g, "");
-                let jsonContect: any = JSON.parse(formatContent);
-                remark = jsonContect.deliverNotes;
-            }
+            let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
+
             dataList.push({
-                Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderId: e.orderMainNo, Oinvoice: cutOffMainNo,
-                TrayNumber: e.trayNumber, WarehouseId: warehouseNo, ConsigneeName: e.contactDetail?.name,
+                Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderIds: e.orderMainNo, PickListId: cutOffMainNo, CustomerId: "",
+                TrayNumber: e.trayNumber, WarehouseId: warehouseNo, ConsigneeName: e.contactDetail?.name, ConsigneeCity: e.contactDetail?.cityName,
                 ConsigneeUnitName: e.contactDetail?.organizationName, ConsigneeAddressDetail: e.contactDetail?.addressString,
                 ConsigneeTelephone: e.contactDetail?.telephone, ConsigneeMobile: e.contactDetail?.mobile, IsBaoJia: '0', BaoJia: e.trayProductPrice, Remark: remark
             });

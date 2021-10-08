@@ -31,11 +31,16 @@ const fields = {
 		"isKey": false,
 		"label": "Cutter"
 	} as FieldItemId,
+	$create: {
+		"name": "$create",
+		"isKey": false,
+		"label": "$create"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, fields.warehouse, fields.cutter, 
+	fields.no, fields.warehouse, fields.cutter, fields.$create, 
 ];
 
 export const ui: UI = {

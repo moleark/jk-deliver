@@ -40,10 +40,15 @@ export const appConfig: AppConfig = {
 			dev: jk,
 			name: 'customer',
 			version: '0.1.1',
+		},
+		{
+			dev: jk,
+			name: 'common',
+			version: '0.1.1',
 		}
 	],
 	noUnit: true,
-    tvs: {},
+	tvs: {},
 	oem: undefined,
 	htmlTitle: '百灵威发货',
 };

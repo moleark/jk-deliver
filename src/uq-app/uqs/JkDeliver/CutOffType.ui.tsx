@@ -26,11 +26,16 @@ const fields = {
 		"widget": "string",
 		"label": "Description"
 	} as FieldItemString,
+	$create: {
+		"name": "$create",
+		"isKey": false,
+		"label": "$create"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.name, fields.description, 
+	fields.name, fields.description, fields.$create, 
 ];
 
 export const ui: UI = {
