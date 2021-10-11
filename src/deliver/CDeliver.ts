@@ -1,4 +1,4 @@
-import { CApp, CUqBase, JkCustomer } from "uq-app";
+import { CApp, CUqBase } from "uq-app";
 import { VDeliver } from "./VDeliver";
 import { ReturnCustomerPendingDeliverRet, ReturnWarehousePendingDeliverRet } from 'uq-app/uqs/JkDeliver'
 import { VCustomerDeliver } from "./VCustomerDeliver";
