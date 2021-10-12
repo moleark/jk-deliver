@@ -420,7 +420,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             document.getElementById("PrintSFHtml").style.display = "";//显示
             let LODOP = getLodop();
             //打印文件名称
-            LODOP.PRINT_INIT(element.waybillNumber + "宅急送快递单");
+            LODOP.PRINT_INIT(element.waybillNumber + "顺丰快递单");
             //打印纸大小
             LODOP.SET_PRINT_PAGESIZE(0, "7.6cm", "13cm", "7.6*13");
             LODOP.ADD_PRINT_HTM(0, 0, "100%", "13cm", printhtml);
@@ -677,7 +677,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
 
     content() {
         return <div id="cutOffItemListDiv" className="px-1 py-1 bg-white">
-
+            <List items={this.detail} item={{ render: this.renderCutOffItem }} none="无拣货数据" />
 
             <div id="hawblayout_print" style={{ display: 'none' }}>
                 <iframe id="mainbody" width="0" height="0"></iframe>
@@ -809,11 +809,10 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 </div>
             </div>
 
-
             <div id="PrintSFHtml" style={{ height: '130mm', width: '76mm', borderStyle: 'dashed', border: '1px dashed #000' }}>
                 <div style={{ width: '76mm', height: '14mm', borderBottom: '1px dashed #000' }}>
                     <div style={{ textAlign: 'right', fontFamily: 'SimHei', fontSize: '26pt', marginRight: '3mm', lineHeight: '26pt' }}>
-                        <span id="SF_proCode">标快</span>
+                        <span id="SF_proCode"></span>
                     </div>
                     <div style={{ textAlign: 'center', fontFamily: 'STSong', fontSize: '6pt' }}>
                         <span>打印时间: {new Date().toLocaleString()}</span>
@@ -880,132 +879,6 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                     </div>
                 </div>
             </div>
-
-            <div id="PrintSFHtml2" style={{ height: '13cm', width: '7.6cm', borderStyle: 'dashed', border: '1px dashed #000' }}>
-                <table style={{ width: '7.6cm' }}>
-                    <tbody>
-                        <tr>
-                            <td align='right' colSpan={2} style={{ height: '1.4cm', borderBottom: '1px dashed #000' }}>
-                                <label id="SF_proCode" style={{ fontFamily: 'SimHei', fontSize: '26pt', marginRight: '0.3cm', lineHeight: '26pt' }}></label>
-                                <br />
-                                <label style={{ fontFamily: 'STSong', fontSize: '6pt', marginRight: '3cm' }}>打印时间: <span id="cg"></span></label>
-                            </td>
-                        </tr>
-                        <tr style={{ borderBottom: '1px dashed #000', textAlign: 'center' }}>
-                            <td style={{ height: '2.1cm', width: '7.6cm' }} colSpan={2}>
-                                <table style={{ width: '100%' }}>
-                                    <tbody>
-                                        <tr>
-                                            <td colSpan={2} align='center'>
-                                                <div style={{ width: '6.6cm', height: '1.3cm', textAlign: 'center' }} >
-                                                    <img id="SF_waybillNumber"></img>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"> </td>
-                                            <td align="center"><label id="SF_waybillNumber_text" style={{ fontFamily: 'SimHei', fontSize: '10pt', fontWeight: 'bolder' }}></label></td>
-                                        </tr>
-                                        <tr style={{ display: 'none' }}>
-                                            <td align="right"><label style={{ fontFamily: 'SimHei', fontSize: '10pt', fontWeight: 'bolder' }}> </label></td>
-                                            <td align="center"><label style={{ fontFamily: 'SimHei', fontSize: '10pt', fontWeight: 'bolder' }}> </label></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr style={{ borderBottom: '1px dashed #000', textAlign: 'center' }}><td style={{ height: '0.8cm', width: '7.6cm' }} colSpan={2}><label id="SF_destRouteLabel" style={{ fontFamily: 'SimHei', fontSize: '22pt', fontWeight: 'bolder', lineHeight: '22pt' }}></label></td></tr>
-                        <tr>
-                            <td style={{ borderRight: '1px dashed #000' }}>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <table>
-                                                    <tbody>
-                                                        <tr style={{ borderBottom: '1px dashed #000' }}>
-                                                            <td align="center" style={{ height: '1.9cm', width: '6cm' }} colSpan={2}>
-                                                                <table style={{ width: '100%' }}>
-                                                                    <tr style={{ height: '1.9cm' }}>
-                                                                        <td align="center"><label style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>收</label></td>
-                                                                        <td>
-                                                                            <div id="SF_Consignee" style={{
-                                                                                whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt'
-                                                                            }}></div>
-                                                                            <div id="SF_ConsigneeAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt' }}></div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr style={{ height: '0.8cm' }}>
-                                                                        <td align="center"><label style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>寄</label></td>
-                                                                        <td>
-                                                                            <div id="SF_Sender" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
-                                                                            <div id="SF_SenderAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ borderRight: '1px dashed #000' }}>
-                                                                <table>
-                                                                    <tr>
-                                                                        <td align="center" style={{ height: '0.6cm', width: '3.2cm', borderBottom: '1px dashed #000' }}>
-                                                                            <label style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}> </label>
-                                                                            <label style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}> </label>
-                                                                            <label style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>已验视</label>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr><td align="center" style={{ height: '1.2cm', width: '3.2cm', borderBottom: '1px dashed #000' }}> </td></tr>
-                                                                    <tr><td align="center" style={{ height: '1.2cm', width: '3.2cm', borderBottom: '1px dashed #000' }}><label id="SF_codingMappingOut" style={{ fontFamily: 'SimHei', fontSize: '40pt', fontWeight: 'bolder', lineHeight: '40pt' }}></label></td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td align="center" style={{ height: '3cm', width: '2.8cm', borderBottom: '1px dashed #000' }}>
-                                                                <canvas id="SF_twoDimensionCode" style={{ width: '2.5cm', height: '2.5cm', marginTop: '0.25cm', marginRight: '0.15cm' }}></canvas>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style={{ height: '0.6cm', width: '6cm', borderBottom: '1px dashed #000' }} colSpan={2}><label style={{ fontFamily: 'STSong', fontSize: '6pt', fontWeight: 'bolder' }}>签收:</label></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="center" style={{ height: '1.55cm', width: '6cm' }} colSpan={2}>
-                                                <table style={{ width: '100%' }}>
-                                                    <tbody>
-                                                        <tr><td><label id="SF_remark" style={{ fontFamily: 'STSong', fontSize: '5pt', fontWeight: 'bolder' }}></label><br /></td></tr>
-                                                        <tr><td align="center"><label style={{ fontFamily: 'STSong', fontSize: '20pt', fontWeight: 'bolder' }}> </label></td></tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tbody>
-                                        <tr style={{ borderBottom: '1px dashed #000' }}>
-                                            <td align="center" style={{ height: '7cm', width: '1.6cm' }}>
-                                                <div>
-                                                    <img id="SF_waybillNumber_col" style={{ height: '1.3cm', width: '6cm', marginLeft: '-4.5cm', marginBottom: '-7.4cm', transform: 'rotate(90deg)', transformOrigin: 'right top 0px' }} />
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td align="center" style={{ height: '1.05cm', width: '1.6cm' }}><label id="SF_proName" style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>陆运包裹</label></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <List items={this.detail} item={{ render: this.renderCutOffItem }} none="无拣货数据" />
         </div >;
     }
 

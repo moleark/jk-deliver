@@ -9,7 +9,7 @@ export class VCutOffSuccess extends VPage<CDeliver> {
 
     private page = (cutOffMain: any) => {
 
-        let { onOpenCutOffDetail } = this.controller;
+        let { onOpenCutOffDetail } = this.controller.cApp.cDeliver;
         return <Page header="截单成功" back="close">
             <div className="p-3 bg-white mb-3">
                 <div className="mb-3">截单成功！</div>

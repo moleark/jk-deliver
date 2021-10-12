@@ -50,16 +50,11 @@ const fields = {
 		"widget": "updown",
 		"label": "TrayNumber"
 	} as FieldItemInt,
-	$create: {
-		"name": "$create",
-		"isKey": false,
-		"label": "$create"
-	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, fields.customer, fields.contact, fields.warehouse, fields.cutOffMain, fields.trayNumber, fields.$create, 
+	fields.no, fields.customer, fields.contact, fields.warehouse, fields.cutOffMain, fields.trayNumber, 
 ];
 
 export const ui: UI = {
