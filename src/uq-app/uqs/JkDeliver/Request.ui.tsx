@@ -2,54 +2,42 @@
 import { Res, setRes, TFunc, UI, uqStringify } from "tonva-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FieldItem, FieldItemInt, FieldItemNum, FieldItemString, FieldItemId } from "tonva-react";
-import { IxPendingDeliver } from "./JkDeliver";
+import { Request } from "./JkDeliver";
 
 /*--fields--*/
 const fields = {
-	ixx: {
-		"name": "ixx",
+	id: {
+		"name": "id",
 		"type": "id",
 		"isKey": false,
-		"label": "Ixx"
+		"label": "Id"
 	} as FieldItemId,
-	ix: {
-		"name": "ix",
+	customerAccount: {
+		"name": "customerAccount",
 		"type": "id",
 		"isKey": false,
-		"label": "Ix"
+		"label": "CustomerAccount"
 	} as FieldItemId,
-	xi: {
-		"name": "xi",
+	contact: {
+		"name": "contact",
 		"type": "id",
 		"isKey": false,
-		"label": "Xi"
+		"label": "Contact"
 	} as FieldItemId,
-	quantity: {
-		"name": "quantity",
-		"type": "number",
+	$create: {
+		"name": "$create",
 		"isKey": false,
-		"widget": "number",
-		"label": "Quantity"
-	} as FieldItemNum,
-	showPrice: {
-		"name": "showPrice",
-		"isKey": false,
-		"label": "ShowPrice"
-	} as undefined,
-	json: {
-		"name": "json",
-		"isKey": false,
-		"label": "Json"
+		"label": "$create"
 	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.ixx, fields.xi, fields.quantity, fields.showPrice, fields.json, 
+	fields.customerAccount, fields.contact, fields.$create, 
 ];
 
 export const ui: UI = {
-	label: "IxPendingDeliver",
+	label: "Request",
 	fieldArr,
 	fields,
 };
@@ -67,6 +55,6 @@ export const t:TFunc = (str:string|JSX.Element): string|JSX.Element => {
 	return res[str as string] ?? str;
 }
 
-export function render(item: IxPendingDeliver):JSX.Element {
+export function render(item: Request):JSX.Element {
 	return <>{uqStringify(item)}</>;
 };
