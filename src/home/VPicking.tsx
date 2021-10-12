@@ -56,7 +56,7 @@ export class VPicking extends VPage<CHome> {
 			</div>
 		 */
 		let left = <div className="py-1 pr-2">{index + 1}</div>;
-		let isDone: boolean = (pickstate === 0) ? false : true;
+		let isDone: boolean = (pickstate === 0 || pickstate === false) ? false : true;
 		pickItem.pickstate = isDone;
 		let right = <div className="m-auto pr-2">
 			<label className="small text-muted">

@@ -32,12 +32,12 @@ export class VTallySheet extends VPage<CHome> {
                 <span><strong>{no}</strong></span>
             </div>
             <div className="row col-12 px-1 py-1 float-left">
-                <span className="text-info small">应打包总瓶数：<strong>{pickTotal}</strong></span>
+                <span className="text-info small">应理货总瓶数：<strong>{pickTotal}</strong></span>
             </div>
             <div className="row col-12 px-1 py-1">
                 {
                     !staff && <div className="my-3">
-                        <button className="btn btn-success" onClick={() => this.tallying(id)}>开始打包</button>
+                        <button className="btn btn-success" onClick={() => this.tallying(id)}>开始理货</button>
                     </div>
                 }
             </div>

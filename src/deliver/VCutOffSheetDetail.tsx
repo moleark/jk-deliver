@@ -7,9 +7,6 @@ import JsBarcode from 'jsbarcode';
 import printJS from 'print-js';
 import QRCode from 'qrcode';
 import { format } from 'date-fns';
-import getLodop from './printHelper/LodopFuncs';
-// import { lodopInitMethod } from 'lodop-printer';
-//const QRCode = require('qrcode');
 
 // websocket京东打印服务使用
 const W3CWebSocket = require('websocket').w3cwebsocket;
@@ -253,8 +250,72 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
      */
     private pringZhaiJiSong = async () => {
 
-        //let result = "{\"ret\":[{\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",\"SiteNo\":\"BH63-66\",\"SiteName\":\"北京_中关村营业所_花园路营业厅\",\"ExpressStatus\":\"0\",\"ExpressErrorCode\":\"OK\",\"ProvinceName\":\"北京市\",\"TownNme\":\"\",\"CityName\":\"北京市\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeTelephone\":\"010-59309000\",\"ConsigneeUnitName\":\"百灵威测试\",\"ExpressCode\":\"ZJS008290952342\",\"ShipperUnitName\":\"J&K Scientific Ltd\",\"AcceptanceUnitName\":\"\",\"DeclaredValue\":\"0\",\"CollectionAmount\":\"0.00\",\"ImportantHints\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：5\",\"Createdate\":\"2021-10-09\",\"ConsigneeAddressDetail\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\"}]}";
-        //let jsonResult: any[] = JSON.parse(result).ret;
+        let result = "{\"ret\":[{\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",\"SiteNo\":\"BH63-66\",\"SiteName\":\"北京_中关村营业所_花园路营业厅\",\"ExpressStatus\":\"0\",\"ExpressErrorCode\":\"OK\",\"ProvinceName\":\"北京市\",\"TownNme\":\"\",\"CityName\":\"北京市\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeTelephone\":\"010-59309000\",\"ConsigneeUnitName\":\"百灵威测试\",\"ExpressCode\":\"ZJS008290952342\",\"ShipperUnitName\":\"J&K Scientific Ltd\",\"AcceptanceUnitName\":\"\",\"DeclaredValue\":\"0\",\"CollectionAmount\":\"0.00\",\"ImportantHints\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：5\",\"Createdate\":\"2021-10-09\",\"ConsigneeAddressDetail\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\"}]}";
+        let jsonResult: any[] = JSON.parse(result).ret;
+        jsonResult.forEach((e: any) => {
+            if (e.ExpressStatus === "0") {
+                let deliverMainId: number = Number(e.Id.split('_')[1]);
+                this.updateWaybillNumber(deliverMainId, 41, e.ExpressCode);	//更新快递单号
+
+                document.getElementById("barcodeTarget2").innerHTML = "";
+                JsBarcode("#barcodeTarget2", e.ExpressCode, {
+                    format: "CODE128", width: 2, height: 35, fontSize: 14, fontOptions: 'bold italic', displayValue: true,
+                    textAlign: "center",    //设置文本的水平对齐方式
+                    textMargin: 1,          //设置条形码和文本之间的间距
+                    margin: 1               //设置条形码周围的空白边距
+                });
+                document.getElementById("barcodeTarget").innerHTML = "";
+                JsBarcode("#barcodeTarget", e.ExpressCode, {
+                    format: 'CODE128', width: 1, height: 30, fontSize: 10, fontOptions: 'bold', displayValue: true,
+                    textAlign: "center",    //设置文本的水平对齐方式
+                    textMargin: 1,          //设置条形码和文本之间的间距
+                    margin: 1               //设置条形码周围的空白边距
+                });
+                var spanConsigneeAddressDetail = document.getElementsByClassName("ConsigneeAddressDetail");
+                for (let index = 0; index < spanConsigneeAddressDetail.length; index++) {
+                    spanConsigneeAddressDetail[index].innerHTML = e.ConsigneeAddressDetail + ",(" + e.ConsigneeUnitName + ")";
+                }
+                document.getElementById("VcityCode").innerText = e.VcityCode;
+                document.getElementById("SiteNo").innerText = e.SiteNo;
+                document.getElementById("SiteName").innerText = e.SiteName;
+                document.getElementById("ProvinceName").innerText = e.ProvinceName;
+                document.getElementById("CityName").innerText = e.CityName;
+                document.getElementById("TownNme").innerText = e.TownNme;
+                var spanConsigneeName = document.getElementsByClassName("ConsigneeName");
+                for (let index = 0; index < spanConsigneeName.length; index++) {
+                    spanConsigneeName[index].innerHTML = e.ConsigneeName;
+                }
+                var spanConsigneeMobile = document.getElementsByClassName("ConsigneeMobile");
+                for (let index = 0; index < spanConsigneeMobile.length; index++) {
+                    spanConsigneeMobile[index].innerHTML = e.ConsigneeMobile;
+                }
+                document.getElementById("ConsigneeTelephone").innerText = e.ConsigneeTelephone;
+                var spanExpressOrderNo = document.getElementsByClassName("ExpressOrderNo");
+                for (let index = 0; index < spanExpressOrderNo.length; index++) {
+                    spanExpressOrderNo[index].innerHTML = e.ExpressOrderNo;
+                }
+                document.getElementById("ImportantHints").innerText = e.ImportantHints;
+                document.getElementById("Createdate").innerText = e.Createdate;
+                document.getElementById("ExpressCode").innerText = e.ExpressCode;
+
+                /*let LODOP = getLodop();
+                var printhtml = document.getElementById("PrintZJSHtml").innerHTML;
+                //打印文件名称
+                LODOP.PRINT_INIT(e.ExpressCode + "宅急送快递单");
+                //打印纸大小
+                LODOP.SET_PRINT_PAGESIZE(0, "10cm", "15cm", "10*15");
+                LODOP.ADD_PRINT_HTM(0, 0, "100%", "15cm", printhtml);
+                LODOP.SET_PRINTER_INDEX("Xprinter XP-460B");
+                LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS", true);
+                var Pid = LODOP.PRINT();
+                return LODOP.GET_VALUE("PRINT_STATUS_TEXT", Pid);*/
+            } else {
+                console.log(e.ExpressStatus + ',' + e.ExceptionMessage);
+            }
+        });
+        return;
+
+
         let dataList: any[] = [];
         let { no: cutOffMainNo, warehouseDetail } = this.main;
 
@@ -330,17 +391,6 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                         document.getElementById("Createdate").innerText = e.Createdate;
                         document.getElementById("ExpressCode").innerText = e.ExpressCode;
 
-                        let LODOP = getLodop();
-                        var printhtml = document.getElementById("PrintZJSHtml").innerHTML;
-                        //打印文件名称
-                        LODOP.PRINT_INIT(e.ExpressCode + "宅急送快递单");
-                        //打印纸大小
-                        LODOP.SET_PRINT_PAGESIZE(0, "10cm", "15cm", "10*15");
-                        LODOP.ADD_PRINT_HTM(0, 0, "100%", "15cm", printhtml);
-                        LODOP.SET_PRINTER_INDEX("Xprinter XP-460B");
-                        LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS", true);
-                        var Pid = LODOP.PRINT();
-                        return LODOP.GET_VALUE("PRINT_STATUS_TEXT", Pid);
                     } else {
                         console.log(e.ExpressStatus + ',' + e.ExceptionMessage);
                     }
@@ -373,7 +423,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 textMargin: 10,          //设置条形码和文本之间的间距
                 margin: 2               //设置条形码周围的空白边距
             });
-            document.getElementById("SF_waybillNumber_text").innerText = element.waybillNumber;
+            // document.getElementById("SF_waybillNumber_text").innerText = element.waybillNumber;
             document.getElementById("SF_destRouteLabel").innerText = element.destRouteLabel;
             document.getElementById("SF_Consignee").innerText = element.ConsigneeName + " " + element.ConsigneeMobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') + " " + element.ConsigneeUnitName;
             document.getElementById("SF_ConsigneeAddress").innerText = element.ConsigneeAddress;
@@ -389,46 +439,24 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 console.log();
             });
 
-            alert("点击确认开始打印");
+            // alert("点击确认开始打印");
             document.getElementById('SF_remark').innerHTML = element.remark;
             JsBarcode("#SF_waybillNumber_col", element.waybillNumber, { format: "CODE128A", height: 30, width: 2, displayValue: false });
 
             var testDiv = document.getElementById("SF_waybillNumber_col");
             testDiv.style.float = "left";
 
-            /*var bdhtml = window.document.body.innerHTML;
-            var prnhtml = document.getElementById("PrintSFHtml").outerHTML;
-            window.document.body.innerHTML = prnhtml; //把需要打印的指定内容赋给body.innerHTML
-
-            window.print(); //调用浏览器的打印功能打印指定区域
-            //window.print(); //调用浏览器的打印功能打印指定区域
-            window.document.body.innerHTML = bdhtml; // 最后还原页面*/
-
             //var printhtml = document.getElementById("PrintSFHtml").outerHTML;
             //document.getElementById("PrintSFHtml").style.display = "";//显示
-            /*setTimeout(() => {
+            setTimeout(() => {
                 // 增加延时机制则成功哪怕延迟1毫秒也正常执行;
                 printJS({
                     printable: 'PrintSFHtml', // 要打印内容的id
                     type: 'html',               // 可以打印html,img详细的可以在官方文档https://printjs.crabbly.com/中查询
-                    //scanStyles: true,          // 默认样式
+                    scanStyles: true,          // 默认样式
                     documentTitle: '.'
                 });
-            }, 1);*/
-
-            var printhtml = document.getElementById("PrintSFHtml").innerHTML;
-            document.getElementById("PrintSFHtml").style.display = "";//显示
-            let LODOP = getLodop();
-            //打印文件名称
-            LODOP.PRINT_INIT(element.waybillNumber + "宅急送快递单");
-            //打印纸大小
-            LODOP.SET_PRINT_PAGESIZE(0, "7.6cm", "13cm", "7.6*13");
-            LODOP.ADD_PRINT_HTM(0, 0, "100%", "13cm", printhtml);
-            LODOP.SET_PRINTER_INDEX("211.5.9.23 上的 HP LaserJet Pro MFP M125-M126 PCLmS");
-            LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS", true);
-            var Pid = LODOP.PRINT();
-            return LODOP.GET_VALUE("PRINT_STATUS_TEXT", Pid);
-
+            }, 1);
         });
         return;
 
@@ -677,13 +705,13 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
 
     content() {
         return <div id="cutOffItemListDiv" className="px-1 py-1 bg-white">
-
+            <List items={this.detail} item={{ render: this.renderCutOffItem }} none="无拣货数据" />
 
             <div id="hawblayout_print" style={{ display: 'none' }}>
                 <iframe id="mainbody" width="0" height="0"></iframe>
             </div>
 
-            <div id="PrintZJSHtml" style={{ display: 'none', width: '10cm', fontFamily: '黑体', height: '15cm' }}>
+            <div id="PrintZJSHtml" style={{ width: '10cm', fontFamily: '黑体', height: '15cm' }}>
                 <div style={{ width: '10cm', height: '0.3cm', textAlign: 'center' }}>
                     <p>
                         <span id="SiteName" style={{ fontFamily: '黑体', fontSize: '18px', fontWeight: 'bold', width: '9cm' }} ></span>
@@ -809,203 +837,76 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 </div>
             </div>
 
-
-            <div id="PrintSFHtml" style={{ height: '130mm', width: '76mm', borderStyle: 'dashed', border: '1px dashed #000' }}>
-                <div style={{ width: '76mm', height: '14mm', borderBottom: '1px dashed #000' }}>
-                    <div style={{ textAlign: 'right', fontFamily: 'SimHei', fontSize: '26pt', marginRight: '3mm', lineHeight: '26pt' }}>
-                        <span id="SF_proCode">标快</span>
+            <div id="PrintSFHtml" style={{ height: '13cm', width: '7.6cm', borderStyle: 'dashed', border: '1px dashed #000' }}>
+                <div style={{ borderBottom: '1px dashed #000', width: '7.6cm', height: '1.4cm' }}>
+                    <div style={{ textAlign: 'right', fontFamily: 'SimHei', fontSize: '20pt', marginRight: '0.3cm', width: '7.6cm', height: '1.0cm' }}>
+                        <span id="SF_proCode"></span>
                     </div>
                     <div style={{ textAlign: 'center', fontFamily: 'STSong', fontSize: '6pt' }}>
                         <span>打印时间: {new Date().toLocaleString()}</span>
                     </div>
                 </div>
-                <div style={{ borderBottom: '1px dashed #000', textAlign: 'center', height: '24mm', width: '76mm' }}>
-                    <img id="SF_waybillNumber" style={{ width: '60mm', height: '20mm' }}></img>
+                <div style={{ borderBottom: '1px dashed #000', textAlign: 'center', height: '2.3cm', width: '7.6cm' }}>
+                    <img id="SF_waybillNumber" style={{ width: '6cm', height: '2cm' }}></img>
                 </div>
-                <div style={{ borderBottom: '1px dashed #000', textAlign: 'center', height: '10mm', width: '76mm' }}>
-                    <span id="SF_destRouteLabel" style={{ fontFamily: 'SimHei', fontSize: '22pt', fontWeight: 'bolder', lineHeight: '22pt' }}></span>
+                <div style={{ borderBottom: '1px dashed #000', textAlign: 'center', height: '1cm', width: '7.6cm' }}>
+                    <span id="SF_destRouteLabel" style={{ fontFamily: 'SimHei', fontSize: '20pt', fontWeight: 'bolder' }}></span>
                 </div>
-                <div style={{ borderRight: '1px dashed #000', width: '76mm', height: '82mm' }}>
-                    <div style={{ borderRight: '1px dashed #000', width: '60mm', height: '82mm', float: 'left' }}>
-                        <div style={{ width: '60mm', height: '19mm' }}>
-                            <div style={{ width: '5mm', height: '19mm', float: 'left', paddingLeft: '0mm', paddingTop: '0mm' }}>
+                <div style={{ borderRight: '1px dashed #000', width: '7.6cm', height: '8cm' }}>
+                    <div style={{ borderRight: '1px dashed #000', width: '6cm', height: '8cm', float: 'left' }}>
+                        <div style={{ width: '6cm', height: '1.9cm' }}>
+                            <div style={{ width: '0.5cm', height: '1.9cm', float: 'left', paddingLeft: '0mm', paddingTop: '0mm' }}>
                                 <span style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>收</span>
                             </div>
-                            <div style={{ width: '54mm', height: '19mm', float: 'left' }}>
+                            <div style={{ width: '5.4cm', height: '1.9cm', float: 'left' }}>
                                 <div id="SF_Consignee" style={{
-                                    whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt'
+                                    whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', fontFamily: 'STSong', fontSize: '9pt'
                                 }}></div>
                                 <div id="SF_ConsigneeAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt' }}></div>
                             </div>
                         </div>
                         <div style={{ borderBottom: '1px dashed #000', width: '60mm', height: '8mm' }}>
-                            <div style={{ width: '5mm', height: '8mm', float: 'left', paddingLeft: '0mm', paddingTop: '0mm' }}>
+                            <div style={{ width: '0.5cm', height: '0.8cm', float: 'left', paddingLeft: '0mm', paddingTop: '0mm' }}>
                                 <label style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>寄</label>
                             </div>
-                            <div style={{ width: '54mm', height: '8mm', float: 'left' }}>
+                            <div style={{ width: '5.4cm', height: '0.8cm', float: 'left' }}>
                                 <div id="SF_Sender" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
                                 <div id="SF_SenderAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
                             </div>
                         </div>
-                        <div style={{ borderBottom: '1px dashed #000', width: '60mm', height: '30mm' }}>
-                            <div style={{ borderRight: '1px dashed #000', width: '32mm', height: '30mm', display: 'left' }}>
-                                <div style={{ borderBottom: '1px dashed #000', width: '32mm', height: '6mm' }}>
+                        <div style={{ borderBottom: '1px dashed #000', width: '6cm', height: '3cm' }}>
+                            <div style={{ borderRight: '1px dashed #000', width: '3.2cm', height: '3cm', float: 'left' }}>
+                                <div style={{ borderBottom: '1px dashed #000', width: '3.2cm', height: '0.6cm', textAlign: 'center' }}>
                                     <span style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>已验视</span>
                                 </div>
-                                <div style={{ borderBottom: '1px dashed #000', width: '32mm', height: '12mm' }}>
+                                <div style={{ borderBottom: '1px dashed #000', width: '3.2cm', height: '1.2cm' }}>
                                     &nbsp;
                                 </div>
-                                <div style={{ borderBottom: '1px dashed #000', width: '32mm', height: '12mm' }}>
-                                    <label id="SF_codingMappingOut" style={{ fontFamily: 'SimHei', fontSize: '40pt', fontWeight: 'bolder', lineHeight: '40pt' }}></label>
+                                <div style={{ width: '3.2cm', height: '1.2cm', textAlign: 'center' }}>
+                                    <label id="SF_codingMappingOut" style={{ fontFamily: 'SimHei', fontSize: '26pt', fontWeight: 'bolder' }}></label>
                                 </div>
                             </div>
-                            <div style={{ width: '27mm', height: '30mm', display: 'left', textAlign: 'center' }}>
-                                <canvas id="SF_twoDimensionCode" style={{ width: '25mm', height: '25mm', marginTop: '2.5mm', marginRight: '1.5mm' }}></canvas>
+                            <div style={{ width: '2.7cm', height: '3cm', float: 'left', textAlign: 'center' }}>
+                                <canvas id="SF_twoDimensionCode" style={{ width: '2.5cm', height: '2.5cm', marginTop: '0.2cm' }}></canvas>
                             </div>
                         </div>
-                        <div style={{ borderBottom: '1px dashed #000', width: '60mm', height: '6mm' }}>
+                        <div style={{ borderBottom: '1px dashed #000', width: '6cm', height: '0.6cm' }}>
                             <span style={{ fontFamily: 'STSong', fontSize: '6pt', fontWeight: 'bolder' }}>签收:</span>
                         </div>
-                        <div style={{ borderBottom: '1px dashed #000', width: '60mm', height: '19mm' }}>
-                            <label id="SF_remark" style={{ fontFamily: 'STSong', fontSize: '5pt', fontWeight: 'bolder' }}></label>
+                        <div style={{ width: '6cm', height: '2cm' }}>
+                            <label id="SF_remark" style={{ fontFamily: 'STSong', fontSize: '7pt' }}></label>
                         </div>
                     </div>
-                    <div style={{ width: '15mm', height: '82mm', float: 'right' }}>
-                        <div style={{ width: '15mm', height: '70mm', paddingLeft: '15mm', transform: 'rotate(90deg)', transformOrigin: 'right top 0px' }}>
-                            <img id="SF_waybillNumber_col" style={{ width: '60mm', height: '15mm', marginLeft: '5mm' }} ></img>
+                    <div style={{ width: '1.5cm', height: '8cm', float: 'right' }}>
+                        <div style={{ width: '1.5cm', height: '6.8cm', paddingLeft: '1.5cm', transform: 'rotate(90deg)', transformOrigin: 'right top 0px' }}>
+                            <img id="SF_waybillNumber_col" style={{ width: '6cm', height: '1.5cm', marginLeft: '0.5cm' }} ></img>
                         </div>
-                        <div style={{ borderTop: '1px dashed #000', width: '15mm', height: '12mm' }}>
-                            <label id="SF_proName" style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>陆运包裹</label>
+                        <div style={{ borderTop: '1px dashed #000', width: '1.5cm', height: '1.2cm' }}>
+                            <label id="SF_proName" style={{ fontFamily: 'STSong', fontSize: '8pt', fontWeight: 'bolder' }}>陆运包裹</label>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div id="PrintSFHtml2" style={{ height: '13cm', width: '7.6cm', borderStyle: 'dashed', border: '1px dashed #000' }}>
-                <table style={{ width: '7.6cm' }}>
-                    <tbody>
-                        <tr>
-                            <td align='right' colSpan={2} style={{ height: '1.4cm', borderBottom: '1px dashed #000' }}>
-                                <label id="SF_proCode" style={{ fontFamily: 'SimHei', fontSize: '26pt', marginRight: '0.3cm', lineHeight: '26pt' }}></label>
-                                <br />
-                                <label style={{ fontFamily: 'STSong', fontSize: '6pt', marginRight: '3cm' }}>打印时间: <span id="cg"></span></label>
-                            </td>
-                        </tr>
-                        <tr style={{ borderBottom: '1px dashed #000', textAlign: 'center' }}>
-                            <td style={{ height: '2.1cm', width: '7.6cm' }} colSpan={2}>
-                                <table style={{ width: '100%' }}>
-                                    <tbody>
-                                        <tr>
-                                            <td colSpan={2} align='center'>
-                                                <div style={{ width: '6.6cm', height: '1.3cm', textAlign: 'center' }} >
-                                                    <img id="SF_waybillNumber"></img>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"> </td>
-                                            <td align="center"><label id="SF_waybillNumber_text" style={{ fontFamily: 'SimHei', fontSize: '10pt', fontWeight: 'bolder' }}></label></td>
-                                        </tr>
-                                        <tr style={{ display: 'none' }}>
-                                            <td align="right"><label style={{ fontFamily: 'SimHei', fontSize: '10pt', fontWeight: 'bolder' }}> </label></td>
-                                            <td align="center"><label style={{ fontFamily: 'SimHei', fontSize: '10pt', fontWeight: 'bolder' }}> </label></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr style={{ borderBottom: '1px dashed #000', textAlign: 'center' }}><td style={{ height: '0.8cm', width: '7.6cm' }} colSpan={2}><label id="SF_destRouteLabel" style={{ fontFamily: 'SimHei', fontSize: '22pt', fontWeight: 'bolder', lineHeight: '22pt' }}></label></td></tr>
-                        <tr>
-                            <td style={{ borderRight: '1px dashed #000' }}>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <table>
-                                                    <tbody>
-                                                        <tr style={{ borderBottom: '1px dashed #000' }}>
-                                                            <td align="center" style={{ height: '1.9cm', width: '6cm' }} colSpan={2}>
-                                                                <table style={{ width: '100%' }}>
-                                                                    <tr style={{ height: '1.9cm' }}>
-                                                                        <td align="center"><label style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>收</label></td>
-                                                                        <td>
-                                                                            <div id="SF_Consignee" style={{
-                                                                                whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt'
-                                                                            }}></div>
-                                                                            <div id="SF_ConsigneeAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt' }}></div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr style={{ height: '0.8cm' }}>
-                                                                        <td align="center"><label style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>寄</label></td>
-                                                                        <td>
-                                                                            <div id="SF_Sender" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
-                                                                            <div id="SF_SenderAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ borderRight: '1px dashed #000' }}>
-                                                                <table>
-                                                                    <tr>
-                                                                        <td align="center" style={{ height: '0.6cm', width: '3.2cm', borderBottom: '1px dashed #000' }}>
-                                                                            <label style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}> </label>
-                                                                            <label style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}> </label>
-                                                                            <label style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>已验视</label>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr><td align="center" style={{ height: '1.2cm', width: '3.2cm', borderBottom: '1px dashed #000' }}> </td></tr>
-                                                                    <tr><td align="center" style={{ height: '1.2cm', width: '3.2cm', borderBottom: '1px dashed #000' }}><label id="SF_codingMappingOut" style={{ fontFamily: 'SimHei', fontSize: '40pt', fontWeight: 'bolder', lineHeight: '40pt' }}></label></td></tr>
-                                                                </table>
-                                                            </td>
-                                                            <td align="center" style={{ height: '3cm', width: '2.8cm', borderBottom: '1px dashed #000' }}>
-                                                                <canvas id="SF_twoDimensionCode" style={{ width: '2.5cm', height: '2.5cm', marginTop: '0.25cm', marginRight: '0.15cm' }}></canvas>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style={{ height: '0.6cm', width: '6cm', borderBottom: '1px dashed #000' }} colSpan={2}><label style={{ fontFamily: 'STSong', fontSize: '6pt', fontWeight: 'bolder' }}>签收:</label></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="center" style={{ height: '1.55cm', width: '6cm' }} colSpan={2}>
-                                                <table style={{ width: '100%' }}>
-                                                    <tbody>
-                                                        <tr><td><label id="SF_remark" style={{ fontFamily: 'STSong', fontSize: '5pt', fontWeight: 'bolder' }}></label><br /></td></tr>
-                                                        <tr><td align="center"><label style={{ fontFamily: 'STSong', fontSize: '20pt', fontWeight: 'bolder' }}> </label></td></tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tbody>
-                                        <tr style={{ borderBottom: '1px dashed #000' }}>
-                                            <td align="center" style={{ height: '7cm', width: '1.6cm' }}>
-                                                <div>
-                                                    <img id="SF_waybillNumber_col" style={{ height: '1.3cm', width: '6cm', marginLeft: '-4.5cm', marginBottom: '-7.4cm', transform: 'rotate(90deg)', transformOrigin: 'right top 0px' }} />
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td align="center" style={{ height: '1.05cm', width: '1.6cm' }}><label id="SF_proName" style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>陆运包裹</label></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <List items={this.detail} item={{ render: this.renderCutOffItem }} none="无拣货数据" />
         </div >;
     }
 

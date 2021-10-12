@@ -35,7 +35,7 @@ export class VTallying extends VPage<CHome> {
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
 
-        let { delivermain, deliverDetail, trayNumber, product, item, tallyShould, tallyDone, tallyState, lotNumber } = tallyItem;
+        let { deliverMain, deliverDetail, trayNumber, product, item, tallyShould, tallyDone, tallyState, lotNumber } = tallyItem;
         let pack = PackX.getObj(item);
 
         let left = <div className="m-auto px-2 py-1 bg"><strong>{trayNumber}</strong></div>;
@@ -48,13 +48,13 @@ export class VTallying extends VPage<CHome> {
                 <input type="text" className="form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
             </div>
          */
-        let isDone: boolean = (tallyState === 0) ? false : true;
+        let isDone: boolean = (tallyState === 0 || tallyState === false) ? false : true;
         tallyItem.tallyState = isDone;
         let right = <div className="m-auto pr-3">
             <label className="small text-muted">
                 <input type="checkbox"
                     defaultChecked={isDone}
-                    onChange={o => { if (o.target.checked === false) { return }; tallyItem.tallyState = o.target.checked; this.doneTallyItem(delivermain, deliverDetail, tallyItem.tallyShould) }} />
+                    onChange={o => { if (o.target.checked === false) { return }; tallyItem.tallyState = o.target.checked; this.doneTallyItem(deliverMain, deliverDetail, tallyItem.tallyShould) }} />
             </label>
         </div>
 
@@ -107,10 +107,10 @@ export class VTallying extends VPage<CHome> {
      * @param deliverDetail 
      * @param tallyQuantity 
      */
-    private async doneTallyItem(delivermain: number, deliverDetail: number, tallyQuantity: number) {
+    private async doneTallyItem(deliverMain: number, deliverDetail: number, tallyQuantity: number) {
         let { doneTallySingle, doneTally } = this.controller;
         let { warehouse, id } = this.main
-        await doneTallySingle(delivermain, deliverDetail, tallyQuantity);
+        await doneTallySingle(deliverMain, deliverDetail, tallyQuantity);
 
         let isAllCheck: boolean = this.detail.every((e: any) => e.tallyState === true);
         if (isAllCheck) {

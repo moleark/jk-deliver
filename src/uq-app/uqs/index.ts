@@ -9,11 +9,11 @@ import * as JkCustomer from './JkCustomer';
 import * as JkCommon from './JkCommon';
 
 export interface UQs extends AppUQs {
-	JkDeliver: JkDeliver.UqExt;
-	JkWarehouse: JkWarehouse.UqExt;
-	JkProduct: JkProduct.UqExt;
-	JkCustomer: JkCustomer.UqExt;
-	JkCommon: JkCommon.UqExt;
+    JkDeliver: JkDeliver.UqExt;
+    JkWarehouse: JkWarehouse.UqExt;
+    JkProduct: JkProduct.UqExt;
+    JkCustomer: JkCustomer.UqExt;
+    JkCommon: JkCommon.UqExt;
 }
 
 export * as JkDeliver from './JkDeliver';
@@ -22,10 +22,10 @@ export * as JkProduct from './JkProduct';
 export * as JkCustomer from './JkCustomer';
 export * as JkCommon from './JkCommon';
 
-export function setUI(uqs:UQs) {
-	JkDeliver.setUI(uqs.JkDeliver);
-	JkWarehouse.setUI(uqs.JkWarehouse);
-	JkProduct.setUI(uqs.JkProduct);
-	JkCustomer.setUI(uqs.JkCustomer);
-	JkCommon.setUI(uqs.JkCommon);
+export function setUI(uqs: UQs) {
+    JkDeliver.setUI(uqs.JkDeliver);
+    JkWarehouse.setUI(uqs.JkWarehouse);
+    JkProduct.setUI(uqs.JkProduct);
+    JkCustomer.setUI(uqs.JkCustomer);
+    JkCommon.setUI(uqs.JkCommon);
 }

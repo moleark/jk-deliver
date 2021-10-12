@@ -71,7 +71,6 @@ export class VReceiptList extends VPage<CDeliver> {
         </div>;
     }
 
-
     private renderProductList = (productItem: any, index: number) => {
 
         // let { expressLogisticsList } = this.controller;

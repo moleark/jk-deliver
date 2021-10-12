@@ -157,6 +157,7 @@ export class CHome extends CUqBase {
         }
         let vPageParam = { id: id, no: no };
         this.backPage();
+        //let vPageParam = { id: 107, no: 2110120001 };
         this.openVPage(VCutOffSuccess, vPageParam);
     }
 
