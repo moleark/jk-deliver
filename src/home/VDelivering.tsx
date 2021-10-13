@@ -1,7 +1,7 @@
 import { tv, Page, VPage, LMR, List } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
-import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliver";
 import { CHome } from "./CHome";
+// import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliver";
 
 export class VDelivering extends VPage<CHome> {
 	private main: any;
@@ -37,7 +37,7 @@ export class VDelivering extends VPage<CHome> {
 		let { JkProduct } = this.controller.uqs;
 		let { ProductX } = JkProduct;
 		let PackX = ProductX.div('packx');
-		let { id, product, item, productExt, deliverShould } = deliverItem;
+		let { id, item, productExt, deliverShould } = deliverItem;
 		let pack = PackX.getObj(item);
 
 		let storageCondition: string = '';
@@ -52,7 +52,7 @@ export class VDelivering extends VPage<CHome> {
 			<div className="">
 				<div className="row col-12 py-1">
 					<span className="col-2 text-muted px-1">产品: </span>
-					<span className="col-5 pl-1">{ProductX.tv(product)} </span>
+					<span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
 					<span className="col-2 text-muted px-1">包装: </span>
 					<span className="col-3 pl-1">{tvPackx(pack)}</span>
 				</div>

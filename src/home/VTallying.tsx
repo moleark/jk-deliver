@@ -35,19 +35,10 @@ export class VTallying extends VPage<CHome> {
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
 
-        let { deliverMain, deliverDetail, trayNumber, product, item, tallyShould, tallyDone, tallyState, lotNumber } = tallyItem;
+        let { deliverMain, deliverDetail, trayNumber, item, tallyShould, tallyDone, tallyState, lotNumber } = tallyItem;
         let pack = PackX.getObj(item);
 
         let left = <div className="m-auto px-2 py-1 bg"><strong>{trayNumber}</strong></div>;
-        /**
-         * <div className="row px-1">
-                <label className="text-muted">应理：</label ><span className="text-info">{tallyShould}</span>
-            </div>
-            <div className="row px-1 text-justify">
-                <label className="text-muted">实理：</label >
-                <input type="text" className="form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyShould} />
-            </div>
-         */
         let isDone: boolean = (tallyState === 0 || tallyState === false) ? false : true;
         tallyItem.tallyState = isDone;
         let right = <div className="m-auto pr-3">
@@ -61,7 +52,7 @@ export class VTallying extends VPage<CHome> {
         return <LMR className="row" key={deliverDetail} left={left} right={right} onClick={() => this.onClickTallyItem(index)}>
             <div className="row col-12 py-1">
                 <span className="col-2 text-muted px-1">编号: </span>
-                <span className="col-5 pl-1">{ProductX.tv(product)} </span>
+                <span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
                 <span className="col-2 text-muted px-1">包装: </span>
                 <span className="col-3 pl-1">{tvPackx(pack)}</span>
             </div>

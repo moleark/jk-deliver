@@ -18,9 +18,8 @@ export class VPickSheet extends VPage<CHome> {
 	}
 
 	content() {
-		let { JkDeliver } = this.controller.uqs;
-		let { id, no, picker } = this.main;
 
+		let { id, no, picker } = this.main;
 		let pickTotal: number = 0;
 		this.detail.forEach(element => {
 			pickTotal += element.shouldQuantity;

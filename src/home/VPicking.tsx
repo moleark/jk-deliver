@@ -15,11 +15,6 @@ export class VPicking extends VPage<CHome> {
 
 	header() { return '拣货单：' + this.main.no }
 
-	/*right() {
-		let { id } = this.main;
-		return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.donePickup(id)}>拣货完成</button>;
-	}*/
-
 	// 修改当前选中行颜色
 	private onClickPickItem = (rowIndex: number) => {
 
@@ -45,16 +40,6 @@ export class VPicking extends VPage<CHome> {
 		let { id: pickupDetail, product, deliverDetail, orderDetail, shelfBlock, lotNumber, item, shouldQuantity, pickdone, pickstate } = pickItem;
 		let pack = PackX.getObj(item);	// JSON.stringify(pack)
 
-		// <input className="box" type="checkbox" defaultChecked={false}></input>&nbsp;
-		/**
-		 * <div className="row px-1">
-				<label className="text-muted">应捡：</label ><span className="text-info">{shouldQuantity}</span>
-			</div>
-			<div className="row px-1 text-justify">
-				<label className="text-muted">实捡：</label >
-				<input type="text" className="form-control col-5 px-0 mx-0" onChange={o => pickItem.quantity = o.target.value} defaultValue={quantity} />
-			</div>
-		 */
 		let left = <div className="py-1 pr-2">{index + 1}</div>;
 		let isDone: boolean = (pickstate === 0 || pickstate === false) ? false : true;
 		pickItem.pickstate = isDone;

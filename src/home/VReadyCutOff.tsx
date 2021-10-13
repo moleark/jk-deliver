@@ -54,13 +54,12 @@ export class VReadyCutOffSheet extends VPage<CHome> {
         //let { Customer, Department } = JkCustomer;
         //let { Warehouse } = JkWarehouse;
 
-        let { orderDetail, product, item, shouldQuantity, customer } = cutOffItem;
+        let { item, shouldQuantity, customer } = cutOffItem;
         let pack = PackX.getObj(item);
-
 
         return <LMR className="px-1 py-1">
             <div className="row col-12 py-1">
-                <span className="col-4 pl-1">{ProductX.tv(product)}</span>
+                <span className="col-4 pl-1">{ProductX.tv(pack.owner)}</span>
                 <span className="col-4 pl-1">{tvPackx(pack)}</span>
                 <span className="col-4 pl-1">{shouldQuantity}</span>
             </div>

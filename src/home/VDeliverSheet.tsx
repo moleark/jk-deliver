@@ -23,13 +23,12 @@ export class VDeliverSheet extends VPage<CHome> {
 	}
 
 	content() {
-		let { JkProduct } = this.controller.uqs;
-		let { id, no, staff, rows, pickRows } = this.main;
+		let { id, no, staff } = this.main;	// rows, pickRows
 		let state: any;
 		if (staff) {
 			state = <>{this.renderUser(staff)} 在打包发运</>;
 		} else {
-			state = <button className="btn btn-success" onClick={() => this.piling(id)}>开始理货</button>;
+			state = <button className="btn btn-success" onClick={() => this.piling(id)}>开始包装</button>;
 		}
 		// 拣货状态的判断，取消不限制
 		/*else if (rows === pickRows) {

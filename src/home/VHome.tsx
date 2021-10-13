@@ -31,7 +31,7 @@ export class VHome extends VPage<CHome> {
                             item={{ render: this.renderCutOffMain, onClick: onCutOffMain }} />
                         <List className="my-1" items={pickups} none="无拣货单"
                             item={{ render: this.renderPickup, onClick: onPickup }} />
-                        <List className="my-1" items={deliverMains} none="无发货单"
+                        <List className="my-1" items={deliverMains} none="无发运单"
                             item={{ render: this.renderDeliverMain, onClick: onDeliverMain }} />
                     </div>
                 });
@@ -87,7 +87,7 @@ export class VHome extends VPage<CHome> {
 
         return <LMR className="px-3 py-2" left={left} right={right}>
             <b>{no}</b> &nbsp;
-            客户: {Customer.tv(customerAccount)}
+            <span className="small text-muted">{Customer.tv(customerAccount)}</span>
         </LMR>
     }
 }
