@@ -18,17 +18,17 @@ const fields = {
 		"isKey": false,
 		"label": "Main"
 	} as FieldItemId,
-	deliverDetail: {
-		"name": "deliverDetail",
+	biz: {
+		"name": "biz",
 		"type": "id",
 		"isKey": false,
-		"label": "DeliverDetail"
+		"label": "Biz"
 	} as FieldItemId,
-	orderDetail: {
-		"name": "orderDetail",
+	item: {
+		"name": "item",
 		"type": "id",
 		"isKey": false,
-		"label": "OrderDetail"
+		"label": "Item"
 	} as FieldItemId,
 	shelfBlock: {
 		"name": "shelfBlock",
@@ -43,6 +43,18 @@ const fields = {
 		"widget": "number",
 		"label": "Quantity"
 	} as FieldItemNum,
+	lotNumber: {
+		"name": "lotNumber",
+		"type": "string",
+		"isKey": false,
+		"widget": "string",
+		"label": "LotNumber"
+	} as FieldItemString,
+	json: {
+		"name": "json",
+		"isKey": false,
+		"label": "Json"
+	} as undefined,
 	pickDone: {
 		"name": "pickDone",
 		"type": "number",
@@ -59,7 +71,7 @@ const fields = {
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.main, fields.deliverDetail, fields.orderDetail, fields.shelfBlock, fields.quantity, fields.pickDone, fields.pickState, 
+	fields.main, fields.biz, fields.item, fields.shelfBlock, fields.quantity, fields.lotNumber, fields.json, fields.pickDone, fields.pickState, 
 ];
 
 export const ui: UI = {

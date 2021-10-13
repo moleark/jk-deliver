@@ -52,21 +52,11 @@ const fields = {
 		"widget": "number",
 		"label": "ReturnDone"
 	} as FieldItemNum,
-	showPrice: {
-		"name": "showPrice",
-		"isKey": false,
-		"label": "ShowPrice"
-	} as undefined,
-	json: {
-		"name": "json",
-		"isKey": false,
-		"label": "Json"
-	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.deliverDone, fields.pickDone, fields.tallyDone, fields.tallyState, fields.deliverReturn, fields.returnDone, fields.showPrice, fields.json, 
+	fields.deliverDone, fields.pickDone, fields.tallyDone, fields.tallyState, fields.deliverReturn, fields.returnDone, 
 ];
 
 export const ui: UI = {

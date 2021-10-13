@@ -18,6 +18,18 @@ const fields = {
 		"isKey": false,
 		"label": "Main"
 	} as FieldItemId,
+	biz: {
+		"name": "biz",
+		"type": "id",
+		"isKey": false,
+		"label": "Biz"
+	} as FieldItemId,
+	item: {
+		"name": "item",
+		"type": "id",
+		"isKey": false,
+		"label": "Item"
+	} as FieldItemId,
 	quantity: {
 		"name": "quantity",
 		"type": "number",
@@ -25,11 +37,28 @@ const fields = {
 		"widget": "number",
 		"label": "Quantity"
 	} as FieldItemNum,
+	lotNumber: {
+		"name": "lotNumber",
+		"type": "string",
+		"isKey": false,
+		"widget": "string",
+		"label": "LotNumber"
+	} as FieldItemString,
+	showPrice: {
+		"name": "showPrice",
+		"isKey": false,
+		"label": "ShowPrice"
+	} as undefined,
+	json: {
+		"name": "json",
+		"isKey": false,
+		"label": "Json"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.main, fields.quantity, 
+	fields.main, fields.biz, fields.item, fields.quantity, fields.lotNumber, fields.showPrice, fields.json, 
 ];
 
 export const ui: UI = {

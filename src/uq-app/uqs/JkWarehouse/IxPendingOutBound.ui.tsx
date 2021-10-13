@@ -24,11 +24,11 @@ const fields = {
 		"isKey": false,
 		"label": "Xi"
 	} as FieldItemId,
-	orderDetail: {
-		"name": "orderDetail",
+	item: {
+		"name": "item",
 		"type": "id",
 		"isKey": false,
-		"label": "OrderDetail"
+		"label": "Item"
 	} as FieldItemId,
 	quantity: {
 		"name": "quantity",
@@ -44,11 +44,16 @@ const fields = {
 		"widget": "string",
 		"label": "LotNumber"
 	} as FieldItemString,
+	json: {
+		"name": "json",
+		"isKey": false,
+		"label": "Json"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.ixx, fields.xi, fields.orderDetail, fields.quantity, fields.lotNumber, 
+	fields.ixx, fields.xi, fields.item, fields.quantity, fields.lotNumber, fields.json, 
 ];
 
 export const ui: UI = {

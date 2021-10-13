@@ -41,11 +41,23 @@ const fields = {
 		"isKey": false,
 		"label": "FinishTime"
 	} as undefined,
+	$owner: {
+		"name": "$owner",
+		"type": "integer",
+		"isKey": false,
+		"widget": "updown",
+		"label": "$owner"
+	} as FieldItemInt,
+	$create: {
+		"name": "$create",
+		"isKey": false,
+		"label": "$create"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, fields.warehouse, fields.tallyer, fields.startTime, fields.finishTime, 
+	fields.no, fields.warehouse, fields.tallyer, fields.startTime, fields.finishTime, fields.$owner, fields.$create, 
 ];
 
 export const ui: UI = {
