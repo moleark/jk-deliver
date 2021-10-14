@@ -14,10 +14,10 @@ export class VCutOffSuccess extends VPage<CDeliver> {
             <div className="p-3 bg-white mb-3">
                 <div className="mb-3">截单成功！</div>
                 <p className="">
-                    截单号: <span onClick={() => onOpenCutOffDetail(cutOffMain.id)} className="h5 text-info"> {cutOffMain.no}</span><br /><br />
+                    截单号: <span onClick={() => { this.closePage(); onOpenCutOffDetail(cutOffMain.id) }} className="h5 text-info"> {cutOffMain.no}</span><br /><br />
                     点击单号可跳转到详情界面统一打印单据。
                 </p>
             </div>
-        </Page>
+        </Page >
     }
 }

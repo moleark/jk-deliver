@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { List, Page, VPage, tv, FA, PropGrid, EasyDate, LMR } from 'tonva-react';
 import { CDeliver } from './CDeliver';
-import './printStyle/ReceiptList.css';
+import '/printStyle/ReceiptList.css';
 import printJS from 'print-js';
 import jklogo from 'images/jklogo.png';
 import { tvPackx } from 'tools/tvPackx';

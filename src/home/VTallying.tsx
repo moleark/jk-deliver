@@ -1,7 +1,6 @@
 import { LMR, VPage, List } from "tonva-react";
 import { ReturnGetCutOffMainDetail, ReturnGetCutOffMainMain } from "uq-app/uqs/JkDeliver";
 import { CHome } from "./CHome";
-import '../deliver/printStyle/TallyList.css';
 import { tvPackx } from "tools/tvPackx";
 
 export class VTallying extends VPage<CHome> {

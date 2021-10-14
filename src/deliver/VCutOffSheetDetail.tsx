@@ -5,7 +5,6 @@ import { CDeliver } from "./CDeliver";
 import { tvPackx } from '../tools/tvPackx';
 import JsBarcode from 'jsbarcode';
 import printJS from 'print-js';
-import QRCode from 'qrcode';
 import { format } from 'date-fns';
 
 // websocket京东打印服务使用
@@ -408,56 +407,24 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
      */
     private pringShunFeng = async () => {
 
-        let result = "{ \"ret\":[{\"id\":\"SHMV20210603Z516Z_33816892\",\"proCode\":\"标快\",\"waybillNumber\":\"SF1331875979567\",\"destRouteLabel\":\"010W-AE-003\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeUnitName\":\"百灵威测试\",\"ConsigneeAddress\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\",\"senderName\":\"龚肃斌\",\"senderTel\":\"13818181523\",\"senderCompany\":\"J&K\",\"senderAddress\":\"上海市浦东新区唐镇上丰路955号3号门\",\"codingMappingOut\":\"3A\",\"twoDimensionCode\":\"MMM={'k1':'010W','k2':'010AE','k3':'003','k4':'T6','k5':'SF1331875979567','k6':'','k7':'53528168'}\",\"remark\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：10\",\"waybillNumber_col\":\"SF1331875979567\",\"proName\":\"陆运包裹\"}]}";
+        let result = `{ \"ret\":[{\"id\":\"SHMV20210603Z516Z_33816892\",\"proCode\":\"标快\",\"waybillNumber\":\"SF1331875979567\",
+        \"destRouteLabel\":\"010W-AE-003\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeUnitName\":\"百灵威测试\",
+        \"ConsigneeAddress\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\",\"senderName\":\"龚肃斌\",\"senderTel\":\"13818181523\",\"senderCompany\":\"J&K\",
+        \"senderAddress\":\"上海市浦东新区唐镇上丰路955号3号门\",\"codingMappingOut\":\"3A\",\"twoDimensionCode\":\"MMM={'k1':'010W','k2':'010AE','k3':'003','k4':'T6','k5':'SF1331875979567','k6':'','k7':'53528168'}\",
+        \"remark\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：10\",\"waybillNumber_col\":\"SF1331875979567\",\"proName\":\"陆运包裹\"},
+        {\"id\":\"SHMV20210603Z516Z_33816892\",\"proCode\":\"标快\",\"waybillNumber\":\"SF1331875979567\",
+        \"destRouteLabel\":\"010W-AE-003\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeUnitName\":\"百灵威测试\",
+        \"ConsigneeAddress\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\",\"senderName\":\"龚肃斌\",\"senderTel\":\"13818181523\",\"senderCompany\":\"J&K\",
+        \"senderAddress\":\"上海市浦东新区唐镇上丰路955号3号门\",\"codingMappingOut\":\"3A\",\"twoDimensionCode\":\"MMM={'k1':'010W','k2':'010AE','k3':'003','k4':'T6','k5':'SF1331875979567','k6':'','k7':'53528168'}\",
+        \"remark\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：10\",\"waybillNumber_col\":\"SF1331875979567\",\"proName\":\"陆运包裹\"}]}`;
         let jsonResult: any[] = JSON.parse(result).ret; // JSON.parse(ret);
         jsonResult.forEach((element: any) => {
 
             let deliverMainId: number = Number(element.id.split('_')[1]);
             this.updateWaybillNumber(deliverMainId, 32, element.waybillNumber);	//更新快递单号
-
-            document.getElementById("SF_proCode").innerText = element.proCode;
-            document.getElementById("SF_waybillNumber").innerHTML = "";
-            JsBarcode("#SF_waybillNumber", element.waybillNumber, {
-                format: "CODE128", width: 1, height: 45, fontSize: 15, displayValue: true,
-                textAlign: "center",    //设置文本的水平对齐方式
-                textMargin: 10,          //设置条形码和文本之间的间距
-                margin: 2               //设置条形码周围的空白边距
-            });
-            // document.getElementById("SF_waybillNumber_text").innerText = element.waybillNumber;
-            document.getElementById("SF_destRouteLabel").innerText = element.destRouteLabel;
-            document.getElementById("SF_Consignee").innerText = element.ConsigneeName + " " + element.ConsigneeMobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') + " " + element.ConsigneeUnitName;
-            document.getElementById("SF_ConsigneeAddress").innerText = element.ConsigneeAddress;
-            document.getElementById("SF_Sender").innerText = element.senderName + " " + element.senderTel.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') + " " + element.senderCompany;
-            document.getElementById("SF_SenderAddress").innerText = element.senderAddress;
-            document.getElementById("SF_codingMappingOut").innerText = element.codingMappingOut;
-            document.getElementById('SF_twoDimensionCode').innerHTML = "";
-
-            QRCode.toCanvas(document.getElementById("SF_twoDimensionCode"), element.twoDimensionCode, {
-                width: 100
-            }, function (error: any) {
-                if (error) console.log(error);
-                console.log();
-            });
-
-            // alert("点击确认开始打印");
-            document.getElementById('SF_remark').innerHTML = element.remark;
-            JsBarcode("#SF_waybillNumber_col", element.waybillNumber, { format: "CODE128A", height: 30, width: 2, displayValue: false });
-
-            var testDiv = document.getElementById("SF_waybillNumber_col");
-            testDiv.style.float = "left";
-
-            //var printhtml = document.getElementById("PrintSFHtml").outerHTML;
-            //document.getElementById("PrintSFHtml").style.display = "";//显示
-            setTimeout(() => {
-                // 增加延时机制则成功哪怕延迟1毫秒也正常执行;
-                printJS({
-                    printable: 'PrintSFHtml', // 要打印内容的id
-                    type: 'html',               // 可以打印html,img详细的可以在官方文档https://printjs.crabbly.com/中查询
-                    scanStyles: true,          // 默认样式
-                    documentTitle: '.'
-                });
-            }, 1);
         });
+        let { openSFExpressSheetList } = this.controller;
+        await openSFExpressSheetList(jsonResult);
         return;
 
         let dataList: any[] = [];
@@ -487,59 +454,8 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 let result = await res.json();
                 let jsonResult: any[] = result.ret; // JSON.parse(ret);
                 jsonResult.forEach((element: any) => {
-
-                    let deliverMainId: number = Number(element.Id.split('_')[1]);
-                    this.updateWaybillNumber(deliverMainId, 32, element.ExpressCode);	//更新快递单号
-
-                    document.getElementById("SF_proCode").innerText = element.proCode;
-                    JsBarcode("#SF_waybillNumber", element.waybillNumber, { format: "CODE128A", height: 30, width: 2, displayValue: false });
-                    document.getElementById("SF_waybillNumber_text").innerText = element.waybillNumber;
-                    document.getElementById("SF_destRouteLabel").innerText = element.destRouteLabel;
-                    document.getElementById("SF_Consignee").innerText = element.ConsigneeName + " " + element.ConsigneeMobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') + " " + element.ConsigneeUnitName;
-                    document.getElementById("SF_ConsigneeAddress").innerText = element.SF_ConsigneeAddress;
-                    document.getElementById("SF_Sender").innerText = element.senderName + " " + element.senderTel.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') + " " + element.senderCompany;
-                    document.getElementById("SF_SenderAddress").innerText = element.senderAddress;
-                    document.getElementById("SF_codingMappingOut").innerText = element.codingMappingOut;
-                    document.getElementById('SF_twoDimensionCode').innerHTML = "";
-                    QRCode.toCanvas(document.getElementById("SF_twoDimensionCode"), element.twoDimensionCode, {
-                        width: 100
-                    }, function (error: any) {
-                        if (error) console.log(error);
-                        console.log();
-                    });
-
-                    alert("点击确认开始打印");
-                    document.getElementById('SF_remark').innerHTML = element.remark;
-                    JsBarcode("#SF_waybillNumber_col", element.waybillNumber, { format: "CODE128A", height: 30, width: 2, displayValue: false });
-
-                    var testDiv = document.getElementById("SF_waybillNumber_col");
-                    testDiv.style.float = "left";
-
-                    var printhtml = document.getElementById("#PrintSFHtml").innerHTML;
-                    document.getElementById("PrintSFHtml").style.display = "";//显示
-                    setTimeout(() => {
-                        // 增加延时机制则成功哪怕延迟1毫秒也正常执行;
-                        printJS({
-                            printable: 'PrintSFHtml', // 要打印内容的id
-                            type: 'html',               // 可以打印html,img详细的可以在官方文档https://printjs.crabbly.com/中查询
-                            scanStyles: true,          // 默认样式
-                            documentTitle: '.'
-                        });
-                    }, 1);
-
-                    /*
-                    document.getElementById("PrintSFHtml").style.display = "";//显示
-                    if (type == 0) {
-                        bdhtml = window.document.body.innerHTML;
-                        sprnstr = "<!--startprint-->"; //开始打印标识字符串有17个字符
-                        eprnstr = "<!--endprint-->"; //结束打印标识字符串
-                        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17); //从开始打印标识之后的内容
-                        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr)); //截取开始标识和结束标识之间的内容
-                        window.document.body.innerHTML = prnhtml; //把需要打印的指定内容赋给body.innerHTML
-                        window.print(); //调用浏览器的打印功能打印指定区域
-                        window.document.body.innerHTML = bdhtml; // 最后还原页面
-                    }
-                    */
+                    let deliverMainId: number = Number(element.id.split('_')[1]);
+                    this.updateWaybillNumber(deliverMainId, 32, element.waybillNumber);	//更新快递单号
                 });
             } else {
                 console.log(res);
@@ -609,7 +525,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         //let { ExpressLogistics } = JkWarehouse;
 
         let { deliverMain, trayNumber, contact, customer, carrier, waybillNumber, deliverTime, deliverDetail,
-            item, product, tallyShould, content, productExt } = cutOffItem;
+            item, tallyShould, content, productExt } = cutOffItem;
         let pack = PackX.getObj(item);
 
         let note: string;
@@ -658,7 +574,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             <div className="row col-12 py-1 pr-0">
                 <div className="col-5 pr-0">
                     <label className="text-muted">编号： </label>
-                    <span>{ProductX.tv(product)}</span>
+                    <span>{ProductX.tv(pack.owner)}</span>
                 </div>
                 <div className="col-4 pr-0">
                     <label className="text-muted">包装： </label>
@@ -686,7 +602,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                         onKeyUp={o => {
                             if (o.key === 'Enter') {
                                 cutOffItem.waybillNumber = (o.target as HTMLInputElement).value;
-                                alert((o.target as HTMLInputElement).value)
+                                alert((o.target as HTMLInputElement).value);
                             }
                         }} defaultValue={waybillNumber} />
                 </div>
@@ -837,76 +753,6 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 </div>
             </div>
 
-            <div id="PrintSFHtml" style={{ height: '13cm', width: '7.6cm', borderStyle: 'dashed', border: '1px dashed #000' }}>
-                <div style={{ borderBottom: '1px dashed #000', width: '7.6cm', height: '1.4cm' }}>
-                    <div style={{ textAlign: 'right', fontFamily: 'SimHei', fontSize: '20pt', marginRight: '0.3cm', width: '7.6cm', height: '1.0cm' }}>
-                        <span id="SF_proCode"></span>
-                    </div>
-                    <div style={{ textAlign: 'center', fontFamily: 'STSong', fontSize: '6pt' }}>
-                        <span>打印时间: {new Date().toLocaleString()}</span>
-                    </div>
-                </div>
-                <div style={{ borderBottom: '1px dashed #000', textAlign: 'center', height: '2.3cm', width: '7.6cm' }}>
-                    <img id="SF_waybillNumber" style={{ width: '6cm', height: '2cm' }}></img>
-                </div>
-                <div style={{ borderBottom: '1px dashed #000', textAlign: 'center', height: '1cm', width: '7.6cm' }}>
-                    <span id="SF_destRouteLabel" style={{ fontFamily: 'SimHei', fontSize: '20pt', fontWeight: 'bolder' }}></span>
-                </div>
-                <div style={{ borderRight: '1px dashed #000', width: '7.6cm', height: '8cm' }}>
-                    <div style={{ borderRight: '1px dashed #000', width: '6cm', height: '8cm', float: 'left' }}>
-                        <div style={{ width: '6cm', height: '1.9cm' }}>
-                            <div style={{ width: '0.5cm', height: '1.9cm', float: 'left', paddingLeft: '0mm', paddingTop: '0mm' }}>
-                                <span style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>收</span>
-                            </div>
-                            <div style={{ width: '5.4cm', height: '1.9cm', float: 'left' }}>
-                                <div id="SF_Consignee" style={{
-                                    whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', fontFamily: 'STSong', fontSize: '9pt'
-                                }}></div>
-                                <div id="SF_ConsigneeAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '10pt', fontFamily: 'STSong', fontSize: '9pt' }}></div>
-                            </div>
-                        </div>
-                        <div style={{ borderBottom: '1px dashed #000', width: '60mm', height: '8mm' }}>
-                            <div style={{ width: '0.5cm', height: '0.8cm', float: 'left', paddingLeft: '0mm', paddingTop: '0mm' }}>
-                                <label style={{ width: '1cm', fontFamily: 'STSong', fontSize: '10pt', fontWeight: 'bolder' }}>寄</label>
-                            </div>
-                            <div style={{ width: '5.4cm', height: '0.8cm', float: 'left' }}>
-                                <div id="SF_Sender" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
-                                <div id="SF_SenderAddress" style={{ whiteSpace: 'normal', msWordBreak: 'break-all', wordWrap: 'break-word', lineHeight: '7pt', fontFamily: 'STSong', fontSize: '6pt' }}></div>
-                            </div>
-                        </div>
-                        <div style={{ borderBottom: '1px dashed #000', width: '6cm', height: '3cm' }}>
-                            <div style={{ borderRight: '1px dashed #000', width: '3.2cm', height: '3cm', float: 'left' }}>
-                                <div style={{ borderBottom: '1px dashed #000', width: '3.2cm', height: '0.6cm', textAlign: 'center' }}>
-                                    <span style={{ fontFamily: 'STSong', fontSize: '9pt', fontWeight: 'bolder' }}>已验视</span>
-                                </div>
-                                <div style={{ borderBottom: '1px dashed #000', width: '3.2cm', height: '1.2cm' }}>
-                                    &nbsp;
-                                </div>
-                                <div style={{ width: '3.2cm', height: '1.2cm', textAlign: 'center' }}>
-                                    <label id="SF_codingMappingOut" style={{ fontFamily: 'SimHei', fontSize: '26pt', fontWeight: 'bolder' }}></label>
-                                </div>
-                            </div>
-                            <div style={{ width: '2.7cm', height: '3cm', float: 'left', textAlign: 'center' }}>
-                                <canvas id="SF_twoDimensionCode" style={{ width: '2.5cm', height: '2.5cm', marginTop: '0.2cm' }}></canvas>
-                            </div>
-                        </div>
-                        <div style={{ borderBottom: '1px dashed #000', width: '6cm', height: '0.6cm' }}>
-                            <span style={{ fontFamily: 'STSong', fontSize: '6pt', fontWeight: 'bolder' }}>签收:</span>
-                        </div>
-                        <div style={{ width: '6cm', height: '2cm' }}>
-                            <label id="SF_remark" style={{ fontFamily: 'STSong', fontSize: '7pt' }}></label>
-                        </div>
-                    </div>
-                    <div style={{ width: '1.5cm', height: '8cm', float: 'right' }}>
-                        <div style={{ width: '1.5cm', height: '6.8cm', paddingLeft: '1.5cm', transform: 'rotate(90deg)', transformOrigin: 'right top 0px' }}>
-                            <img id="SF_waybillNumber_col" style={{ width: '6cm', height: '1.5cm', marginLeft: '0.5cm' }} ></img>
-                        </div>
-                        <div style={{ borderTop: '1px dashed #000', width: '1.5cm', height: '1.2cm' }}>
-                            <label id="SF_proName" style={{ fontFamily: 'STSong', fontSize: '8pt', fontWeight: 'bolder' }}>陆运包裹</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div >;
     }
 
