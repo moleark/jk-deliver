@@ -1,7 +1,7 @@
 import { List, VPage, FA } from 'tonva-react';
 import { CDeliver } from './CDeliver';
 import printJS from 'print-js';
-import "../../public/printStyle/ZJSExpressSheet.css";
+//import "./printStyle/ZJSExpressSheet.css";
 import Barcode from './printHelper/BarcodeImg';
 
 // 宅急送电子面单打印界面
@@ -28,7 +28,7 @@ export class VZJSExpressSheet extends VPage<CDeliver> {
             scanStyles: false,           // 不适用默认样式
             style: style,               // 亦可使用引入的外部css
             css: '/printStyle/ZJSExpressSheet.css',
-            onPrintDialogClose: () => { clearInterval(focuser); }  // 取消打印回调 this.backPage();
+            onPrintDialogClose: () => { clearInterval(focuser); this.backPage(); }  // 取消打印回调
         });
     }
 

@@ -2,7 +2,7 @@ import { List, VPage, FA } from 'tonva-react';
 import { CDeliver } from './CDeliver';
 import printJS from 'print-js';
 import QRCode from 'qrcode.react';
-import "../../public/printStyle/SFExpressSheet.css";
+//import "./printStyle/SFExpressSheet.css";
 import Barcode from './printHelper/BarcodeImg';
 
 // 顺丰电子面单打印界面
@@ -29,7 +29,7 @@ export class VSFExpressSheet extends VPage<CDeliver> {
             scanStyles: false,           // 不适用默认样式
             style: style,               // 亦可使用引入的外部css
             css: '/printStyle/SFExpressSheet.css',
-            onPrintDialogClose: () => { clearInterval(focuser); }  // 取消打印回调 this.backPage();
+            onPrintDialogClose: () => { clearInterval(focuser); this.backPage(); }  // 取消打印回调
         });
     }
 

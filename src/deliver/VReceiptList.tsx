@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react';
 import { List, Page, VPage, tv, FA, PropGrid, EasyDate, LMR } from 'tonva-react';
 import { CDeliver } from './CDeliver';
-//import '/printStyle/ReceiptList.css';
-import "../../public/printStyle/ReceiptList.css";
+//import './printStyle/ReceiptList.css';
 import printJS from 'print-js';
 import jklogo from 'images/jklogo.png';
 import { tvPackx } from 'tools/tvPackx';
@@ -95,9 +94,9 @@ export class VReceiptList extends VPage<CDeliver> {
 
         let { no } = this.main;
         let { JkCustomer, JkDeliver } = this.controller.uqs;
-        let { Customer } = JkCustomer;
+        let { Customer, BuyerAccount } = JkCustomer;
         let { Carrier } = JkDeliver;
-        let { trayNumber, customer, contactDetail, carrier, trayProductCount, trayProductPrice } = trayItem;
+        let { trayNumber, customerAccount, contactDetail, carrier, trayProductCount, trayProductPrice } = trayItem;
 
         let top = <div className="top">
             <table cellPadding={0} cellSpacing={0}>
@@ -117,7 +116,7 @@ export class VReceiptList extends VPage<CDeliver> {
             <table cellPadding={0} cellSpacing={0}>
                 <tr className="deliveryInfo_tr_1">
                     <td className="deliveryInfo_td_1"><strong>订货人：</strong></td>
-                    <td className="deliveryInfo_td_2">{Customer.tv(customer)}</td>
+                    <td className="deliveryInfo_td_2">{BuyerAccount.tv(customerAccount)}</td>
                     <td className="deliveryInfo_td_3"><strong>收货单位：</strong></td>
                     <td className="deliveryInfo_td_4">{contactDetail?.organizationName}</td>
                     <td className="deliveryInfo_td_5"><strong>电话：</strong></td>

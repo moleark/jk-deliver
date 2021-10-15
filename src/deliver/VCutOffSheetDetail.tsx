@@ -3,8 +3,6 @@ import { CDeliver } from "./CDeliver";
 // import { ReturnGetCutOffMainMain, ReturnGetCutOffMainDetail } from "uq-app/uqs/JkDeliver";
 // import { VReceiptList } from './VReceiptList';
 import { tvPackx } from '../tools/tvPackx';
-import JsBarcode from 'jsbarcode';
-import printJS from 'print-js';
 import { format } from 'date-fns';
 
 // websocket京东打印服务使用
@@ -63,7 +61,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 }
                 arrId.push(cutOffDetail[index]['trayNumber']);
                 this.trayNumberListInfo.push({
-                    trayNumber: cutOffDetail[index]['trayNumber'], customer: cutOffDetail[index]['customer'], carrier: cutOffDetail[index]['carrier'],
+                    trayNumber: cutOffDetail[index]['trayNumber'], customerAccount: cutOffDetail[index]['customerAccount'], carrier: cutOffDetail[index]['carrier'],
                     contactDetail: cutOffDetail[index]['contactDetail'], productDetail: cutOffDetail[index]['productDetail'],
                     deliverMain: cutOffDetail[index]['deliverMain'], deliverDetail: cutOffDetail[index]['deliverDetail'],
                     orderMainNo: cutOffDetail[index]['orderMainNo'], content: cutOffDetail[index]['content'],
@@ -174,7 +172,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             let warehouseNo = warehouseDetail?.no;
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
             dataList.push({
-                Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderIds: e.orderMainNo, PickListId: cutOffMainNo, CustomerId: e.customer,
+                Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderIds: e.orderMainNo, PickListId: cutOffMainNo, CustomerId: e.customerAccount,
                 TrayNumber: e.trayNumber, WarehouseId: warehouseNo, ConsigneeName: e.contactDetail?.name, ConsigneeCity: e.contactDetail?.cityName,
                 ConsigneeUnitName: e.contactDetail?.organizationName, ConsigneeAddressDetail: e.contactDetail?.addressString,
                 ConsigneeTelephone: e.contactDetail?.telephone, ConsigneeMobile: e.contactDetail?.mobile,
@@ -442,7 +440,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let { Customer, Contact } = JkCustomer;
         //let { ExpressLogistics } = JkWarehouse;
 
-        let { deliverMain, trayNumber, contact, customer, carrier, waybillNumber, deliverTime, deliverDetail,
+        let { deliverMain, trayNumber, contact, customerAccount, carrier, waybillNumber, deliverTime, deliverDetail,
             item, tallyShould, content, productExt } = cutOffItem;
         let pack = PackX.getObj(item);
 
