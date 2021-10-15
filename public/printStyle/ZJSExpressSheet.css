@@ -1,0 +1,437 @@
+/* 发运单整体列表样式 */
+.zjs_expressSheetList{
+    width: 10cm;
+}
+.zjs_expressSheetList ul.va-list {
+    list-style: none;
+    background-color: #f0f0f0;
+    padding: 0;
+    margin-bottom: -1px;
+}
+.zjs_expressSheetList ul.va-list>li{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    margin-bottom: 1px;
+    background-color: white;
+    page-break-before:always;
+}
+
+/* 单个发运单样式 */
+.zjs_expressSheetList ul.va-list>li>div{
+    flex: 1 1;
+    display: block;
+    flex-direction: row;
+}
+.zjs_expressSheetItem{
+    width: 10cm;
+    font-family: SimHei;
+    height: 14.8cm;
+    padding: 1px;
+    /*padding-left: 0mm;
+    padding-top: 0mm;
+    margin-left: 0mm;
+    margin-top: 0mm;*/
+}
+/* top */
+.zjs_top{
+    width: 10cm;
+    height: 0.5cm;
+    text-align: center;
+}
+.zjs_top .SiteName{
+    font-family: SimHei; 
+    font-size: 14pt;
+    line-height: 14pt;
+    font-weight: bold;
+    text-align: center;
+    width: 9cm;
+}
+.zjs_top .L{
+    font-family: SimHei;
+    font-size: 16pt;
+    line-height: 15pt; 
+    font-weight: bold;
+    float: right;
+}
+
+/* zjs_jointCode */
+.zjs_jointCode {
+    width: 10cm; 
+    height: 0.6cm; 
+    text-align: center;
+}
+.zjs_jointCode span{
+    font-family: SimHei; 
+    font-size: 16pt; 
+    font-weight: bold;
+}
+
+/* zjs_barcode */
+.zjs_barcode{
+    width: 10cm;
+    height: 1.5cm;
+    text-align: center;
+}
+/*.zjs_barcode img{
+
+}*/
+
+/* zjs_receiver */
+.zjs_receiver{
+    width: 10cm;
+    font-family: SimHei;
+    height: 1.7cm;
+}
+.receiver_table{
+    margin: 0px;
+    padding: 0px;
+    height: 1.6cm;
+    border-collapse: collapse;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    width: 100%;
+}
+.receiver_table span{
+    white-space: normal;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+.receiver_table #info{
+    border-right: 1px solid #000;
+    text-align: center;
+    width: 4%;
+    writing-mode: vertical-lr;
+    height: 1.6cm;
+}
+.receiver_table #info span{
+    font-size: 12px;
+    font-family: SimHei;
+    writing-mode: horizontal-tb;
+}
+.receiver_table #address{
+    font-family: SimHei;
+    font-size: 9pt;
+    font-weight: bold;
+}
+.receiver_table #contactName{
+    font-family: SimHei;
+    font-weight: bold;
+    font-size: 14px;
+    width: 3cm;
+}
+.receiver_table #contactMobile{
+    font-family: SimHei;
+    font-weight: bold;
+    font-size: 13px;
+    width: 3cm;
+}
+.receiver_table #ConsigneeTelephone{
+    font-family:SimHei; 
+    font-weight:bold;
+    font-size:13px;
+}
+
+/* zjs_sender */
+.zjs_sender{
+    width:10cm; 
+    font-family:SimHei; 
+    height:1.4cm;
+}
+.sender_table{
+    margin: 0px; 
+    padding: 0px; 
+    height:0.9cm; 
+    border-collapse: collapse;
+    border-bottom:2px solid #000;
+    width:100%;
+}
+.sender_table #info{
+    border-right:1px solid #000;
+    text-align:center;
+    width:4%;
+    writing-mode:vertical-lr;
+}
+.sender_table #info span{
+    font-size:7px;
+    font-family:SimHei;
+    writing-mode: horizontal-tb;
+}
+.sender_table #address{
+    margin-left:2cm; 
+    width:82%;
+}
+.sender_table #address span{
+    font-family:SimHei;
+    font-weight:bold;
+    font-size:10px;
+}
+.sender_table #check{
+    border-left:1px solid #000;
+    text-align:left;
+    width:14%;
+}
+.sender_table #check span{
+    font-size: 9px;
+    font-family: SimHei;
+    font-weight: bold;
+}
+.sender_table #name{
+    margin-left:2cm;
+    width:82%;
+}
+.sender_table #name span{
+    font-family:SimHei;
+    font-weight:bold; 
+    font-size:10px;
+}
+.sender_table #realName{
+    border-left:1px solid #000;
+    text-align:left;
+    width:14%;
+}
+.sender_table #realName span{
+    font-size: 9px;
+    font-family: SimHei;
+    font-weight: bold;
+}
+
+/* zjs_notice */
+.zjs_notice{
+    width:10cm;
+    font-family:SimHei;
+    height:3cm;
+}
+.notice_table1{
+    margin: 0px; 
+    padding: 0px;
+     height:1cm; 
+    border-top-width: 0px; 
+    border-collapse: collapse;
+}
+.notice_table1 tr td span{
+    font-size:10pt;
+    font-weight:bold;
+    font-family:SimHei;
+}
+.notice_table1 #ImportantHints{
+    font-family:SimHei; 
+    font-weight:bold;
+    font-size:8pt;
+}
+.notice_table2{
+    margin: 0px; 
+    padding: 0px; 
+    height:1.9cm;  
+    border-collapse: collapse;
+    border-bottom:2px solid #000;
+    width:100%;
+}
+.notice_table2 #notice1{
+    font-size:9px;
+    font-family:SimHei;
+    width:4cm;
+}
+.notice_table2 #notice2{
+    font-size:11px;
+    font-weight:bold;
+    font-family:SimHei;
+}
+.notice_table2 #notice3{
+    font-size:9px;
+    font-family:SimHei; 
+    width:4cm;
+}
+.notice_table2 #notice4{
+    font-size:18px;
+    font-weight:bold;
+    font-family:SimHei;
+}
+.notice_table2 #notice5{
+    font-size:18px;
+    font-family:SimHei;
+    font-weight:bold; 
+    width:4cm;
+}
+.notice_table2 #notice6{
+    font-size:9px;
+    font-family:SimHei;
+}
+.notice_table2 #notice7{
+    font-size:9px;
+    font-family:SimHei;
+    font-weight:bold;
+}
+.notice_table2 #Createdate{
+    font-family:SimHei;
+    font-weight:bold; 
+    font-size:9px;
+}
+
+/* zjs_orderInfo */
+.zjs_orderInfo{
+    width:10cm; 
+    font-family:SimHei; 
+    height:3.1cm;
+}
+.orderInfo_Table1{
+    margin: 0px; 
+    padding: 0px; 
+    height:1.7cm; 
+    border-top-width: 0px; 
+    border-collapse: collapse;
+}
+.orderInfo_Table1 #info1{
+    font-size:12px;
+    font-family:SimHei; 
+    font-weight:bold;
+}
+.orderInfo_Table1 #ExpressCode{
+    font-family:SimHei;
+    font-weight:bold; 
+    font-size:12px;
+    width:5cm;
+}
+.orderInfo_Table1 #info2{
+    font-size: 12px;
+    font-family: SimHei;
+    font-weight: bold;
+}
+.orderInfo_Table1 #info3{
+    font-size: 12px;
+    font-family: SimHei;
+    font-weight: bold;
+}
+.orderInfo_Table1 .ExpressOrderNo{
+    font-family:SimHei;
+    font-weight:bold; 
+    font-size:12px;
+    width:5cm;
+}
+.orderInfo_Table1 #info4{
+    font-size:10px;
+    font-family:SimHei;
+}
+.orderInfo_Table1 #info5{
+    font-size: 10px;
+    font-family: SimHei;
+}
+
+.orderInfo_Table2{
+    margin: 0px; 
+    padding: 0px; 
+    height:1.3cm; 
+    border-bottom:2px solid #000;
+    width:100%; 
+    border-collapse: collapse;
+}
+.orderInfo_Table2 #info6{
+    font-size:12px;
+    font-family:SimHei; 
+    font-weight:bold;
+}
+.orderInfo_Table2 #info7{
+    font-size:12px;
+    font-family:SimHei; 
+    font-weight:bold;
+}
+.orderInfo_Table2 .ConsigneeName{
+    font-family:SimHei; 
+    font-weight:bold;
+    font-size:12px;
+    margin-right:3px;
+}
+.orderInfo_Table2 .ConsigneeMobile{
+    font-family:SimHei; 
+    font-weight:bold;
+    font-size:12px;
+    margin-right:3px;
+}
+.orderInfo_Table2 .ConsigneeAddressDetail{
+    font-family:SimHei; 
+    font-weight:bold;
+    font-size:8px;
+    margin-left:6px;
+}
+
+/* zjs_bottom */
+.zjs_bottom{
+    width:10cm; 
+    font-family:SimHei;
+    height:2.6cm;
+}
+.bottom_table1{
+    margin: 0px; 
+    padding: 0px; 
+    height:1cm; 
+    border-top-width: 0px; 
+    border-collapse: collapse;
+}
+.bottom_table1 #info1{
+    font-size: 12px;
+    font-family: SimHei;
+    font-weight: bold;
+}
+.bottom_table1 #ConsigneeName{
+    font-family: SimHei; 
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 3px;
+}
+.bottom_table1 #ConsigneeMobile{
+    font-family: SimHei;
+    font-weight: bold; 
+    font-size:12px;
+    margin-right: 3px;
+}
+.bottom_table1 #ProvinceName{
+    font-family: SimHei;
+    font-weight: bold; 
+    font-size: 12px;
+    margin-right: 3px;
+}
+.bottom_table1 #CityName{
+    font-family: SimHei;
+    font-weight: bold; 
+    font-size: 12px;
+    margin-right: 3px;
+}
+.bottom_table1 #TownNme{
+    font-family: SimHei;
+    font-weight: bold; 
+    font-size: 12px;
+    margin-right: 3px;
+}
+.bottom_table1 #info2{
+    font-size: 12px;
+    font-family: SimHei;
+    font-weight: bold;
+}
+.bottom_table1 #ExpressOrderNo{
+    font-family: SimHei; 
+    font-weight: bold;
+    font-size: 10px;
+    width: 4.6cm;
+}
+.bottom_table1 #info3{
+    font-size: 10px;
+    font-family: SimHei;
+}
+.bottom_table2{
+    margin: 0px; 
+    padding: 0px; 
+    height:1.4cm; 
+    border-top-width: 0px; 
+    border-collapse: collapse;
+}
+.bottom_table2 .info4{
+    width: 6cm; 
+    height: 1.4cm;
+}
+.bottom_table2 .info4 img{
+    margin-left:0.5cm;
+}
+.bottom_table2 .info5{
+    font-size: 10px;
+    font-family: SimHei;
+}

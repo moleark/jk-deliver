@@ -6,6 +6,7 @@ import { VCutOffSheetDetail } from "./VCutOffSheetDetail";
 import { VCutOffHistory } from "./VCutOffHistory";
 import { VReceiptList } from "./VReceiptList";
 import { VSFExpressSheet } from "./VSFExpressSheet";
+import { VZJSExpressSheet } from "./VZJSExpressSheet";
 
 export class CDeliver extends CUqBase {
 	// warehousePendingDeliver: ReturnWarehousePendingDeliverRet[];
@@ -134,6 +135,15 @@ export class CDeliver extends CUqBase {
 	 */
 	openSFExpressSheetList = async (detail: any[]) => {
 		this.openVPage(VSFExpressSheet, detail);
+	}
+
+	/**
+	 * 打开宅急送电子面单打印界面
+	 * @param main 
+	 * @param detail 
+	 */
+	openZJSExpressSheetList = async (detail: any[]) => {
+		this.openVPage(VZJSExpressSheet, detail);
 	}
 
 	/**

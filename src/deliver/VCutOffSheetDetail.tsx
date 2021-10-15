@@ -249,69 +249,29 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
      */
     private pringZhaiJiSong = async () => {
 
-        let result = "{\"ret\":[{\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",\"SiteNo\":\"BH63-66\",\"SiteName\":\"北京_中关村营业所_花园路营业厅\",\"ExpressStatus\":\"0\",\"ExpressErrorCode\":\"OK\",\"ProvinceName\":\"北京市\",\"TownNme\":\"\",\"CityName\":\"北京市\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeTelephone\":\"010-59309000\",\"ConsigneeUnitName\":\"百灵威测试\",\"ExpressCode\":\"ZJS008290952342\",\"ShipperUnitName\":\"J&K Scientific Ltd\",\"AcceptanceUnitName\":\"\",\"DeclaredValue\":\"0\",\"CollectionAmount\":\"0.00\",\"ImportantHints\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：5\",\"Createdate\":\"2021-10-09\",\"ConsigneeAddressDetail\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\"}]}";
+        let result = `{\"ret\":[{\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",
+        \"SiteNo\":\"BH63-66\",\"SiteName\":\"北京_中关村营业所_花园路营业厅\",\"ExpressStatus\":\"0\",\"ExpressErrorCode\":\"OK\",\"ProvinceName\":\"北京市\",
+        \"TownNme\":\"\",\"CityName\":\"北京市\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeTelephone\":\"010-59309000\",
+        \"ConsigneeUnitName\":\"百灵威测试\",\"ExpressCode\":\"ZJS008290952342\",\"ShipperUnitName\":\"J&K Scientific Ltd\",\"AcceptanceUnitName\":\"\",
+        \"DeclaredValue\":\"0\",\"CollectionAmount\":\"0.00\",\"ImportantHints\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：5\",
+        \"Createdate\":\"2021-10-09\",\"ConsigneeAddressDetail\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\"},
+        {\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",
+        \"SiteNo\":\"BH63-66\",\"SiteName\":\"北京_中关村营业所_花园路营业厅\",\"ExpressStatus\":\"0\",\"ExpressErrorCode\":\"OK\",\"ProvinceName\":\"北京市\",
+        \"TownNme\":\"\",\"CityName\":\"北京市\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeTelephone\":\"010-59309000\",
+        \"ConsigneeUnitName\":\"百灵威测试\",\"ExpressCode\":\"ZJS008290952342\",\"ShipperUnitName\":\"J&K Scientific Ltd\",\"AcceptanceUnitName\":\"\",
+        \"DeclaredValue\":\"0\",\"CollectionAmount\":\"0.00\",\"ImportantHints\":\"订单批号:2109270001\\n提醒注意：（汽运禁航）（务必本人或专人签收）\\n临时理货号：5\",
+        \"Createdate\":\"2021-10-09\",\"ConsigneeAddressDetail\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\"}]}`;
         let jsonResult: any[] = JSON.parse(result).ret;
         jsonResult.forEach((e: any) => {
             if (e.ExpressStatus === "0") {
                 let deliverMainId: number = Number(e.Id.split('_')[1]);
                 this.updateWaybillNumber(deliverMainId, 41, e.ExpressCode);	//更新快递单号
-
-                document.getElementById("barcodeTarget2").innerHTML = "";
-                JsBarcode("#barcodeTarget2", e.ExpressCode, {
-                    format: "CODE128", width: 2, height: 35, fontSize: 14, fontOptions: 'bold italic', displayValue: true,
-                    textAlign: "center",    //设置文本的水平对齐方式
-                    textMargin: 1,          //设置条形码和文本之间的间距
-                    margin: 1               //设置条形码周围的空白边距
-                });
-                document.getElementById("barcodeTarget").innerHTML = "";
-                JsBarcode("#barcodeTarget", e.ExpressCode, {
-                    format: 'CODE128', width: 1, height: 30, fontSize: 10, fontOptions: 'bold', displayValue: true,
-                    textAlign: "center",    //设置文本的水平对齐方式
-                    textMargin: 1,          //设置条形码和文本之间的间距
-                    margin: 1               //设置条形码周围的空白边距
-                });
-                var spanConsigneeAddressDetail = document.getElementsByClassName("ConsigneeAddressDetail");
-                for (let index = 0; index < spanConsigneeAddressDetail.length; index++) {
-                    spanConsigneeAddressDetail[index].innerHTML = e.ConsigneeAddressDetail + ",(" + e.ConsigneeUnitName + ")";
-                }
-                document.getElementById("VcityCode").innerText = e.VcityCode;
-                document.getElementById("SiteNo").innerText = e.SiteNo;
-                document.getElementById("SiteName").innerText = e.SiteName;
-                document.getElementById("ProvinceName").innerText = e.ProvinceName;
-                document.getElementById("CityName").innerText = e.CityName;
-                document.getElementById("TownNme").innerText = e.TownNme;
-                var spanConsigneeName = document.getElementsByClassName("ConsigneeName");
-                for (let index = 0; index < spanConsigneeName.length; index++) {
-                    spanConsigneeName[index].innerHTML = e.ConsigneeName;
-                }
-                var spanConsigneeMobile = document.getElementsByClassName("ConsigneeMobile");
-                for (let index = 0; index < spanConsigneeMobile.length; index++) {
-                    spanConsigneeMobile[index].innerHTML = e.ConsigneeMobile;
-                }
-                document.getElementById("ConsigneeTelephone").innerText = e.ConsigneeTelephone;
-                var spanExpressOrderNo = document.getElementsByClassName("ExpressOrderNo");
-                for (let index = 0; index < spanExpressOrderNo.length; index++) {
-                    spanExpressOrderNo[index].innerHTML = e.ExpressOrderNo;
-                }
-                document.getElementById("ImportantHints").innerText = e.ImportantHints;
-                document.getElementById("Createdate").innerText = e.Createdate;
-                document.getElementById("ExpressCode").innerText = e.ExpressCode;
-
-                /*let LODOP = getLodop();
-                var printhtml = document.getElementById("PrintZJSHtml").innerHTML;
-                //打印文件名称
-                LODOP.PRINT_INIT(e.ExpressCode + "宅急送快递单");
-                //打印纸大小
-                LODOP.SET_PRINT_PAGESIZE(0, "10cm", "15cm", "10*15");
-                LODOP.ADD_PRINT_HTM(0, 0, "100%", "15cm", printhtml);
-                LODOP.SET_PRINTER_INDEX("Xprinter XP-460B");
-                LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS", true);
-                var Pid = LODOP.PRINT();
-                return LODOP.GET_VALUE("PRINT_STATUS_TEXT", Pid);*/
             } else {
                 console.log(e.ExpressStatus + ',' + e.ExceptionMessage);
             }
         });
+        let { openZJSExpressSheetList } = this.controller;
+        await openZJSExpressSheetList(jsonResult);
         return;
 
 
@@ -348,48 +308,6 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                     if (e.ExpressStatus === "0") {
                         let deliverMainId: number = Number(e.Id.split('_')[1]);
                         this.updateWaybillNumber(deliverMainId, 41, e.ExpressCode);	//更新快递单号
-
-                        document.getElementById("barcodeTarget2").innerHTML = "";
-                        JsBarcode("#barcodeTarget2", e.ExpressCode, {
-                            format: "CODE128", width: 2, height: 35, fontSize: 14, fontOptions: 'bold italic', displayValue: true,
-                            textAlign: "center",    //设置文本的水平对齐方式
-                            textMargin: 1,          //设置条形码和文本之间的间距
-                            margin: 1               //设置条形码周围的空白边距
-                        });
-                        document.getElementById("barcodeTarget").innerHTML = "";
-                        JsBarcode("#barcodeTarget", e.ExpressCode, {
-                            format: 'CODE128', width: 1, height: 30, fontSize: 10, fontOptions: 'bold', displayValue: true,
-                            textAlign: "center",    //设置文本的水平对齐方式
-                            textMargin: 1,          //设置条形码和文本之间的间距
-                            margin: 1               //设置条形码周围的空白边距
-                        });
-                        var spanConsigneeAddressDetail = document.getElementsByClassName("ConsigneeAddressDetail");
-                        for (let index = 0; index < spanConsigneeAddressDetail.length; index++) {
-                            spanConsigneeAddressDetail[index].innerHTML = e.ConsigneeAddressDetail + ",(" + e.ConsigneeUnitName + ")";
-                        }
-                        document.getElementById("VcityCode").innerText = e.VcityCode;
-                        document.getElementById("SiteNo").innerText = e.SiteNo;
-                        document.getElementById("SiteName").innerText = e.SiteName;
-                        document.getElementById("ProvinceName").innerText = e.ProvinceName;
-                        document.getElementById("CityName").innerText = e.CityName;
-                        document.getElementById("TownNme").innerText = e.TownNme;
-                        var spanConsigneeName = document.getElementsByClassName("ConsigneeName");
-                        for (let index = 0; index < spanConsigneeName.length; index++) {
-                            spanConsigneeName[index].innerHTML = e.ConsigneeName;
-                        }
-                        var spanConsigneeMobile = document.getElementsByClassName("ConsigneeMobile");
-                        for (let index = 0; index < spanConsigneeMobile.length; index++) {
-                            spanConsigneeMobile[index].innerHTML = e.ConsigneeMobile;
-                        }
-                        document.getElementById("ConsigneeTelephone").innerText = e.ConsigneeTelephone;
-                        var spanExpressOrderNo = document.getElementsByClassName("ExpressOrderNo");
-                        for (let index = 0; index < spanExpressOrderNo.length; index++) {
-                            spanExpressOrderNo[index].innerHTML = e.ExpressOrderNo;
-                        }
-                        document.getElementById("ImportantHints").innerText = e.ImportantHints;
-                        document.getElementById("Createdate").innerText = e.Createdate;
-                        document.getElementById("ExpressCode").innerText = e.ExpressCode;
-
                     } else {
                         console.log(e.ExpressStatus + ',' + e.ExceptionMessage);
                     }
@@ -626,133 +544,6 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             <div id="hawblayout_print" style={{ display: 'none' }}>
                 <iframe id="mainbody" width="0" height="0"></iframe>
             </div>
-
-            <div id="PrintZJSHtml" style={{ width: '10cm', fontFamily: '黑体', height: '15cm' }}>
-                <div style={{ width: '10cm', height: '0.3cm', textAlign: 'center' }}>
-                    <p>
-                        <span id="SiteName" style={{ fontFamily: '黑体', fontSize: '18px', fontWeight: 'bold', width: '9cm' }} ></span>
-                        <span style={{ fontFamily: '黑体', fontSize: '24px', fontWeight: 'bold', float: 'right' }}>L</span>
-                    </p>
-                </div>
-                <div style={{ width: '10cm', height: '1.0cm', textAlign: 'center' }}>
-                    <p>
-                        <span id="VcityCode" style={{ fontFamily: '黑体', fontSize: '32px', fontWeight: 'bold' }} ></span>
-                        <span style={{ fontFamily: '黑体', fontSize: '32px', fontWeight: 'bold' }}>-</span>
-                        <span id="SiteNo" style={{ fontFamily: '黑体', fontSize: '32px', fontWeight: 'bold' }}></span>
-                    </p>
-                </div>
-                <div style={{ width: '10cm', height: '1.5cm', textAlign: 'center' }}>
-                    <img id="barcodeTarget2" ></img>
-                </div>
-                <div style={{ width: '10cm', fontFamily: '黑体', height: '1.6cm' }}>
-                    <table cellSpacing={0} cellPadding={0} style={{ margin: '0px', padding: '0px', height: '1.6cm', borderCollapse: 'collapse', borderTop: '2px solid #000', borderBottom: '2px solid #000', width: '100%' }}>
-                        <tbody>
-                            <tr>
-                                <td height="1.6cm" style={{ borderRight: '1px solid #000', textAlign: 'center', width: '4%', writingMode: 'vertical-lr' }} rowSpan={2} ><span style={{ fontSize: '12px', fontFamily: '黑体' }}>收件人</span></td>
-                                <td><span className="ConsigneeAddressDetail" style={{ fontFamily: '黑体', fontSize: '13px', fontWeight: 'bold' }}></span></td>
-                            </tr>
-                            <tr>
-                                <td><span className="ConsigneeName" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '14px', width: '3cm' }}></span><span className="ConsigneeMobile" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '13px', width: '3cm' }}></span><span id="ConsigneeTelephone" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '13px' }}></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style={{ width: '10cm', fontFamily: '黑体', height: '0.9cm' }}>
-                    <table style={{ margin: '0px', padding: '0px', height: '0.9cm', borderCollapse: 'collapse', borderBottom: '2px solid #000', width: '100%' }} cellSpacing={0} cellPadding={0}>
-                        <tbody>
-                            <tr>
-                                <td height="0.9cm" rowSpan={2} style={{ borderRight: '1px solid #000', textAlign: 'center', width: '4%', writingMode: 'vertical-lr' }}><span style={{ fontSize: '7px', fontFamily: '黑体' }}>寄件人</span></td>
-                                <td style={{ marginLeft: '2cm', width: '82%' }}><span style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '10px' }}>北京 北京 大厂县 东燕郊潮白河工业区</span></td>
-                                <td style={{ borderLeft: '1px solid #000', textAlign: 'left', width: '14%' }}><span style={{ fontSize: '9px', fontFamily: '黑体', fontWeight: 'bold' }}>已验收</span></td>
-                            </tr>
-                            <tr>
-                                <td style={{ marginLeft: '2cm', width: '82%' }}><span style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '10px' }}>李晨辉  400-666-7788</span></td>
-                                <td style={{ borderLeft: '1px solid #000', textAlign: 'left', width: '14%' }}><span style={{ fontSize: '9px', fontFamily: '黑体', fontWeight: 'bold' }}>已实名</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style={{ width: '10cm', fontFamily: '黑体', height: '2.9cm' }}>
-                    <table style={{ margin: '0px', padding: '0px', height: '1cm', borderTopWidth: '0px', borderCollapse: 'collapse' }} cellSpacing={0} cellPadding={0}>
-                        <tbody>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontWeight: 'bold', fontFamily: '黑体' }}>重要提示：</span><span id="ImportantHints" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px' }}></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table style={{ margin: '0px', padding: '0px', height: '1.9cm', borderCollapse: 'collapse', borderBottom: '2px solid #000', width: '100%' }} cellSpacing={0} cellPadding={0}>
-                        <tbody>
-                            <tr>
-                                <td><span style={{ fontSize: '9px', fontFamily: '黑体', width: '4cm' }}>品名：样品</span></td>
-                                <td><span style={{ fontSize: '11px', fontWeight: 'bold', fontFamily: '黑体' }}>总代收款：</span></td>
-                            </tr>
-                            <tr>
-                                <td><span style={{ fontSize: '9px', fontFamily: '黑体', width: '4cm' }}>件数：一件      计费重量：0.5公斤</span></td>
-                                <td><span style={{ fontSize: '18px', fontWeight: 'bold', fontFamily: '黑体' }}>￥0.00元</span></td>
-                            </tr>
-                            <tr>
-                                <td rowSpan={2}><span style={{ fontSize: '18px', fontFamily: '黑体', fontWeight: 'bold', width: '4cm' }}>签收人：</span></td>
-                                <td><span style={{ fontSize: '9px', fontFamily: '黑体' }}>打印单位：J&K Scientific Ltd</span></td>
-                            </tr>
-                            <tr>
-                                <td><span style={{ fontSize: '9px', fontFamily: '黑体', fontWeight: 'bold' }}>打印时间：</span><span id="Createdate" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '9px' }}></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style={{ width: '10cm', fontFamily: '黑体', height: '3cm' }}>
-                    <table style={{ margin: '0px', padding: '0px', height: '1.7cm', borderTopWidth: '0px', borderCollapse: 'collapse', border: '0px' }} cellSpacing={0} cellPadding={0}>
-                        <tbody>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>条码号：</span><span id="ExpressCode" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', width: '5cm' }}></span></td>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>代收款：0.00元</span></td>
-                            </tr>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>客户单号：</span><span className="ExpressOrderNo" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', width: '5cm' }}></span></td>
-                                <td><span style={{ fontSize: '10px', fontFamily: '黑体' }}>计费重量：0.5公斤</span></td>
-                            </tr>
-                            <tr>
-                                <td><span style={{ fontSize: '10px', fontFamily: '黑体' }}>品名：样品</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table style={{ margin: '0px', padding: '0px', height: '1.3cm', borderBottom: '2px solid #000', width: '100%', borderCollapse: 'collapse' }} cellSpacing={0} cellPadding={0}>
-                        <tbody>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>寄件人：李晨辉  400-666-7788    北京  北京  大厂县</span></td>
-                            </tr>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>收件人：</span><span className="ConsigneeName" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginRight: '3px' }}></span><span className="ConsigneeMobile" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginRight: '3px' }}></span><span className="ConsigneeAddressDetail" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '8px', marginLeft: '6px' }}></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style={{ width: '10cm', fontFamily: '黑体', height: '2.4cm' }}>
-                    <table style={{ margin: '0px', padding: '0px', height: '1cm', borderTopWidth: '0px', borderCollapse: 'collapse', border: '0px' }} cellSpacing={0} cellPadding={0} >
-                        <tbody>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>收件人：</span><span className="ConsigneeName" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginRight: '3px' }}></span><span className="ConsigneeMobile" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginRight: '3px' }}></span><span id="ProvinceName" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginRight: '3px' }}></span><span id="CityName" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginRight: '3px' }}></span><span id="TownNme" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '12px', marginLeft: '3px' }}></span></td>
-                            </tr>
-                            <tr>
-                                <td><span style={{ fontSize: '12px', fontFamily: '黑体', fontWeight: 'bold' }}>客户单号：</span><span className="ExpressOrderNo" style={{ fontFamily: '黑体', fontWeight: 'bold', fontSize: '10px', width: '4.6cm' }}></span><span style={{ fontSize: '10px', fontFamily: '黑体' }}>品名：样品</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table style={{ margin: '0px', padding: '0px', height: '1.4cm', borderTopWidth: '0px', borderCollapse: 'collapse', border: '0px' }} cellSpacing={0} cellPadding={0}>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div style={{ width: '6cm', height: '1.4cm' }}>
-                                        <img id="barcodeTarget" style={{ marginLeft: '0.5cm' }}></img>
-                                    </div>
-                                </td>
-                                <td><span style={{ fontSize: '10px', fontFamily: '黑体' }}>件数：共 1 件</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div >;
     }
 

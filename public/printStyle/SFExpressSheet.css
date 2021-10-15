@@ -1,14 +1,14 @@
 /* 发运单整体列表样式 */
-.expressSheetList{
+.sf_expressSheetList{
     width: 7.6cm;
 }
-.expressSheetList ul.va-list {
+.sf_expressSheetList ul.va-list {
     list-style: none;
     background-color: #f0f0f0;
     padding: 0;
     margin-bottom: -1px;
 }
-.expressSheetList ul.va-list>li{
+.sf_expressSheetList ul.va-list>li{
     display: flex;
     flex-direction: row;
     flex-wrap:wrap;
@@ -18,16 +18,17 @@
 }
 
 /* 单个发运单样式 */
-.expressSheetList ul.va-list>li>div{
+.sf_expressSheetList ul.va-list>li>div{
     flex: 1 1;
     display: block;
     flex-direction: row;
 }
-.expressSheetItem{
+.sf_expressSheetItem{
     height: 13cm;
     width: 7.6cm;
     border-style: dashed;
     border: 1px dashed #000;
+    padding: 1px;
 }
 
 /* 头部样式（快递类型和时间） */

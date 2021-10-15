@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react';
 import { List, Page, VPage, tv, FA, PropGrid, EasyDate, LMR } from 'tonva-react';
 import { CDeliver } from './CDeliver';
-import '/printStyle/ReceiptList.css';
+//import '/printStyle/ReceiptList.css';
+import "../../public/printStyle/ReceiptList.css";
 import printJS from 'print-js';
 import jklogo from 'images/jklogo.png';
 import { tvPackx } from 'tools/tvPackx';
@@ -23,34 +24,7 @@ export class VReceiptList extends VPage<CDeliver> {
     // 打印页面
     private printPage = async () => {
         // size: portrait || landscape; 设置横(landscape)\纵向(portrait)打印
-
-        let style = '@page {size:landscape}' + '@media print {'
-            + `.trayNumberList_DR{width:100%;flex:1 1;display:grid;flex-wrap:wrap}.trayNumberList_DR ul.va-list{list-style:none;background-color:#f0f0f0;padding:0;margin-bottom:-1px}
-            .trayNumberList_DR ul.va-list>li{display:flex;flex-direction:row;flex-wrap:wrap;margin-bottom:1px;background-color:white;page-break-before:always}
-            .trayNumberList_DR ul.va-list>li>div{flex:1 1;display:grid;flex-direction:row}.top{width:100%;padding-bottom:5px}
-            .top tr{width:100%}.td_left{display:flex;padding-bottom:5px;font-weight:600;width:25%}
-            .td_left div{display:flex;padding-top:40px}.td_left span{font-size:15px}.td_right{width:8%;text-align:right;padding-right:10px;font-size:18px}
-            .deliveryInfo{width:100%;border:1px;padding-bottom:5px}.deliveryInfo_tr_1{width:100%;font-size:16px}
-            .deliveryInfo_td_1{width:9%}.deliveryInfo_td_2{width:8%}.deliveryInfo_td_3{width:9%}
-            .deliveryInfo_td_4{width:25%}.deliveryInfo_td_5{width:5%}.deliveryInfo_td_6{width:13%}
-            .deliveryInfo_td_7{width:9%}.deliveryInfo_td_8{width:8%}.title{width:100%;font-size:16px;height:38px;padding-bottom:0}
-            .title_div_1{text-align:left;width:10%;float:left}.title_div_2{text-align:left;width:27%;float:left}
-            .title_div_3{text-align:left;width:11%;float:left}.title_div_4{text-align:center;width:4%;float:left}
-            .title_div_5{text-align:center;width:9%;float:left}.title_div_6{text-align:center;width:4%;float:left}
-            .title_div_7{text-align:left;width:10%;float:left}.title_div_8{text-align:left;width:8%;float:left}
-            .title_div_9{text-align:left;width:8%;float:left}.title_div_10{text-align:left;width:9%;float:left}
-            .trayNumberItem_DR{width:100%;flex:1 1;display:grid;flex-wrap:wrap;margin-top:-15px}
-            .trayNumberItem_DR ul.va-list{list-style:none;background-color:#f0f0f0;padding:0;margin-bottom:-1px}
-            .trayNumberItem_DR ul.va-list>li{display:flex;flex-direction:row;flex-wrap:wrap;margin-bottom:1px;background-color:white;page-break-before:avoid}
-            .trayNumberItem_DR ul.va-list>li>div{flex:1 1;display:grid;flex-direction:row}.dataListItem_DR{width:100%;border-bottom:1px solid #000}
-            .dataListItem_DR_tr{width:100%;font-size:16px;height:26px}.dataListItem_DR_tr_td_1{width:10%;text-align:left}
-            .dataListItem_DR_tr_td_2{width:27%;text-align:left}.dataListItem_DR_tr_td_3{text-align:left;width:11%}
-            .dataListItem_DR_tr_td_4{width:4%;text-align:center}.dataListItem_DR_tr_td_5{width:9%;text-align:center}
-            .dataListItem_DR_tr_td_6{width:4%;text-align:center}.dataListItem_DR_tr_td_7{width:10%;text-align:left}
-            .dataListItem_DR_tr_td_8{width:8%;text-align:left}.dataListItem_DR_tr_td_9{width:8%;text-align:left}
-            .dataListItem_DR_tr_td_10{width:9%;text-align:left}.footer{padding-top:11px;text-align:right}
-            .footer span{width:70px;border-bottom:1px solid Black;padding:3px 20px 3px 20px}`
-            + '}';
+        const style = '@page {size:landscape}' + '@media print {}';
         let focuser = setInterval(() => window.dispatchEvent(new Event('focus')), 500);
 
         printJS({
@@ -58,6 +32,7 @@ export class VReceiptList extends VPage<CDeliver> {
             type: 'html',               // 可以打印html,img详细的可以在官方文档 https://printjs.crabbly.com/中查询
             scanStyles: false,          // 不适用默认样式
             style: style,               // 亦可使用引入的外部css
+            css: '/printStyle/ReceiptList.css',
             documentTitle: '回执单',
             onPrintDialogClose: () => { clearInterval(focuser); this.backPage(); }  // 取消打印回调
         });
