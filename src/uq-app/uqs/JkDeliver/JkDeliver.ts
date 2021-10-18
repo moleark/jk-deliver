@@ -1,4 +1,4 @@
-//=== UqApp builder created on Wed Oct 13 2021 16:49:55 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Mon Oct 18 2021 14:02:28 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -226,6 +226,16 @@ export interface ReturnGetCutOffMainDetail {
 export interface ResultGetCutOffMain {
 	main: ReturnGetCutOffMainMain[];
 	detail: ReturnGetCutOffMainDetail[];
+}
+
+export interface ParamGetCutOffTypeList {
+}
+export interface ReturnGetCutOffTypeListList {
+	cutOffType: number;
+	name: string;
+}
+export interface ResultGetCutOffTypeList {
+	list: ReturnGetCutOffTypeListList[];
 }
 
 export interface ParamGetOrderDetailTransportation {
@@ -523,6 +533,7 @@ export interface UqExt extends Uq {
 	GetCutOffMainList: UqQuery<ParamGetCutOffMainList, ResultGetCutOffMainList>;
 	WarehouseCutOffMain: UqQuery<ParamWarehouseCutOffMain, ResultWarehouseCutOffMain>;
 	GetCutOffMain: UqQuery<ParamGetCutOffMain, ResultGetCutOffMain>;
+	GetCutOffTypeList: UqQuery<ParamGetCutOffTypeList, ResultGetCutOffTypeList>;
 	GetOrderDetailTransportation: UqQuery<ParamGetOrderDetailTransportation, ResultGetOrderDetailTransportation>;
 	GetPointExchangeDetailTransportation: UqQuery<ParamGetPointExchangeDetailTransportation, ResultGetPointExchangeDetailTransportation>;
 	GetCarrierNo: UqQuery<ParamGetCarrierNo, ResultGetCarrierNo>;

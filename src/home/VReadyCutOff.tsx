@@ -33,17 +33,17 @@ export class VReadyCutOffSheet extends VPage<CHome> {
     }
 
     right() {
-        /*
+
         let actions: DropdownAction[] = [];
         if (this.cutOffTypeList.length) {
             let dropdownAction: any[] = this.cutOffTypeList.map((v: any, index) => {
-                return { icon: 'cut', caption: v.name, action: () => this.onCutOff(this.warehouse, v.customer, v.tradetype) };
+                return { icon: 'cut', caption: v.name, action: () => this.onCutOff(this.warehouse, v.cutOffType) };
             });
             actions = dropdownAction;
         }
         return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="navicon" actions={actions} />;
-        */
-        return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, 1)}> 截单类型1</button>;
+
+        //return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, 1)}> 截单</button>;
     }
 
     private renderReadyCutOffItem = (cutOffItem: any) => {

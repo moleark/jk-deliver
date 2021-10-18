@@ -124,8 +124,8 @@ export class CHome extends CUqBase {
 		let { JkDeliver } = this.uqs;
 		let cutOffType: number = 1;
 		let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse, cutOffType });
-		let cutOffTypeRet = { "截单类型1": "1", "截单类型2": "2" };	// await JkDeliver.GetCutOffTypeList.query({})
-		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet };
+		let cutOffTypeRet = await JkDeliver.GetCutOffTypeList.query({})
+		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet.list };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
 	}
 
@@ -304,7 +304,8 @@ export class CHome extends CUqBase {
 	 */
 	donePickup = async (pickupId: number,
 		pickDetail: {
-			deliverDetail: number;
+			pickupDetail: number;
+			biz: number;
 			quantity: number;
 		}[]) => {
 		await this.uqs.JkWarehouse.Picked.submit({

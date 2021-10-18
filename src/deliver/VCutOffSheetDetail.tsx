@@ -25,6 +25,11 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
     private detail: any[];
     private trayNumberListInfo: any[] = [];
     private webSocket: WebSocket;
+    private interFaceUrl: string = 'http://211.5.7.253/MVC/api/warehouse/GetJDExpressCode';
+    private jdCarrier: number = 16;     // 测试环境:16，生产环境:30;
+    private ydCarrier: number = 1;      // 测试环境:1，生产环境:1;
+    private zjsCarrier: number = 41;    // 测试环境:41，生产环境:28;
+    private sfCarrier: number = 32;    // 测试环境:32，生产环境:20;
 
     init(param: [any, any[]]) {
         let [main, detail] = param;
@@ -102,7 +107,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let dataList: any[] = [];
         let { no: cutOffMainNo, warehouseDetail } = this.main;
 
-        this.trayNumberListInfo.filter(v => v.carrier === 16).forEach((e: any) => {
+        this.trayNumberListInfo.filter(v => v.carrier === this.jdCarrier).forEach((e: any) => {
             let warehouseNo = warehouseDetail?.no;
             /*if (e.content) {
                 let formatContent: string = String(e.content).replace(/\r\n/g, "").replace(/\r/g, "").replace(/\n/g, "");
@@ -122,7 +127,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             let formData = JSON.stringify(requestData);
 
             try {
-                let res = await window.fetch('http://localhost:38311/api/warehouse/GetJDExpressCode', {
+                let res = await window.fetch(this.interFaceUrl, {
                     method: 'post',
                     mode: 'cors',
                     headers: { 'Content-Type': 'text/plain;application/json;charset=utf-8', 'Accept': 'application/json' },
@@ -145,7 +150,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                             var text = "{\"orderType\": \"" + printCmd + "\", \"parameters\": {\"printName\": \"" + printName + "\", 		\"tempUrl\": \"" + temp + "\", \"customTempUrl\": \"" + tempUser + "\", \"customData\": [" + printDataUser + "], 	\"printData\": [\"" + printData + "\"] } }";
                             this.webSocket.send(text);
                             let deliverMainId: number = Number(e.Id.split('_')[1]);
-                            this.updateWaybillNumber(deliverMainId, 16, e.DeliveryId);	//更新快递单号
+                            this.updateWaybillNumber(deliverMainId, this.jdCarrier, e.DeliveryId);	//更新快递单号
                         } else {
                             console.log(e.ResultMsg + e.Id);
                         }
@@ -168,7 +173,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let dataList: any[] = [];
         let { no: cutOffMainNo, warehouseDetail } = this.main;
 
-        this.trayNumberListInfo.filter(v => v.carrier === 1).forEach((e: any) => {
+        this.trayNumberListInfo.filter(v => v.carrier === this.ydCarrier).forEach((e: any) => {
             let warehouseNo = warehouseDetail?.no;
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
             dataList.push({
@@ -184,7 +189,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let requestData = { data: dataList };
         let formData = JSON.stringify(requestData);
         try {
-            let res = await window.fetch('http://localhost:38311/api/warehouse/GetYDExpressCode', {
+            let res = await window.fetch(this.interFaceUrl, {
                 method: 'post',
                 mode: 'cors',
                 headers: { 'Content-Type': 'text/plain;application/json;charset=utf-8', 'Accept': 'application/json' },
@@ -199,7 +204,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                     if (e.ExpressStatus === "1") {
                         PdfInfos += e.PdfInfo + "@";
                         let deliverMainId: number = Number(e.Id.split('_')[1]);
-                        this.updateWaybillNumber(deliverMainId, 1, e.ExpressCode);	//更新快递单号
+                        this.updateWaybillNumber(deliverMainId, this.ydCarrier, e.ExpressCode);	//更新快递单号
                     } else {
                         console.log(e.ExpressStatus);
                     }
@@ -227,7 +232,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 var value = document.createElement("input");
                 value.type = "hidden";
                 value.name = "value";
-                value.value = "tpr9Rwyil5fPDuYgQDQTYj0bPDsMM7ecozYjEfEeJ+w686rLE/xD+QwNKK1TxavdSFnDMzCmTFdaVUdg7HIwDRPEH1Twnrk0cEUV8kKOR6rjlJ/b8yRYbU+FeOJx/bkkhf2tK+tZ8Pt+pof3TgUwpFS+8HN88A++//r8sqxisDD8WgENkUMxp0i+FL1ByTzgPbzg1+irj1MPGRM5X+dn6LUVuFwDosZ2AqG7uPwOxTZgFnJMb3tU5AEkaSa3Kcr2iaAkftjDvQejWG6i6XS0lPv4sRWCNivTCfSuYm+KWCPS2e5Ystj11vPKr+fj9CXrZSjmKWuYQQmZtEvW1Eh9EAjAiqfz4iipBnHRtiDwm/xQxRKQeMMqKq1pEkgA9wHjC9sTWQNQx+2lh2phReutiAF2vpgiPJY4XhKTxlkLWBiLCa9YIV0oAiDc2bm6pxrV9iC8xRxmEQk288Xue4LIYZoqcBHQ0D1mZUsHyneGw7Lk4AYtGRj…b0Uw+5ZeGmKUrwc43a9z8jS+GtOQI3tB7HkOJMWQ+NEPWLf7XOwBqJZT5EdunK6K0w4FCw/55JS3fIqFvECGaEonFLW1bxA24vYBckL0deL2j3KPztO27nVymqyxj2ygFtHTNa5Wn/dtTNS8YvOEjsKYUw5BOjhDs6bdSKoiy6AxedY8uj7HbNhmm/ayaASuporWZp8U0yIuXcHkV9f646TYXSmQh1wOpBlB4AZoDzHD5O/jbwdxj5660gx4JY7sv4GhbuDLS8CkQDGGUWhNgBPr9uOHloZI44vxEtJLWLFhxJSdDJ9WjsbsYV6Su/pZ/h/2YtfL6Vz4l4stWSUd08xhPi5s8IKtwPXGTQOga/JwkzquK4ofjRd2Sny0Y4JPhrw6/S87GJCD+f1CG4hoTQ/l14EPdGLq4YUKVpHnoAZlk4ynRkSJI2fmY2WlMqVoZSihE3mdvvYIVZTgS11R90KBows1V+aPSnQ48opOwFmn3UPFbB";
+                value.value = PdfInfos;
                 pdfform.appendChild(value);
 
                 var div = document.getElementById('hawblayout_print');
@@ -247,7 +252,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
      */
     private pringZhaiJiSong = async () => {
 
-        let result = `{\"ret\":[{\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",
+        /*let result = `{\"ret\":[{\"Id\":\"MV20210827S0A_33816882\",\"OrderNo\":\"DDZJS008290952342\",\"ExpressOrderNo\":\"MV20210827S0A\",\"VcityCode\":\"010\",
         \"SiteNo\":\"BH63-66\",\"SiteName\":\"北京_中关村营业所_花园路营业厅\",\"ExpressStatus\":\"0\",\"ExpressErrorCode\":\"OK\",\"ProvinceName\":\"北京市\",
         \"TownNme\":\"\",\"CityName\":\"北京市\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeTelephone\":\"010-59309000\",
         \"ConsigneeUnitName\":\"百灵威测试\",\"ExpressCode\":\"ZJS008290952342\",\"ShipperUnitName\":\"J&K Scientific Ltd\",\"AcceptanceUnitName\":\"\",
@@ -270,13 +275,11 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         });
         let { openZJSExpressSheetList } = this.controller;
         await openZJSExpressSheetList(jsonResult);
-        return;
-
-
+        */
         let dataList: any[] = [];
         let { no: cutOffMainNo, warehouseDetail } = this.main;
 
-        this.trayNumberListInfo.filter(v => v.carrier === 41).forEach((e: any) => {
+        this.trayNumberListInfo.filter(v => v.carrier === this.zjsCarrier).forEach((e: any) => {
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
             let warehouseNo = warehouseDetail?.no;
             dataList.push({
@@ -291,7 +294,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let requestData = { data: dataList };
         let formData = JSON.stringify(requestData);
         try {
-            let res = await window.fetch('http://localhost:38311/api/warehouse/GetZJSExpressCode', {
+            let res = await window.fetch(this.interFaceUrl, {
                 method: 'post',
                 mode: 'cors',
                 headers: { 'Content-Type': 'text/plain;application/json;charset=utf-8', 'Accept': 'application/json' },
@@ -305,7 +308,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 jsonResult.forEach((e: any) => {
                     if (e.ExpressStatus === "0") {
                         let deliverMainId: number = Number(e.Id.split('_')[1]);
-                        this.updateWaybillNumber(deliverMainId, 41, e.ExpressCode);	//更新快递单号
+                        this.updateWaybillNumber(deliverMainId, this.zjsCarrier, e.ExpressCode);	//更新快递单号
                     } else {
                         console.log(e.ExpressStatus + ',' + e.ExceptionMessage);
                     }
@@ -323,7 +326,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
      */
     private pringShunFeng = async () => {
 
-        let result = `{ \"ret\":[{\"id\":\"SHMV20210603Z516Z_33816892\",\"proCode\":\"标快\",\"waybillNumber\":\"SF1331875979567\",
+        /*let result = `{ \"ret\":[{\"id\":\"SHMV20210603Z516Z_33816892\",\"proCode\":\"标快\",\"waybillNumber\":\"SF1331875979567\",
         \"destRouteLabel\":\"010W-AE-003\",\"ConsigneeName\":\"张康\",\"ConsigneeMobile\":\"18611114263\",\"ConsigneeUnitName\":\"百灵威测试\",
         \"ConsigneeAddress\":\"北京市北京市朝阳区北辰西路69号峻峰华亭A座5层\",\"senderName\":\"龚肃斌\",\"senderTel\":\"13818181523\",\"senderCompany\":\"J&K\",
         \"senderAddress\":\"上海市浦东新区唐镇上丰路955号3号门\",\"codingMappingOut\":\"3A\",\"twoDimensionCode\":\"MMM={'k1':'010W','k2':'010AE','k3':'003','k4':'T6','k5':'SF1331875979567','k6':'','k7':'53528168'}\",
@@ -341,11 +344,10 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         });
         let { openSFExpressSheetList } = this.controller;
         await openSFExpressSheetList(jsonResult);
-        return;
-
+        */
         let dataList: any[] = [];
         let { no: cutOffMainNo, warehouseDetail } = this.main;
-        this.trayNumberListInfo.filter(v => v.carrier === 32).forEach((e: any) => {
+        this.trayNumberListInfo.filter(v => v.carrier === this.sfCarrier).forEach((e: any) => {
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
             let warehouseNo = warehouseDetail?.no;
             dataList.push({
@@ -359,7 +361,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let requestData = { data: dataList };
         let formData = JSON.stringify(requestData);
         try {
-            let res = await window.fetch('http://localhost:38311/api/warehouse/GetSFExpressCode', {
+            let res = await window.fetch(this.interFaceUrl, {
                 method: 'post',
                 mode: 'cors',
                 headers: { 'Content-Type': 'text/plain;application/json;charset=utf-8', 'Accept': 'application/json' },
@@ -371,7 +373,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 let jsonResult: any[] = result.ret; // JSON.parse(ret);
                 jsonResult.forEach((element: any) => {
                     let deliverMainId: number = Number(element.id.split('_')[1]);
-                    this.updateWaybillNumber(deliverMainId, 32, element.waybillNumber);	//更新快递单号
+                    this.updateWaybillNumber(deliverMainId, this.sfCarrier, element.waybillNumber);	//更新快递单号
                 });
             } else {
                 console.log(res);

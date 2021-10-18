@@ -1,4 +1,4 @@
-//=== UqApp builder created on Wed Oct 13 2021 16:49:55 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Mon Oct 18 2021 14:02:29 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -218,7 +218,8 @@ export interface ResultAutoPick {
 export interface ParamPicked {
 	pickup: number;
 	detail: {
-		deliverDetail: number;
+		pickupDetail: number;
+		biz: number;
 		quantity: number;
 	}[];
 
@@ -232,54 +233,11 @@ export interface ParamPicking {
 export interface ResultPicking {
 }
 
-export interface ParamMergeToTally {
-	warehouse: number;
-	pickups: {
-		pickup: number;
-	}[];
-
-}
-export interface ReturnMergeToTallyTallys {
-	id: number;
-	no: string;
-}
-export interface ResultMergeToTally {
-	tallys: ReturnMergeToTallyTallys[];
-}
-
-export interface ParamTally {
-	tally: number;
-	detail: {
-		orderDetail: number;
-		quantity: number;
-	}[];
-
-}
-export interface ResultTally {
-}
-
 export interface ParamAutoOutBound {
 	aWarehouse: number;
 	cutOffMain: number;
 }
 export interface ResultAutoOutBound {
-}
-
-export interface ParamOutBound {
-	warehouse: number;
-	pickupMaxRows: number;
-}
-export interface ReturnOutBoundPickups {
-	id: number;
-	no: string;
-}
-export interface ReturnOutBoundDelivers {
-	id: number;
-	no: string;
-}
-export interface ResultOutBound {
-	pickups: ReturnOutBoundPickups[];
-	delivers: ReturnOutBoundDelivers[];
 }
 
 export interface ParamPickedSingle {
@@ -529,18 +487,6 @@ export interface ResultGetPickup {
 	detail: ReturnGetPickupDetail[];
 }
 
-export interface ParamWarehouseTallys {
-}
-export interface ReturnWarehouseTallysRet {
-	warehouse: number;
-	tallymain: number;
-	no: string;
-	create: any;
-}
-export interface ResultWarehouseTallys {
-	ret: ReturnWarehouseTallysRet[];
-}
-
 export interface ParamGetOutInBoundReasonList {
 }
 export interface ReturnGetOutInBoundReasonListList {
@@ -784,24 +730,6 @@ export interface ItemProductPackLot {
 	lot: string;
 }
 
-export interface TallyDetail {
-	id?: number;
-	main?: number;
-	biz: number;
-	quantity: number;
-}
-
-export interface TallyMain {
-	id?: number;
-	no?: string;
-	warehouse: number;
-	tallyer: number;
-	startTime: any;
-	finishTime: any;
-	$owner?: number;
-	$create?: any;
-}
-
 export interface DxPicking {
 	id: number;
 	$act?: number;
@@ -816,11 +744,6 @@ export interface OrderDetailX {
 	$act?: number;
 }
 
-export interface DxTallyMain {
-	id: number;
-	$act?: number;
-}
-
 export interface ActParamDxPicking {
 	id: number|IDXValue;
 	$act?: number;
@@ -832,11 +755,6 @@ export interface ActParamOrderDetailX {
 	showPrice?: number|IDXValue;
 	lotNumber?: string|IDXValue;
 	json?: string|IDXValue;
-	$act?: number;
-}
-
-export interface ActParamDxTallyMain {
-	id: number|IDXValue;
 	$act?: number;
 }
 
@@ -872,6 +790,7 @@ export interface IxPendingOutBound {
 	ixx: number;
 	ix: number;
 	xi: number;
+	biz2: number;
 	item: number;
 	quantity: number;
 	lotNumber: string;
@@ -890,11 +809,8 @@ export interface ParamActs {
 	itemResearch?: ItemResearch[];
 	itemProductPack?: ItemProductPack[];
 	itemProductPackLot?: ItemProductPackLot[];
-	tallyDetail?: TallyDetail[];
-	tallyMain?: TallyMain[];
 	dxPicking?: ActParamDxPicking[];
 	orderDetailX?: ActParamOrderDetailX[];
-	dxTallyMain?: ActParamDxTallyMain[];
 	warehouseSection?: WarehouseSection[];
 	itemStore?: ItemStore[];
 	ixUserWarehouse?: IxUserWarehouse[];
@@ -935,10 +851,7 @@ export interface UqExt extends Uq {
 	AutoPick: UqAction<ParamAutoPick, ResultAutoPick>;
 	Picked: UqAction<ParamPicked, ResultPicked>;
 	Picking: UqAction<ParamPicking, ResultPicking>;
-	MergeToTally: UqAction<ParamMergeToTally, ResultMergeToTally>;
-	Tally: UqAction<ParamTally, ResultTally>;
 	AutoOutBound: UqAction<ParamAutoOutBound, ResultAutoOutBound>;
-	OutBound: UqAction<ParamOutBound, ResultOutBound>;
 	PickedSingle: UqAction<ParamPickedSingle, ResultPickedSingle>;
 	ProductInventory: UqBook<ParamProductInventory, ResultProductInventory>;
 	ShelfBlockInventory: UqBook<ParamShelfBlockInventory, ResultShelfBlockInventory>;
@@ -957,7 +870,6 @@ export interface UqExt extends Uq {
 	GetValidWarehouseList: UqQuery<ParamGetValidWarehouseList, ResultGetValidWarehouseList>;
 	WarehousePickups: UqQuery<ParamWarehousePickups, ResultWarehousePickups>;
 	GetPickup: UqQuery<ParamGetPickup, ResultGetPickup>;
-	WarehouseTallys: UqQuery<ParamWarehouseTallys, ResultWarehouseTallys>;
 	GetOutInBoundReasonList: UqQuery<ParamGetOutInBoundReasonList, ResultGetOutInBoundReasonList>;
 	ShippingAreaInclusionProvince: UqMap;
 	ShippingAreaInclusionCity: UqMap;
@@ -981,11 +893,8 @@ export interface UqExt extends Uq {
 	ItemResearch: UqID<any>;
 	ItemProductPack: UqID<any>;
 	ItemProductPackLot: UqID<any>;
-	TallyDetail: UqID<any>;
-	TallyMain: UqID<any>;
 	DxPicking: UqIDX<any>;
 	OrderDetailX: UqIDX<any>;
-	DxTallyMain: UqIDX<any>;
 	WarehouseSection: UqIX<any>;
 	ItemStore: UqIX<any>;
 	IxUserWarehouse: UqIX<any>;

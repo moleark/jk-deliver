@@ -100,7 +100,7 @@ export class VPicking extends VPage<CHome> {
 		if (isAllCheck) {
 			let pickDetail: any[] = [];
 			this.detail.forEach((d: any) => {
-				pickDetail.push({ deliverDetail: d.deliverDetail, quantity: d.shouldQuantity });
+				pickDetail.push({ pickupDetail: d.pickupDetail, biz: d.deliverDetail, quantity: d.shouldQuantity });
 			});
 			await donePickup(pickupId, pickDetail);
 			this.closePage();
