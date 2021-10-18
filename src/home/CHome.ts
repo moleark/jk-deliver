@@ -1,7 +1,7 @@
 import { QueryPager } from "tonva-react";
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase, JkDeliver } from "uq-app";
-import { ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
+import { ReturnGetReadyCutOffCountRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
 import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
@@ -15,12 +15,14 @@ import { VPickSheet } from "./VPickSheet";
 
 export class WarehousePending {
 	warehouse: number;
+	readyCutOffs: ReturnGetReadyCutOffCountRet[];
 	cutOffMains: ReturnWarehouseCutOffMainRet[];
 	pickups: ReturnWarehousePickupsRet[];
 	deliverMains: ReturnWarehouseDeliverMainRet[];
 
 	constructor() {
 		makeObservable(this, {
+			readyCutOffs: observable.shallow,
 			cutOffMains: observable.shallow,
 			pickups: observable.shallow,
 			deliverMains: observable.shallow,
@@ -62,7 +64,8 @@ export class CHome extends CUqBase {
 
 	load = async () => {
 		let { JkDeliver, JkWarehouse } = this.uqs;
-		let [cutOffMains, pickups, deliverMains] = await Promise.all([
+		let [readyCutOffs, cutOffMains, pickups, deliverMains] = await Promise.all([
+			JkDeliver.GetReadyCutOffCount.query({}),
 			JkDeliver.WarehouseCutOffMain.query({}),
 			JkWarehouse.WarehousePickups.query({}),
 			JkDeliver.WarehouseDeliverMain.query({})
@@ -74,12 +77,20 @@ export class CHome extends CUqBase {
 			if (!wp) {
 				wp = coll[warehouse] = new WarehousePending();
 				wp.warehouse = warehouse;
+				wp.readyCutOffs = [];
 				wp.cutOffMains = [];
 				wp.pickups = [];
 				wp.deliverMains = [];
 				arr.push(wp);
 			}
 			return wp;
+		}
+		for (let row of readyCutOffs.ret) {
+			let { warehouse, id: requestDetailId } = row;
+			let wp = wpFromWarehouse(warehouse);
+			if (requestDetailId) {
+				wp.readyCutOffs.push(row);
+			}
 		}
 		for (let row of cutOffMains.ret) {
 			let { warehouse, cutOffMain } = row;

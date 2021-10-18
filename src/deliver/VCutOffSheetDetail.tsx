@@ -26,10 +26,10 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
     private trayNumberListInfo: any[] = [];
     private webSocket: WebSocket;
     private interFaceUrl: string = 'http://211.5.7.253/MVC/api/warehouse/GetJDExpressCode';
-    private jdCarrier: number = 16;     // 测试环境:16，生产环境:30;
+    private jdCarrier: number = 30;     // 测试环境:16，生产环境:30;
     private ydCarrier: number = 1;      // 测试环境:1，生产环境:1;
-    private zjsCarrier: number = 41;    // 测试环境:41，生产环境:28;
-    private sfCarrier: number = 32;    // 测试环境:32，生产环境:20;
+    private zjsCarrier: number = 28;    // 测试环境:41，生产环境:28;
+    private sfCarrier: number = 20;    // 测试环境:32，生产环境:20;
 
     init(param: [any, any[]]) {
         let [main, detail] = param;
@@ -115,8 +115,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 remark = jsonContect.deliverNotes;
             }*/
             let remark: string = "订单批号:" + cutOffMainNo + ",货号:" + e.trayNumber + ",提醒注意：（汽运禁航）（务必本人或专人签收）";
+            // e.orderMainNo + '_'  \ e.orderMainNo \ 
             dataList.push({
-                Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderId: e.orderMainNo, Oinvoice: cutOffMainNo,
+                Id: e.deliverMain, SaleOrderId: '', Oinvoice: cutOffMainNo,
                 TrayNumber: e.trayNumber, WarehouseId: warehouseNo, ConsigneeName: e.contactDetail?.name,
                 ConsigneeUnitName: e.contactDetail?.organizationName, ConsigneeAddressDetail: e.contactDetail?.addressString,
                 ConsigneeTelephone: e.contactDetail?.telephone, ConsigneeMobile: e.contactDetail?.mobile, IsBaoJia: '0', BaoJia: e.trayProductPrice, Remark: remark
@@ -149,8 +150,8 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                             var printName = "HPRT R42D";		    //6、打印机名称
                             var text = "{\"orderType\": \"" + printCmd + "\", \"parameters\": {\"printName\": \"" + printName + "\", 		\"tempUrl\": \"" + temp + "\", \"customTempUrl\": \"" + tempUser + "\", \"customData\": [" + printDataUser + "], 	\"printData\": [\"" + printData + "\"] } }";
                             this.webSocket.send(text);
-                            let deliverMainId: number = Number(e.Id.split('_')[1]);
-                            this.updateWaybillNumber(deliverMainId, this.jdCarrier, e.DeliveryId);	//更新快递单号
+                            //let deliverMainId: number = Number(e.Id.split('_')[1]);
+                            this.updateWaybillNumber(e.id, this.jdCarrier, e.DeliveryId);	//更新快递单号
                         } else {
                             console.log(e.ResultMsg + e.Id);
                         }
@@ -176,8 +177,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         this.trayNumberListInfo.filter(v => v.carrier === this.ydCarrier).forEach((e: any) => {
             let warehouseNo = warehouseDetail?.no;
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
+            // e.orderMainNo + '_' +
             dataList.push({
-                Id: e.orderMainNo + '_' + e.deliverMain, SaleOrderIds: e.orderMainNo, PickListId: cutOffMainNo, CustomerId: e.customerAccount,
+                Id: e.deliverMain, SaleOrderIds: e.orderMainNo, PickListId: cutOffMainNo, CustomerId: e.customerAccount,
                 TrayNumber: e.trayNumber, WarehouseId: warehouseNo, ConsigneeName: e.contactDetail?.name, ConsigneeCity: e.contactDetail?.cityName,
                 ConsigneeUnitName: e.contactDetail?.organizationName, ConsigneeAddressDetail: e.contactDetail?.addressString,
                 ConsigneeTelephone: e.contactDetail?.telephone, ConsigneeMobile: e.contactDetail?.mobile,
@@ -203,8 +205,8 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 jsonResult.forEach((e: any) => {
                     if (e.ExpressStatus === "1") {
                         PdfInfos += e.PdfInfo + "@";
-                        let deliverMainId: number = Number(e.Id.split('_')[1]);
-                        this.updateWaybillNumber(deliverMainId, this.ydCarrier, e.ExpressCode);	//更新快递单号
+                        //let deliverMainId: number = Number(e.Id.split('_')[1]);
+                        this.updateWaybillNumber(e.Id, this.ydCarrier, e.ExpressCode);	//更新快递单号
                     } else {
                         console.log(e.ExpressStatus);
                     }
@@ -282,8 +284,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         this.trayNumberListInfo.filter(v => v.carrier === this.zjsCarrier).forEach((e: any) => {
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
             let warehouseNo = warehouseDetail?.no;
+            // e.orderMainNo + '_' +
             dataList.push({
-                Id: e.orderMainNo + '_' + e.deliverMain, WarehouseId: warehouseNo, SaleOrderIds: e.orderMainNo, ConsigneeName: e.contactDetail?.name,
+                Id: e.deliverMain, WarehouseId: warehouseNo, SaleOrderIds: e.orderMainNo, ConsigneeName: e.contactDetail?.name,
                 ConsigneeUnitName: e.contactDetail?.organizationName, ConsigneeTelephone: e.contactDetail?.telephone,
                 ConsigneeMobile: e.contactDetail?.mobile, ConsigneeProvince: e.contactDetail?.provinceName,
                 ConsigneeCity: e.contactDetail?.cityName, ConsigneeAddressDetail: e.contactDetail?.addressString,
@@ -307,8 +310,8 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
 
                 jsonResult.forEach((e: any) => {
                     if (e.ExpressStatus === "0") {
-                        let deliverMainId: number = Number(e.Id.split('_')[1]);
-                        this.updateWaybillNumber(deliverMainId, this.zjsCarrier, e.ExpressCode);	//更新快递单号
+                        //let deliverMainId: number = Number(e.Id.split('_')[1]);
+                        this.updateWaybillNumber(e.id, this.zjsCarrier, e.ExpressCode);	//更新快递单号
                     } else {
                         console.log(e.ExpressStatus + ',' + e.ExceptionMessage);
                     }
@@ -350,8 +353,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         this.trayNumberListInfo.filter(v => v.carrier === this.sfCarrier).forEach((e: any) => {
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
             let warehouseNo = warehouseDetail?.no;
+            // e.orderMainNo + '_' +
             dataList.push({
-                Id: e.orderMainNo + '_' + e.deliverMain, ConsigneeName: e.contactDetail?.name,
+                Id: e.deliverMain, ConsigneeName: e.contactDetail?.name,
                 ConsigneeUnitName: e.contactDetail?.organizationName, ConsigneeTelephone: e.contactDetail?.telephone,
                 ConsigneeMobile: e.contactDetail?.mobile, ConsigneeAddressDetail: e.contactDetail?.addressString,
                 IsBaoJia: '0', BaoJia: e.trayProductPrice, Remark: remark
@@ -372,8 +376,8 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                 let result = await res.json();
                 let jsonResult: any[] = result.ret; // JSON.parse(ret);
                 jsonResult.forEach((element: any) => {
-                    let deliverMainId: number = Number(element.id.split('_')[1]);
-                    this.updateWaybillNumber(deliverMainId, this.sfCarrier, element.waybillNumber);	//更新快递单号
+                    // let deliverMainId: number = Number(element.id.split('_')[1]);
+                    this.updateWaybillNumber(element.id, this.sfCarrier, element.waybillNumber);	//更新快递单号
                 });
             } else {
                 console.log(res);
@@ -484,9 +488,9 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
             <div className="py-1 text-left">{symbol}</div>
             <div className="py-1 text-left">
                 <div><button className="btn btn-primary btn-sm py-1" onClick={e => alert('打印')}>打印</button></div>
-                <div><button className="btn btn-primary btn-sm my-1" onClick={e => alert('发运')}>发运</button></div>
             </div>
         </div>;
+        // <div><button className="btn btn-primary btn-sm my-1" onClick={e => alert('发运')}>发运</button></div>
 
         return <LMR key={deliverDetail} left={left} right={right} onClick={() => this.onClickCutOffItem(index)}>
             <div className="row col-12 py-1 pr-0">

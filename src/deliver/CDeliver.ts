@@ -7,6 +7,7 @@ import { VCutOffHistory } from "./VCutOffHistory";
 import { VReceiptList } from "./VReceiptList";
 import { VSFExpressSheet } from "./VSFExpressSheet";
 import { VZJSExpressSheet } from "./VZJSExpressSheet";
+import { accessSync } from "fs";
 
 export class CDeliver extends CUqBase {
 	// warehousePendingDeliver: ReturnWarehousePendingDeliverRet[];
@@ -81,16 +82,17 @@ export class CDeliver extends CUqBase {
 		});
 		detail.forEach((element: any) => {
 			// promises.push(this.getCustomerOrganization(element.customerAccount).then(data => element.organization = data));
-			promises.push(this.getProductExtention(375209 /*element.product*/).then(data => element.productExt = data));
-			promises.push(this.getContant(88703).then(data => element.contactDetail = data));  //  element.contact
-			promises.push(this.getProduct(232173 || element.product).then(data => element.productDetail = data));
+			promises.push(this.getContant(element.contact /*88703*/).then(data => element.contactDetail = data));  //  element.contact
+			promises.push(this.getProductId(element.item).then(data => element.product = data));
 		});
 		await Promise.all(promises);
 
 		let promisesAddress: PromiseLike<any>[] = [];
 		// 可以在uq中写一个统一查询query，能够避免多次循环查询
 		detail.forEach(async (element: any) => {
-			promisesAddress.push(this.getAddressDetail(332).then(data => element.contactDetail.addressDetail = data));
+			// promises.push(this.getProduct(element.product/*|| 232173*/).then(data => element.productDetail = data));
+			// promises.push(this.getProductExtention(element.product /*|| 375209*/).then(data => element.productExt = data));
+			promisesAddress.push(this.getAddressDetail(element.contactDetail.address.id).then(data => element.contactDetail.addressDetail = data));
 		});
 		await Promise.all(promisesAddress);
 
@@ -106,13 +108,16 @@ export class CDeliver extends CUqBase {
 		let cutOff = main[0];
 		detail.forEach((e: any) => {
 			let apointCarrierId: any = 0;
+			let unitPrice: any = 0;
 			if (e.content) {
 				let formatContent: string = String(e.content).replace(/\r\n/g, "").replace(/\r/g, "").replace(/\n/g, "");
 				let jsonContect: any = JSON.parse(formatContent);
-				let apointCarrier: any = jsonContect.shouldExpressLogistics[0];
+				let apointCarrier: any = jsonContect.shouldExpressLogistics;
+				unitPrice = jsonContect.unitPrice;
 				apointCarrierId = this.carrierList.find((e: any) => e.no === apointCarrier)?.id;
 			}
 			e.carrier = (e.carrier) ? e.carrier : apointCarrierId;
+			e.price = unitPrice;
 		});
 		let vPageParam = [cutOff, detail];
 		this.openVPage(VCutOffSheetDetail, vPageParam);
@@ -202,6 +207,10 @@ export class CDeliver extends CUqBase {
 		let d: any = await JkCustomer.Contact.all();
 		console.log(d);*/
 		return await JkCustomer.Contact.load(contactId);
+	}
+
+	getProductId = async (pack: number) => {
+		let { JkProduct } = this.uqs;
 	}
 
 	/**

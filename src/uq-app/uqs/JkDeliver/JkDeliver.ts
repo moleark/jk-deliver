@@ -1,4 +1,4 @@
-//=== UqApp builder created on Mon Oct 18 2021 14:02:28 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Mon Oct 18 2021 17:03:49 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -275,6 +275,16 @@ export interface ResultGetCarrierNo {
 	ret: ReturnGetCarrierNoRet[];
 }
 
+export interface ParamGetReadyCutOffCount {
+}
+export interface ReturnGetReadyCutOffCountRet {
+	warehouse: number;
+	id: number;
+}
+export interface ResultGetReadyCutOffCount {
+	ret: ReturnGetReadyCutOffCountRet[];
+}
+
 export interface OrderMain {
 	id?: number;
 	no?: string;
@@ -537,6 +547,7 @@ export interface UqExt extends Uq {
 	GetOrderDetailTransportation: UqQuery<ParamGetOrderDetailTransportation, ResultGetOrderDetailTransportation>;
 	GetPointExchangeDetailTransportation: UqQuery<ParamGetPointExchangeDetailTransportation, ResultGetPointExchangeDetailTransportation>;
 	GetCarrierNo: UqQuery<ParamGetCarrierNo, ResultGetCarrierNo>;
+	GetReadyCutOffCount: UqQuery<ParamGetReadyCutOffCount, ResultGetReadyCutOffCount>;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
 	Warehouse: UqID<any>;

@@ -75,8 +75,8 @@ export class VReceiptList extends VPage<CDeliver> {
         return <div className="dataListItem_DR">
             <table cellPadding={0} cellSpacing={0}>
                 <tr className="dataListItem_DR_tr">
-                    <td className="dataListItem_DR_tr_td_1">{productDetail?.origin}</td>
-                    <td className="dataListItem_DR_tr_td_2">{productDetail?.descriptionC.length > 15 ? String(productDetail.descriptionC).substr(0, 15) : productDetail.descriptionC}</td>
+                    <td className="dataListItem_DR_tr_td_1">{productDetail === undefined ? '' : productDetail.origin}</td>
+                    < td className="dataListItem_DR_tr_td_2">{productDetail === undefined ? '' : productDetail.descriptionC.length > 15 ? String(productDetail.descriptionC).substr(0, 15) : productDetail.descriptionC}</td>
                     <td className="dataListItem_DR_tr_td_3">{storageCondition}</td>
                     <td className="dataListItem_DR_tr_td_4">{tallyShould}</td>
                     <td className="dataListItem_DR_tr_td_5">{tvPackx(pack)}</td>
