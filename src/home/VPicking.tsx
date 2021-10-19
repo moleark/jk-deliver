@@ -55,7 +55,7 @@ export class VPicking extends VPage<CHome> {
 		return <LMR className="px-1 py-1" key={pickupDetail} left={left} right={right} onClick={() => this.onClickPickItem(index)}>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">编号: </span>
-				<span className="col-5 pl-1">{ProductX.tv(product)} </span>
+				<span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
 				<span className="col-2 text-muted px-1">包装: </span>
 				<span className="col-3 pl-1">{tvPackx(pack)}</span>
 			</div>

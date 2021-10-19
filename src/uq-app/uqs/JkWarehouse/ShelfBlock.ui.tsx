@@ -17,5 +17,5 @@ export const t: TFunc = (str: string | JSX.Element): string | JSX.Element => {
 
 export function render(item: TuidShelfBlock): JSX.Element {
 	//return <>{uqStringify(item)}</>;
-	return <>{item.no}</>;
+	return <>{item.name}</>;
 };

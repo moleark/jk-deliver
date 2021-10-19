@@ -1,7 +1,7 @@
 import { QueryPager } from "tonva-react";
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase, JkDeliver } from "uq-app";
-import { ReturnGetReadyCutOffCountRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
+import { ReturnGetWarehouseReadyCutOffCountRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
 import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
@@ -15,7 +15,7 @@ import { VPickSheet } from "./VPickSheet";
 
 export class WarehousePending {
 	warehouse: number;
-	readyCutOffs: ReturnGetReadyCutOffCountRet[];
+	readyCutOffs: ReturnGetWarehouseReadyCutOffCountRet[];
 	cutOffMains: ReturnWarehouseCutOffMainRet[];
 	pickups: ReturnWarehousePickupsRet[];
 	deliverMains: ReturnWarehouseDeliverMainRet[];
@@ -48,13 +48,16 @@ export class WarehousePending {
 export class CHome extends CUqBase {
 	warehouse: number;
 	customer: number;
-	// customerOrderDetails: CustomerPendingDeliver[];
+	cutOffType: number;
 	warehousePending: WarehousePending[];
+	readyCutOffTaskList: QueryPager<any>;
 
 	constructor(cApp: CApp) {
 		super(cApp);
 		makeObservable(this, {
 			warehousePending: observable.shallow,
+			readyCutOffTaskList: observable.shallow,
+			cutOffType: observable
 		});
 	}
 	protected async internalStart() {
@@ -65,7 +68,7 @@ export class CHome extends CUqBase {
 	load = async () => {
 		let { JkDeliver, JkWarehouse } = this.uqs;
 		let [readyCutOffs, cutOffMains, pickups, deliverMains] = await Promise.all([
-			JkDeliver.GetReadyCutOffCount.query({}),
+			JkDeliver.GetWarehouseReadyCutOffCount.query({}),
 			JkDeliver.WarehouseCutOffMain.query({}),
 			JkWarehouse.WarehousePickups.query({}),
 			JkDeliver.WarehouseDeliverMain.query({})
@@ -116,16 +119,6 @@ export class CHome extends CUqBase {
 		arr.sort((a, b) => a.warehouse - b.warehouse);
 		this.warehousePending = arr;
 	}
-	/*
-		loadCustomerPendingDeliver = async(row: ReturnWarehousePendingDeliverRet) => {
-			let {warehouse} = row;
-			let customer = 0;
-			let ret = await this.uqs.JkDeliver.CustomerPendingDeliver.query({warehouse, customer});
-			this.warehouse = warehouse;
-			this.customerOrderDetails = ret.ret as CustomerPendingDeliver[];
-			this.openVPage(VCustomerDeliver);
-		}
-	*/
 
 	/**
 	 * 打开截单界面
@@ -133,11 +126,23 @@ export class CHome extends CUqBase {
 	 */
 	onOpenCutOffPage = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let cutOffType: number = 1;
-		let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse, cutOffType });
 		let cutOffTypeRet = await JkDeliver.GetCutOffTypeList.query({})
-		let vPageParam = { warehouse: warehouse, taskList: readyCutOffRet.list, cutOffTypeList: cutOffTypeRet.list };
+		let vPageParam = { warehouse: warehouse, cutOffTypeList: cutOffTypeRet.list };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
+	}
+
+	/**
+	 * 查询待截单任务根据库房和截单类型
+	 * @param warehouse 
+	 * @param cutOffType 
+	 */
+	onLoadReadyCutOffList = async (warehouse: number, cutOffType: number) => {
+		let { JkDeliver } = this.uqs;
+		// let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse, cutOffType });
+		let readyCutOffRet: QueryPager<any> = new QueryPager<any>(JkDeliver.GetReadyCutOffList, 10, 20);
+		await readyCutOffRet.first({ warehouse, cutOffType });
+		this.cutOffType = cutOffType;
+		this.readyCutOffTaskList = readyCutOffRet;
 	}
 
 	/**
@@ -146,7 +151,7 @@ export class CHome extends CUqBase {
 	 */
 	onOpenCutOffHistory = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
-		let cutOffMainLists: QueryPager<any> = new QueryPager<any>(JkDeliver.GetCutOffMainList, 15, 15);
+		let cutOffMainLists: QueryPager<any> = new QueryPager<any>(JkDeliver.GetCutOffMainList, 10, 20);
 		await cutOffMainLists.first({ warehouse });
 		let vPageParam = { warehouse: warehouse, historyList: cutOffMainLists };
 		this.cApp.cDeliver.openCutOffHistory(vPageParam);
