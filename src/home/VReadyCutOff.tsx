@@ -1,18 +1,28 @@
-import { VPage, LMR, List, DropdownAction, DropdownActions, Scroller } from "tonva-react";
+import { VPage, LMR, List, Scroller } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
 import { CHome } from "./CHome";
 import classNames from 'classnames';
 import { observer } from "mobx-react";
 import React from "react";
+import { makeObservable, observable } from "mobx";
 
 export class VReadyCutOffSheet extends VPage<CHome> {
 
     private warehouse: number;
     private cutOffTypeList: any[];
+    cutOffType: number;
+    constructor(cApp: CHome) {
+        super(cApp);
+        makeObservable(this, {
+            cutOffType: observable
+        });
+    }
+
     init(param: any) {
         let { warehouse, cutOffTypeList } = param;
         this.warehouse = warehouse;
         this.cutOffTypeList = cutOffTypeList;
+        this.controller.readyCutOffTaskList = null;
     }
 
     header() { return '待截单列表' }
@@ -47,7 +57,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
             actions = dropdownAction;
         }
         return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="navicon" actions={actions} />;*/
-        return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, this.controller.cutOffType)}> 截单</button>;
+        return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, this.cutOffType)}> 截单</button>;
     }
 
     /**
@@ -80,7 +90,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
     private rendercutOffTypeItem = (data: any) => {
         let { cutOffType, name } = data;
         return React.createElement(observer(() => {
-            return <span className={classNames(this.controller.cutOffType === cutOffType ? 'text-light bg-primary' : 'text-primary', 'm-1 border-primary border py-1 px-2 rounded-lg small')}
+            return <span className={classNames(this.cutOffType === cutOffType ? 'text-light bg-primary' : 'text-primary', 'm-1 border-primary border py-1 px-2 rounded-lg small')}
                 onClick={() => this.selectCutOffType(cutOffType)} >
                 {name}
             </span >;
@@ -93,7 +103,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      * @param cutOffType 
      */
     private selectCutOffType = async (cutOffType: number) => {
-        this.controller.cutOffType = cutOffType;
+        this.cutOffType = cutOffType;
         let { onLoadReadyCutOffList } = this.controller;
         await onLoadReadyCutOffList(this.warehouse, cutOffType);
     }

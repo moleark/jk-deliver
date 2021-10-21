@@ -214,6 +214,12 @@ export class CHome extends CUqBase {
 			alert(`id ${pickup} 没有取到单据`);
 			return;
 		}
+		let promises: PromiseLike<any>[] = [];
+		detail.forEach((element: any) => {
+			promises.push(this.getShelfBlock(element.shelfBlock).then(data => element.shelfBlockName = data));
+		});
+		await Promise.all(promises);
+
 		let pickupMain = main[0];
 		let { picker } = pickupMain;
 		let vPageParam = [pickupMain, detail];
@@ -380,4 +386,22 @@ export class CHome extends CUqBase {
 		let extention = await JkProduct.ProductExtention.obj({ product: product }); // 56998
 		return extention?.content;
 	}
+
+	/**
+	 * 获取货位信息
+	 * @param shelfBlockId 
+	 * @returns 
+	 */
+	getShelfBlock = async (shelfBlockId: number) => {
+		let { JkWarehouse } = this.uqs;
+		let shelfBlock = await JkWarehouse.ShelfBlock.load(shelfBlockId);
+		return shelfBlock?.name;
+	}
+
+	searchProductPackByOrigin = async (origin: string) => {
+		let { JkProduct } = this.uqs;
+		let result: any = await JkProduct.GetProductPackByOrigin.query({ origin: origin, salesRegion: 1 });
+		return result.ret;
+	}
+
 }

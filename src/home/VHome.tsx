@@ -48,7 +48,7 @@ export class VHome extends VPage<CHome> {
 
     private renderCutOffMain = (row: ReturnWarehouseCutOffMainRet, index: number): JSX.Element => {
         let { no, staff } = row;
-        let left = <div className="w-8c text-info">理货单</div>;
+        let left = <div className="w-5c text-info">理货单</div>;
         let right: any;
         right = (staff) ?
             <span className="text-success">{this.renderUser(staff)} </span>
@@ -61,7 +61,7 @@ export class VHome extends VPage<CHome> {
 
     private renderPickup = (row: ReturnWarehousePickupsRet, index: number): JSX.Element => {
         let { no, picker } = row;
-        let left = <div className="w-8c text-success">拣货单</div>;
+        let left = <div className="w-5c text-success">拣货单</div>;
         let right: any;
         right = (picker) ?
             <span className="text-success">{this.renderUser(picker)}</span>
@@ -76,7 +76,7 @@ export class VHome extends VPage<CHome> {
         let { JkCustomer } = this.controller.uqs;
         let { Customer, BuyerAccount } = JkCustomer;
         let { deliverMain, no, customerAccount, create, rows, pickRows, staff } = row;
-        let left = <div className="w-8c text-primary">发运单</div>;
+        let left = <div className="w-5c text-primary">发运单</div>;
         /*let right = pickRows === rows ?
             (staff ?
                     <span>{this.renderUser(staff)} <span className="text-success">发前确认</span></span>

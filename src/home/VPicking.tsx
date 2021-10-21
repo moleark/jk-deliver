@@ -1,58 +1,80 @@
+import { observer } from "mobx-react";
+import React from "react";
 import { LMR, VPage, List } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
 import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { CHome } from "./CHome";
+import { makeObservable, observable } from "mobx";
 
 export class VPicking extends VPage<CHome> {
 	private main: ReturnGetPickupMain;
-	private detail: ReturnGetPickupDetail[];
+	detail: ReturnGetPickupDetail[];
+	constructor(cApp: CHome) {
+		super(cApp);
+		makeObservable(this, {
+			detail: observable
+		});
+	}
 
 	init(param: [ReturnGetPickupMain, ReturnGetPickupDetail[]]) {
 		let [main, detail] = param;
 		this.main = main;
-		this.detail = detail;
+		this.detail = detail.sort((a: any, b: any) => { return this.compare(a, b) });
 	}
 
 	header() { return '拣货单：' + this.main.no }
 
-	// 修改当前选中行颜色
-	private onClickPickItem = (rowIndex: number) => {
-
-		let pickListDiv = document.getElementById("pickListDiv").getElementsByTagName("ul")[0].getElementsByTagName("li");
-
-		for (let index = 0; index < pickListDiv.length; index++) {
-			if (index == rowIndex) {
-				pickListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFF99";
-			} else {
-				pickListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFFFF";
-			}
-		}
+	/**
+	 * 自定义排序方法
+	 * @param a 
+	 * @param b 
+	 * @returns 
+	 */
+	private compare = (a: any, b: any) => {
+		let stateA: string = a["pickstate"] === 1 ? '1' : '0';
+		let stateB: string = b["pickstate"] === 1 ? '1' : '0';
+		let blockNameA: string = a["shelfBlockName"] === undefined ? '0' : a["shelfBlockName"];
+		let blockNameB: string = b["shelfBlockName"] === undefined ? '0' : b["shelfBlockName"];
+		return stateA.localeCompare(stateB) || blockNameA.localeCompare(blockNameB);
 	}
 
 	private renderPickItem = (pickItem: any, index: number) => {
 
 		let { JkProduct, JkWarehouse } = this.controller.uqs;
 		let { ProductX } = JkProduct;
-		let { ShelfBlock } = JkWarehouse;
+		// let { ShelfBlock } = JkWarehouse;
 		let PackX = ProductX.div('packx');
 
-		let { id: mainId } = this.main;
-		let { id: pickupDetail, product, deliverDetail, orderDetail, shelfBlock, lotNumber, item, shouldQuantity, pickdone, pickstate } = pickItem;
+		// let { id: mainId } = this.main;
+		let { id: pickupDetail, product, deliverDetail, shelfBlock, shelfBlockName, lotNumber, item, shouldQuantity, pickdone, pickstate } = pickItem;
 		let pack = PackX.getObj(item);	// JSON.stringify(pack)
 
-		let left = <div className="py-1 pr-2">{index + 1}</div>;
+		// let left = <div className="py-1 pr-2">{index + 1}</div>;
 		let isDone: boolean = (pickstate === 0 || pickstate === false) ? false : true;
 		pickItem.pickstate = isDone;
 		let right = <div className="m-auto pr-2">
 			<label className="small text-muted">
 				<input type="checkbox"
 					defaultChecked={isDone}
-					onChange={e => { if (e.target.checked === false) { return }; pickItem.pickstate = e.target.checked; this.donePickupItem(pickupDetail, shouldQuantity) }} />
+					onChange={e => {
+						if (e.target.checked === false) { return };
+						pickItem.pickstate = e.target.checked;
+						this.donePickupItem(pickupDetail, pickdone);
+						this.detail.sort((a: any, b: any) => a["pickstate"] - b["pickstate"] || a["shelfBlockName"] - b["shelfBlockName"]);
+					}}
+				/>
 			</label>
 		</div>;
 
 		// {JkDeliver.OrderDetail.render(id)}	ProductX.tv(product)	tv(product, v => v.origin)	JSON.stringify(pack)
-		return <LMR className="px-1 py-1" key={pickupDetail} left={left} right={right} onClick={() => this.onClickPickItem(index)}>
+		// onClick={() => this.onClickPickItem(index)}
+		// {ShelfBlock.tv(shelfBlock)}
+		return <LMR className="py-1 border-top border-light" key={pickupDetail} right={right}
+			style={isDone === true ? { backgroundColor: "#C1FFC1" } : {}}>
+			<div className="row col-12 py-1">
+				<span className="col-2 text-muted px-1">货位: </span>
+				<span className="col-9 pl-1"> <b>{shelfBlockName}</b></span>
+			</div>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">编号: </span>
 				<span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
@@ -64,33 +86,31 @@ export class VPicking extends VPage<CHome> {
 				<span className="col-9 pl-1">{lotNumber}</span>
 			</div>
 			<div className="row col-12 py-1">
-				<span className="col-2 text-muted px-1">货位: </span>
-				<span className="col-9 pl-1">{ShelfBlock.tv(shelfBlock)}</span>
-			</div>
-			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">应拣: </span>
 				<span className="col-5 text-info">{shouldQuantity}</span>
 				<span className="col-2 text-muted px-1">实捡: </span>
 				<input type="text" className="form-control col-2 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
-					onChange={o => pickItem.shouldQuantity = o.target.value} defaultValue={pickstate === 0 ? shouldQuantity : pickdone}
-				/>
+					onChange={o => pickItem.pickdone = o.target.value} defaultValue={pickdone} />
 			</div>
-		</LMR>;
+		</LMR >;
 	};
 
 	content() {
-
-		// let [pickupMain, pickupDetail] = this.pickupData;
 		let pickTotal: number = 0;
 		this.detail.forEach(element => {
 			pickTotal += element.shouldQuantity;
+			if (element.pickstate === 0) {
+				element.pickdone = element.shouldQuantity;
+			}
 		});
 
 		return <div id="pickListDiv" className="p-1 bg-white">
-			<List items={this.detail} item={{ render: this.renderPickItem }} none="无拣货数据" />
-			<div className="float-right py-3">
-				<span className="px-2 text-info small">应拣总瓶数：<strong>{pickTotal}</strong></span>
+			<div className="px-0 py-1 bg-light" style={{ borderBottom: '1px dashed #dee2e6' }}>
+				<span className="px-1 text-info small">应拣总瓶数：<strong>{pickTotal}</strong></span>
 			</div>
+			{React.createElement(observer(() => {
+				return <List items={this.detail} item={{ render: this.renderPickItem }} none="无拣货数据" />
+			}))}
 		</div>;
 	}
 
@@ -104,7 +124,7 @@ export class VPicking extends VPage<CHome> {
 		if (isAllCheck) {
 			let pickDetail: any[] = [];
 			this.detail.forEach((d: any) => {
-				pickDetail.push({ pickupDetail: d.pickupDetail, biz: d.deliverDetail, quantity: d.shouldQuantity });
+				pickDetail.push({ pickupDetail: d.pickupDetail, biz: d.deliverDetail, quantity: d.pickdone });
 			});
 			await donePickup(pickupId, pickDetail);
 			this.closePage();
