@@ -38,6 +38,7 @@ import * as ItemStore from './ItemStore.ui';
 import * as IxUserWarehouse from './IxUserWarehouse.ui';
 import * as IxPendingPickup from './IxPendingPickup.ui';
 import * as IxPendingOutBound from './IxPendingOutBound.ui';
+import * as IxPendingOutBoundResult from './IxPendingOutBoundResult.ui';
 	
 export function setUI(uq: Uq) {
 	assign(uq, 'SalesRegion', SalesRegion);
@@ -79,5 +80,6 @@ export function setUI(uq: Uq) {
 	assign(uq, 'IxUserWarehouse', IxUserWarehouse);
 	assign(uq, 'IxPendingPickup', IxPendingPickup);
 	assign(uq, 'IxPendingOutBound', IxPendingOutBound);
+	assign(uq, 'IxPendingOutBoundResult', IxPendingOutBoundResult);
 }
 export * from './JkWarehouse';

@@ -45,6 +45,11 @@ export const appConfig: AppConfig = {
 			dev: jk,
 			name: 'common',
 			version: '0.1.1',
+		},
+		{
+			dev: jk,
+			name: 'webuser',
+			version: '0.1.1',
 		}
 	],
 	noUnit: true,

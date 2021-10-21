@@ -1,4 +1,4 @@
-//=== UqApp builder created on Tue Oct 19 2021 18:21:19 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Thu Oct 21 2021 10:24:20 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -796,6 +796,14 @@ export interface IxPendingOutBound {
 	json: string;
 }
 
+export interface IxPendingOutBoundResult {
+	ixx: number;
+	ix: number;
+	xi: number;
+	item: number;
+	lotNumber: string;
+}
+
 export interface ParamActs {
 	storePoint?: StorePoint[];
 	item?: Item[];
@@ -815,6 +823,7 @@ export interface ParamActs {
 	ixUserWarehouse?: IxUserWarehouse[];
 	ixPendingPickup?: IxPendingPickup[];
 	ixPendingOutBound?: IxPendingOutBound[];
+	ixPendingOutBoundResult?: IxPendingOutBoundResult[];
 }
 
 
@@ -899,6 +908,7 @@ export interface UqExt extends Uq {
 	IxUserWarehouse: UqIX<any>;
 	IxPendingPickup: UqIX<any>;
 	IxPendingOutBound: UqIX<any>;
+	IxPendingOutBoundResult: UqIX<any>;
 }
 
 export function assign(uq: any, to:string, from:any): void {

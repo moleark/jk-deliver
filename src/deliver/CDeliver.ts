@@ -66,6 +66,7 @@ export class CDeliver extends CUqBase {
 
 	/**
 	 *  打开截单详情界面，去统一打印单据
+	 *  此方法查询存在问题，需要优化：查询contact，查询address，查询province、city、county
 	 * @param cutOffMain 
 	 */
 	onOpenCutOffDetail = async (cutOffMain: number) => {
@@ -92,16 +93,26 @@ export class CDeliver extends CUqBase {
 		detail.forEach(async (element: any) => {
 			// promises.push(this.getProduct(element.product/*|| 232173*/).then(data => element.productDetail = data));
 			// promises.push(this.getProductExtention(element.product /*|| 375209*/).then(data => element.productExt = data));
-			promisesAddress.push(this.getAddressDetail(element.contactDetail.address.id).then(data => element.contactDetail.addressDetail = data));
+			if (element.contactDetail?.address === undefined) {
+				element.contactDetail = {};
+			} else {
+				promisesAddress.push(this.getAddressDetail(element.contactDetail?.address?.id).then(data => element.contactDetail.addressDetail = data ? data : ''));
+			}
 		});
 		await Promise.all(promisesAddress);
 
 		let promisesArea: PromiseLike<any>[] = [];
 		// 可以在uq中写一个统一查询query，能够避免多次循环查询
 		detail.forEach(async (element: any) => {
-			promisesArea.push(this.getProvinceName(element.contactDetail.addressDetail.province.id).then(data => element.contactDetail.provinceName = data));
-			promisesArea.push(this.getCityName(element.contactDetail.addressDetail.city.id).then(data => element.contactDetail.cityName = data));
-			promisesArea.push(this.getCountyName(element.contactDetail.addressDetail.county.id).then(data => element.contactDetail.countyName = data));
+			if (element.contactDetail.addressDetail === undefined) {
+				element.contactDetail.provinceName = undefined;
+				element.contactDetail.cityName = undefined;
+				element.contactDetail.countyName = undefined;
+			} else {
+				promisesArea.push(this.getProvinceName(element.contactDetail?.addressDetail?.province?.id || 1).then(data => element.contactDetail.provinceName = data));
+				promisesArea.push(this.getCityName(element.contactDetail?.addressDetail?.city?.id || 1).then(data => element.contactDetail.cityName = data));
+				promisesArea.push(this.getCountyName(element.contactDetail?.addressDetail?.county?.id || 1).then(data => element.contactDetail.countyName = data));
+			}
 		});
 		await Promise.all(promisesArea);
 

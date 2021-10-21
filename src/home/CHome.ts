@@ -240,7 +240,7 @@ export class CHome extends CUqBase {
 
 		let promises: PromiseLike<any>[] = [];
 		mainArr.forEach((element: any) => {
-			promises.push(this.cApp.cDeliver.getContant(88750 || element.contact).then(data => element.contactDetail = data));
+			promises.push(this.cApp.cDeliver.getContant(element.contact).then(data => element.contactDetail = data));
 		});
 
 		detail.forEach((element: any) => {

@@ -1,5 +1,6 @@
-import { VPage, LMR, List, Scroller } from "tonva-react";
+import { VPage, LMR, List, Scroller, FA } from "tonva-react";
 import { CDeliver } from "./CDeliver";
+import { format } from 'date-fns';
 
 export class VCutOffHistory extends VPage<CDeliver> {
 
@@ -14,13 +15,18 @@ export class VCutOffHistory extends VPage<CDeliver> {
     header() { return '截单历史' }
 
     private renderCutOffHistory = (cutOffHistory: any) => {
-
-        let { id, no, cutter } = cutOffHistory;
+        let { JkWebuser } = this.controller.uqs;
+        let { WebUser } = JkWebuser;
+        let { id, no, cutter, create } = cutOffHistory;
         let { onOpenCutOffDetail } = this.controller;
-        // let right = <div className="text-muted">{cutter}</div>
+        let right = <FA className="mr-1 cursor-pointer text-info" name="eye" />;
 
-        return <LMR className="px-1 py-1" right={undefined} onClick={() => onOpenCutOffDetail(id)}>
-            <div className="row col-12 py-1"> {no} </div>
+        return <LMR className="px-1 py-1" right={right} onClick={() => onOpenCutOffDetail(id)}>
+            <div className="row py-1 col-12">
+                <div className="col-5 px-1">{no}</div>
+                <div className="col-3 px-0 text-muted small">{WebUser.tv(cutter)}</div>
+                <div className="col-4 px-0 text-muted small">{format(Date.now(), 'yyyy/MM/dd HH:mm')}</div>
+            </div>
         </LMR>;
     }
 
