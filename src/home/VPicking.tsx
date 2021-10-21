@@ -60,16 +60,20 @@ export class VPicking extends VPage<CHome> {
 				<span className="col-3 pl-1">{tvPackx(pack)}</span>
 			</div>
 			<div className="row col-12 py-1">
-				<span className="col-2 text-muted px-1">货位: </span>
-				<span className="col-5 pl-1">{ShelfBlock.tv(shelfBlock)}</span>
 				<span className="col-2 text-muted px-1">Lot: </span>
-				<span className="col-3 pl-1">{lotNumber}</span>
+				<span className="col-9 pl-1">{lotNumber}</span>
+			</div>
+			<div className="row col-12 py-1">
+				<span className="col-2 text-muted px-1">货位: </span>
+				<span className="col-9 pl-1">{ShelfBlock.tv(shelfBlock)}</span>
 			</div>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">应拣: </span>
 				<span className="col-5 text-info">{shouldQuantity}</span>
 				<span className="col-2 text-muted px-1">实捡: </span>
-				<input type="text" className="form-control col-3 text-info" onChange={o => pickItem.shouldQuantity = o.target.value} defaultValue={pickstate === 0 ? shouldQuantity : pickdone} />
+				<input type="text" className="form-control col-2 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+					onChange={o => pickItem.shouldQuantity = o.target.value} defaultValue={pickstate === 0 ? shouldQuantity : pickdone}
+				/>
 			</div>
 		</LMR>;
 	};

@@ -19,7 +19,7 @@ export class VCutOffHistory extends VPage<CDeliver> {
         let { WebUser } = JkWebuser;
         let { id, no, cutter, create } = cutOffHistory;
         let { onOpenCutOffDetail } = this.controller;
-        let right = <FA className="mr-1 cursor-pointer text-info" name="eye" />;
+        let right = <FA className="px-1 py-2 cursor-pointer text-info" name="eye" />;
 
         return <LMR className="px-1 py-1" right={right} onClick={() => onOpenCutOffDetail(id)}>
             <div className="row py-1 col-12">
@@ -36,7 +36,7 @@ export class VCutOffHistory extends VPage<CDeliver> {
     }
 
     content() {
-        return <div id="pickListDiv" className="p-1 bg-white">
+        return <div id="pickListDiv" className="bg-white">
             <List items={this.cutOffHistoryList} item={{ render: this.renderCutOffHistory }} none="无截单历史" />
         </div>;
     }

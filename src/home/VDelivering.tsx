@@ -48,24 +48,24 @@ export class VDelivering extends VPage<CHome> {
 
 		let left = <div className="py-1 pr-2">{index + 1}</div>;
 
-		return <LMR key={id} left={left} onClick={() => this.onClickDeliverItem(index)}>
-			<div className="">
-				<div className="row col-12 py-1">
-					<span className="col-2 text-muted px-1">产品: </span>
-					<span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
-					<span className="col-2 text-muted px-1">包装: </span>
-					<span className="col-3 pl-1">{tvPackx(pack)}</span>
-				</div>
-				<div className="row col-12 py-1">
-					<span className="col-2 text-muted px-1">储运: </span>
-					<span className="col-12 pl-1">{storageCondition}</span>
-				</div>
-				<div className="row col-12 py-1">
-					<span className="col-2 text-muted px-1">应发: </span>
-					<span className="col-5 text-info">{deliverShould}</span>
-					<span className="col-2 text-muted px-1">实发: </span>
-					<input type="text" className="form-control input-sm col-3" onChange={o => deliverItem.deliverShould = o.target.value} defaultValue={deliverShould} />
-				</div>
+		return <LMR className="py-1" key={id} left={left} onClick={() => this.onClickDeliverItem(index)}>
+			<div className="row col-12 py-1">
+				<span className="col-2 text-muted px-1">产品: </span>
+				<span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
+				<span className="col-2 text-muted px-1">包装: </span>
+				<span className="col-3 pl-1">{tvPackx(pack)}</span>
+			</div>
+			<div className="row col-12 py-1">
+				<span className="col-2 text-muted px-1">储运: </span>
+				<span className="col-12 pl-1">{storageCondition}</span>
+			</div>
+			<div className="row col-12 py-1">
+				<span className="col-2 text-muted px-1">应发: </span>
+				<span className="col-5 text-info">{deliverShould}</span>
+				<span className="col-2 text-muted px-1">实发: </span>
+				<input type="text" className="form-control col-2 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+					onChange={o => deliverItem.deliverShould = o.target.value} defaultValue={deliverShould}
+				/>
 			</div>
 		</LMR>;
 	}
@@ -81,7 +81,7 @@ export class VDelivering extends VPage<CHome> {
 		// <div className="col-12 px-1 py-1">订单备注:{ }</div>  // 暂时注释
 		// <div className="col-12 px-1 py-1">发运方式</div>
 		return <div className="p-1 bg-white" >
-			<div className="px-2 py-1">
+			<div className="px-1 py-1">
 				<div className="row col-12 px-1 py-1">
 					<div className="col-6">{contactDetail?.name}</div>
 					<div className="col-6">{contactDetail?.organizationName}</div>

@@ -48,22 +48,24 @@ export class VTallying extends VPage<CHome> {
             </label>
         </div>
 
-        return <LMR className="row" key={deliverDetail} left={left} right={right} onClick={() => this.onClickTallyItem(index)}>
+        return <LMR className="row px-1 py-1" key={deliverDetail} left={left} right={right} onClick={() => this.onClickTallyItem(index)}>
             <div className="row col-12 py-1">
-                <span className="col-2 text-muted px-1">编号: </span>
+                <span className="col-2 text-muted px-1">编号:</span>
                 <span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
-                <span className="col-2 text-muted px-1">包装: </span>
+                <span className="col-2 text-muted px-1">包装:</span>
                 <span className="col-3 pl-1">{tvPackx(pack)}</span>
             </div>
             <div className="row col-12 py-1">
-                <span className="col-2 text-muted px-1">应理：</span >
-                <span className="col-5 pl-1 text-info">{tallyShould}</span>
-                <span className="col-2 text-muted px-1">Lot: </span>
-                <span className="col-3 pl-1">{lotNumber}</span>
+                <span className="col-2 text-muted px-1">Lot:</span>
+                <span className="col-9 pl-1">{lotNumber}</span>
             </div>
             <div className="row col-12 py-1">
-                <span className="col-2 text-muted px-1">实理：</span >
-                <input type="text" className="col-4 form-control px-0 mx-0" onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyState === 0 ? tallyShould : tallyDone} />
+                <span className="col-2 text-muted px-1">应理:</span >
+                <span className="col-5 pl-1 text-info">{tallyShould}</span>
+                <span className="col-2 text-muted px-1">实理:</span >
+                <input type="text" className="col-2 form-control px-1 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+                    onChange={o => tallyItem.tallyShould = o.target.value} defaultValue={tallyState === 0 ? tallyShould : tallyDone}
+                />
             </div>
         </LMR>;
 
