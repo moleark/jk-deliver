@@ -48,16 +48,13 @@ export class WarehousePending {
 export class CHome extends CUqBase {
 	warehouse: number;
 	customer: number;
-	cutOffType: number;
 	warehousePending: WarehousePending[];
-	readyCutOffTaskList: QueryPager<any>;
+
 
 	constructor(cApp: CApp) {
 		super(cApp);
 		makeObservable(this, {
-			warehousePending: observable.shallow,
-			readyCutOffTaskList: observable.shallow,
-			cutOffType: observable
+			warehousePending: observable.shallow
 		});
 	}
 	protected async internalStart() {
@@ -127,6 +124,13 @@ export class CHome extends CUqBase {
 	onOpenCutOffPage = async (warehouse: number) => {
 		let { JkDeliver } = this.uqs;
 		let cutOffTypeRet = await JkDeliver.GetCutOffTypeList.query({})
+		let { list } = cutOffTypeRet;
+		let promises: PromiseLike<any>[] = [];
+		list.forEach((element: any) => {
+			promises.push(this.getCutOffTypeReadyCount(warehouse, element.cutOffType).then(data => element.readyCutOffCount = data));
+		});
+		await Promise.all(promises);
+
 		let vPageParam = { warehouse: warehouse, cutOffTypeList: cutOffTypeRet.list };
 		this.openVPage(VReadyCutOffSheet, vPageParam);
 	}
@@ -141,8 +145,8 @@ export class CHome extends CUqBase {
 		// let readyCutOffRet = await JkDeliver.GetReadyCutOffList.query({ warehouse, cutOffType });
 		let readyCutOffRet: QueryPager<any> = new QueryPager<any>(JkDeliver.GetReadyCutOffList, 10, 20);
 		await readyCutOffRet.first({ warehouse, cutOffType });
-		this.cutOffType = cutOffType;
-		this.readyCutOffTaskList = readyCutOffRet;
+		return readyCutOffRet;
+		// this.readyCutOffTaskList = readyCutOffRet;
 	}
 
 	/**
@@ -166,6 +170,27 @@ export class CHome extends CUqBase {
 	onCutOff = async (warehouse: number, cutOffType: number) => {
 		let { JkDeliver } = this.uqs;
 		let ret = await JkDeliver.CutOff.submit({ aWarehouse: warehouse, cutOffType: cutOffType });
+		let { id, no } = ret;
+		if (id === undefined) {
+			alert(`当前截单失败！`);
+			return;
+		}
+		let vPageParam = { id: id, no: no };
+		this.backPage();
+		//let vPageParam = { id: 107, no: 2110120001 };
+		this.openVPage(VCutOffSuccess, vPageParam);
+	}
+
+	/**
+	 * 选择部分产品截单
+	 * @param warehouse 
+	 * @param cutOffType 
+	 * @param detail 
+	 * @returns 
+	 */
+	onCutOffPart = async (warehouse: number, cutOffType: number, detail: any) => {
+		let { JkDeliver } = this.uqs;
+		let ret = await JkDeliver.CutOffByRequestDetail.submit({ aWarehouse: warehouse, cutOffType: cutOffType, detail: detail });
 		let { id, no } = ret;
 		if (id === undefined) {
 			alert(`当前截单失败！`);
@@ -414,6 +439,16 @@ export class CHome extends CUqBase {
 		let { JkProduct } = this.uqs;
 		let result: any = await JkProduct.GetProductPackByOrigin.query({ origin: origin, salesRegion: 1 });
 		return result.ret;
+	}
+
+	getCutOffTypeReadyCount = async (warehouse: number, cutofftypeId: number) => {
+		let { JkDeliver } = this.uqs;
+		let readyCutOffCount: number = 0;
+		let result = await JkDeliver.GetCutOffTypeCount.query({ warehouseId: warehouse, cutofftypeId: cutofftypeId });
+		if (result.ret[0] !== undefined) {
+			readyCutOffCount = result.ret[0].readyCutOffCount;
+		}
+		return readyCutOffCount;
 	}
 
 }

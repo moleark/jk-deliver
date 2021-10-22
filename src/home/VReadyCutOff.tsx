@@ -1,4 +1,4 @@
-import { VPage, LMR, List, Scroller } from "tonva-react";
+import { VPage, LMR, List, Scroller, DropdownActions, DropdownAction, QueryPager } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
 import { CHome } from "./CHome";
 import classNames from 'classnames';
@@ -11,10 +11,12 @@ export class VReadyCutOffSheet extends VPage<CHome> {
     private warehouse: number;
     private cutOffTypeList: any[];
     cutOffType: number;
+    readyCutOffTaskList: QueryPager<any>;
     constructor(cApp: CHome) {
         super(cApp);
         makeObservable(this, {
-            cutOffType: observable
+            cutOffType: observable,
+            readyCutOffTaskList: observable.shallow
         });
     }
 
@@ -22,7 +24,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
         let { warehouse, cutOffTypeList } = param;
         this.warehouse = warehouse;
         this.cutOffTypeList = cutOffTypeList;
-        this.controller.readyCutOffTaskList = null;
+        this.readyCutOffTaskList = null;
     }
 
     header() { return '待截单列表' }
@@ -32,10 +34,27 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      * @param warehouse 库房
      * @param tradeType 贸易类型（xx2,xx3,xx4,xx5）
      */
-    private onCutOff = async (warehouse: number, cutOffType: number) => {
+    private onCutOffAll = async (warehouse: number, cutOffType: number) => {
         if (cutOffType !== 0 || cutOffType !== undefined) {
             let { onCutOff } = this.controller;
             await onCutOff(warehouse, cutOffType);
+        }
+    }
+
+    /**
+     * 选择部分产品截单
+     * @param warehouse 
+     * @param cutOffType 
+     */
+    private onCutOffPart = async (warehouse: number, cutOffType: number) => {
+        if (cutOffType !== 0 || cutOffType !== undefined) {
+            let { onCutOffPart } = this.controller;
+            let filterList = this.readyCutOffTaskList.items.filter(v => v.checkState === true);
+            let detail: any[] = [];
+            filterList.forEach((d: any) => {
+                detail.push({ aRequestDetail: d.id });
+            });
+            await onCutOffPart(warehouse, cutOffType, detail);
         }
     }
 
@@ -45,7 +64,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      */
     onPageScrollBottom = async (scroller: Scroller) => {
         scroller.scrollToBottom();
-        this.controller.readyCutOffTaskList.more();
+        this.readyCutOffTaskList.more();
     }
 
     right() {
@@ -57,7 +76,19 @@ export class VReadyCutOffSheet extends VPage<CHome> {
             actions = dropdownAction;
         }
         return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="navicon" actions={actions} />;*/
-        return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, this.cutOffType)}> 截单</button>;
+        //return <button className="btn btn-sm btn-primary mr-2" onClick={() => this.onCutOff(this.warehouse, this.cutOffType)}> 截单</button>;
+        let actions: DropdownAction[] = [
+            {
+                icon: 'cut',
+                caption: '全部截单',
+                action: () => this.onCutOffAll(this.warehouse, this.cutOffType)
+            }, {
+                icon: 'cut',
+                caption: '选择截单',
+                action: () => this.onCutOffPart(this.warehouse, this.cutOffType)
+            }
+        ];
+        return <DropdownActions className="align-self-center mr-2 bg-transparent border-0 text-light" icon="navicon" actions={actions} />;
     }
 
     /**
@@ -66,14 +97,27 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      * @returns 
      */
     private renderReadyCutOffItem = (cutOffItem: any) => {
+        cutOffItem.checkState = false;
         let { JkProduct } = this.controller.uqs;
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
 
-        let { item, shouldQuantity, customer } = cutOffItem;
+        let { item, shouldQuantity, customerAccount } = cutOffItem;
         let pack = PackX.getObj(item);
 
-        return <LMR className="px-1 py-1">
+        let checkState: boolean = (cutOffItem.checkState === false || cutOffItem.checkState === undefined) ? false : true;
+        let right = <div className="m-auto pr-2">
+            <label className="small text-muted">
+                <input type="checkbox"
+                    defaultChecked={checkState}
+                    onChange={e => {
+                        cutOffItem.checkState = e.target.checked;
+                    }}
+                />
+            </label>
+        </div>;
+
+        return <LMR className="px-1 py-1" right={right}>
             <div className="row col-12 py-1">
                 <span className="col-4 pl-1">{ProductX.tv(pack.owner)}</span>
                 <span className="col-4 pl-1">{tvPackx(pack)}</span>
@@ -88,12 +132,13 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      * @returns 
      */
     private rendercutOffTypeItem = (data: any) => {
-        let { cutOffType, name } = data;
+        let { cutOffType, name, readyCutOffCount } = data;
+
         return React.createElement(observer(() => {
-            return <span className={classNames(this.cutOffType === cutOffType ? 'text-light bg-primary' : 'text-primary', 'm-1 border-primary border py-1 px-2 rounded-lg small')}
+            return <span className={classNames(this.cutOffType === cutOffType ? 'text-light bg-primary' : 'text-primary', 'm-1 border-primary border py-1 px-1 rounded-lg small')}
                 onClick={() => this.selectCutOffType(cutOffType)} >
-                {name}
-            </span >;
+                {name} {readyCutOffCount}
+            </span>;
         }
         ));
     };
@@ -104,19 +149,25 @@ export class VReadyCutOffSheet extends VPage<CHome> {
      */
     private selectCutOffType = async (cutOffType: number) => {
         this.cutOffType = cutOffType;
+        this.readyCutOffTaskList = null;
         let { onLoadReadyCutOffList } = this.controller;
-        await onLoadReadyCutOffList(this.warehouse, cutOffType);
+        let result: any = await onLoadReadyCutOffList(this.warehouse, cutOffType);
+        this.readyCutOffTaskList = result;
     }
 
     content() {
+        /*this.readyCutOffTaskList.forEach(element => {
+            console.log(element.id);
+        });*/
+
         return <div>
             <div className="border-bottom mb-1 bg-light pt-1" style={{ borderBottom: '1px dashed rgb(222, 226, 230)' }}>
                 <List items={this.cutOffTypeList} item={{ render: this.rendercutOffTypeItem }} className="d-flex bg-white w-100 flex-wrap" none="暂无截单类型" />
             </div>
             <div id="pickListDiv" className="p-1">
                 {React.createElement(observer(() => {
-                    if (!this.controller.readyCutOffTaskList?.items?.length) return null;
-                    return <List before={""} items={this.controller.readyCutOffTaskList} item={{ render: this.renderReadyCutOffItem }} none="无截单数据" />
+                    if (!this.readyCutOffTaskList?.items?.length) return null;
+                    return <List before={""} items={this.readyCutOffTaskList} item={{ render: this.renderReadyCutOffItem }} none="无截单数据" />
                 }))}
             </div>
         </div>;

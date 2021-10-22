@@ -9,6 +9,8 @@ import React from "react";
 export class VTallying extends VPage<CHome> {
     private main: ReturnGetCutOffMainMain;
     private genreInput: HTMLInputElement;
+    private taskCount: number = 0;
+    private currentCount: number = 0;
     detail: ReturnGetCutOffMainDetail[];
     constructor(cApp: CHome) {
         super(cApp);
@@ -22,6 +24,7 @@ export class VTallying extends VPage<CHome> {
         this.main = main;
         // 数据按照是否完成 和 ?(暂时是trayNumber，应该是产品编号) 来排序；
         this.detail = detail.sort((a: any, b: any) => a["tallyState"] - b["tallyState"] || a["trayNumber"] - b["trayNumber"]);
+        this.taskCount = detail.length;
     }
 
     header() { return '理货单：' + this.main.no }
@@ -44,6 +47,7 @@ export class VTallying extends VPage<CHome> {
                     onChange={o => {
                         if (o.target.checked === false) { return };
                         tallyItem.tallyState = o.target.checked;
+                        this.currentCount += 1;
                         this.doneTallyItem(deliverMain, deliverDetail, tallyDone);
                         this.detail.sort((a: any, b: any) => a["tallyState"] - b["tallyState"] || a["trayNumber"] - b["trayNumber"]);
                     }} />
@@ -159,7 +163,8 @@ export class VTallying extends VPage<CHome> {
         let { warehouse, id } = this.main
         await doneTallySingle(deliverMain, deliverDetail, tallyDone);
 
-        let isAllCheck: boolean = this.detail.every((e: any) => e.tallyState === true);
+        // let isAllCheck: boolean = this.detail.every((e: any) => e.tallyState === true);
+        let isAllCheck: boolean = (this.currentCount == this.taskCount) ? true : false;
         if (isAllCheck) {
             await doneTally(warehouse, id);
             this.closePage();

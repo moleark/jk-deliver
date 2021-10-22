@@ -1,4 +1,4 @@
-//=== UqApp builder created on Fri Oct 22 2021 14:27:37 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Oct 22 2021 19:09:53 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -101,6 +101,22 @@ export interface ParamUpdateWaybillNumber {
 	waybillNumber: string;
 }
 export interface ResultUpdateWaybillNumber {
+}
+
+export interface ParamCutOffByRequestDetail {
+	aWarehouse: number;
+	cutOffType: number;
+	detail: {
+		aRequestDetail: number;
+	}[];
+
+}
+export interface ReturnCutOffByRequestDetailMain {
+	id: number;
+	no: string;
+}
+export interface ResultCutOffByRequestDetail {
+	main: ReturnCutOffByRequestDetailMain[];
 }
 
 export interface Param$poked {
@@ -281,11 +297,23 @@ export interface ParamGetReadyCutOffCount {
 }
 export interface ReturnGetReadyCutOffCountRet {
 	warehouse: number;
-	cutofftype: number;
 	readyCutOffCount: number;
 }
 export interface ResultGetReadyCutOffCount {
 	ret: ReturnGetReadyCutOffCountRet[];
+}
+
+export interface ParamGetCutOffTypeCount {
+	warehouseId: number;
+	cutofftypeId: number;
+}
+export interface ReturnGetCutOffTypeCountRet {
+	warehouse: number;
+	cutofftype: number;
+	readyCutOffCount: number;
+}
+export interface ResultGetCutOffTypeCount {
+	ret: ReturnGetCutOffTypeCountRet[];
 }
 
 export interface OrderMain {
@@ -539,6 +567,7 @@ export interface UqExt extends Uq {
 	TallyDone: UqAction<ParamTallyDone, ResultTallyDone>;
 	UpdateDeliverCarrier: UqAction<ParamUpdateDeliverCarrier, ResultUpdateDeliverCarrier>;
 	UpdateWaybillNumber: UqAction<ParamUpdateWaybillNumber, ResultUpdateWaybillNumber>;
+	CutOffByRequestDetail: UqAction<ParamCutOffByRequestDetail, ResultCutOffByRequestDetail>;
 	$poked: UqQuery<Param$poked, Result$poked>;
 	WarehouseDeliverMain: UqQuery<ParamWarehouseDeliverMain, ResultWarehouseDeliverMain>;
 	GetDeliver: UqQuery<ParamGetDeliver, ResultGetDeliver>;
@@ -551,6 +580,7 @@ export interface UqExt extends Uq {
 	GetPointExchangeDetailTransportation: UqQuery<ParamGetPointExchangeDetailTransportation, ResultGetPointExchangeDetailTransportation>;
 	GetCarrierNo: UqQuery<ParamGetCarrierNo, ResultGetCarrierNo>;
 	GetReadyCutOffCount: UqQuery<ParamGetReadyCutOffCount, ResultGetReadyCutOffCount>;
+	GetCutOffTypeCount: UqQuery<ParamGetCutOffTypeCount, ResultGetCutOffTypeCount>;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
 	Warehouse: UqID<any>;
