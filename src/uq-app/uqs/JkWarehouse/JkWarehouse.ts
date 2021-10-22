@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Oct 21 2021 10:24:20 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Oct 22 2021 14:27:37 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqBook, UqQuery, UqMap, UqHistory, UqPending, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -682,6 +682,7 @@ export interface Pickup {
 	picker: number;
 	startTime: any;
 	finishTime: any;
+	$create?: any;
 }
 
 export interface OrderDetail {

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { LMR, VPage, List } from "tonva-react";
+import { LMR, VPage, List, FA } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
 import { ReturnGetPickupDetail, ReturnGetPickupMain } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { CHome } from "./CHome";
@@ -89,8 +89,18 @@ export class VPicking extends VPage<CHome> {
 				<span className="col-2 text-muted px-1">应拣: </span>
 				<span className="col-5 text-info">{shouldQuantity}</span>
 				<span className="col-2 text-muted px-1">实捡: </span>
-				<input type="text" className="form-control col-2 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
-					onChange={o => pickItem.pickdone = o.target.value} defaultValue={pickdone} />
+				<div className="col-3 form-inline p-0 m-0">
+					<span className="col-1 pl-0" onClick={() => { if (pickItem.pickdone > 0) { pickItem.pickdone = Number(pickItem.pickdone) - 1; } }}>
+						<FA name="minus" className="fa fa-minus-square fa-sm text-info" />
+					</span>
+					{React.createElement(observer(() => {
+						return <input type="text" className="form-control col-7 px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+							onChange={o => pickItem.pickdone = o.target.value} defaultValue={pickdone} />
+					}))}
+					<span className="col-1 pl-0" onClick={() => { pickItem.pickdone = Number(pickItem.pickdone) + 1; }}>
+						<FA name="plus" className="fa fa-plus-square fa-sm text-info" />
+					</span>
+				</div>
 			</div>
 		</LMR >;
 	};

@@ -1,7 +1,7 @@
 import { QueryPager } from "tonva-react";
 import { makeObservable, observable } from "mobx";
 import { CApp, CUqBase, JkDeliver } from "uq-app";
-import { ReturnGetWarehouseReadyCutOffCountRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
+import { ReturnGetReadyCutOffCountRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
 import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { VDelivering } from "./VDelivering";
 import { VDeliverSheet } from "./VDeliverSheet";
@@ -15,7 +15,7 @@ import { VPickSheet } from "./VPickSheet";
 
 export class WarehousePending {
 	warehouse: number;
-	readyCutOffs: ReturnGetWarehouseReadyCutOffCountRet[];
+	readyCutOffs: ReturnGetReadyCutOffCountRet[];
 	cutOffMains: ReturnWarehouseCutOffMainRet[];
 	pickups: ReturnWarehousePickupsRet[];
 	deliverMains: ReturnWarehouseDeliverMainRet[];
@@ -68,7 +68,7 @@ export class CHome extends CUqBase {
 	load = async () => {
 		let { JkDeliver, JkWarehouse } = this.uqs;
 		let [readyCutOffs, cutOffMains, pickups, deliverMains] = await Promise.all([
-			JkDeliver.GetWarehouseReadyCutOffCount.query({}),
+			JkDeliver.GetReadyCutOffCount.query({}),
 			JkDeliver.WarehouseCutOffMain.query({}),
 			JkWarehouse.WarehousePickups.query({}),
 			JkDeliver.WarehouseDeliverMain.query({})
@@ -89,9 +89,9 @@ export class CHome extends CUqBase {
 			return wp;
 		}
 		for (let row of readyCutOffs.ret) {
-			let { warehouse, id: requestDetailId } = row;
+			let { warehouse, readyCutOffCount } = row;
 			let wp = wpFromWarehouse(warehouse);
-			if (requestDetailId) {
+			if (readyCutOffCount > 0) {
 				wp.readyCutOffs.push(row);
 			}
 		}
@@ -198,6 +198,18 @@ export class CHome extends CUqBase {
 			this.openVPage(VTallying, vPageParam);
 		else
 			this.openVPage(VTallySheet, vPageParam);
+	}
+
+	/**
+	 * 查询理货单
+	 * @param cutOffMain 
+	 * @returns 
+	 */
+	onGetCutOffMain = async (cutOffMain: number) => {
+		let { JkDeliver } = this.uqs;
+		let ret = await JkDeliver.GetCutOffMain.query({ cutOffMain });
+		let { main, detail } = ret;
+		return detail;
 	}
 
 	/**
@@ -354,11 +366,11 @@ export class CHome extends CUqBase {
 		detail: {
 			id: number;
 			orderDetail: number;
-			deliverShould: number;
+			deliverDone: number;
 		}[]) {
 		await this.uqs.JkDeliver.Delivered.submit({
 			deliver,
-			detail: detail.map(v => ({ deliverDetail: v.id, orderDetail: v.orderDetail, quantity: v.deliverShould }))
+			detail: detail.map(v => ({ deliverDetail: v.id, orderDetail: v.orderDetail, quantity: v.deliverDone }))
 		});
 		this.warehousePending.forEach(v => v.removeDeliver(deliver));
 		// await this.load();

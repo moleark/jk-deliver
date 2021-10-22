@@ -41,11 +41,16 @@ const fields = {
 		"isKey": false,
 		"label": "FinishTime"
 	} as undefined,
+	$create: {
+		"name": "$create",
+		"isKey": false,
+		"label": "$create"
+	} as undefined,
 };
 /*==fields==*/
 
 const fieldArr: FieldItem[] = [
-	fields.no, fields.warehouse, fields.picker, fields.startTime, fields.finishTime, 
+	fields.no, fields.warehouse, fields.picker, fields.startTime, fields.finishTime, fields.$create, 
 ];
 
 export const ui: UI = {

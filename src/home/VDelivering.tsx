@@ -1,11 +1,20 @@
-import { tv, Page, VPage, LMR, List } from "tonva-react";
+import { makeObservable, observable } from "mobx";
+import { observer } from "mobx-react";
+import React from "react";
+import { tv, Page, VPage, LMR, List, FA } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
 import { CHome } from "./CHome";
 // import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliver";
 
 export class VDelivering extends VPage<CHome> {
 	private main: any;
-	private detail: any[];
+	detail: any[];
+	constructor(cApp: CHome) {
+		super(cApp);
+		makeObservable(this, {
+			detail: observable
+		});
+	}
 
 	init(param: [any, any[]]) {
 		let [main, detail] = param;
@@ -37,7 +46,7 @@ export class VDelivering extends VPage<CHome> {
 		let { JkProduct } = this.controller.uqs;
 		let { ProductX } = JkProduct;
 		let PackX = ProductX.div('packx');
-		let { id, item, productExt, deliverShould } = deliverItem;
+		let { id, item, productExt, deliverShould, deliverDone } = deliverItem;
 		let pack = PackX.getObj(item);
 
 		let storageCondition: string = '';
@@ -48,7 +57,8 @@ export class VDelivering extends VPage<CHome> {
 
 		let left = <div className="py-1 pr-2">{index + 1}</div>;
 
-		return <LMR className="py-1" key={id} left={left} onClick={() => this.onClickDeliverItem(index)}>
+		// onClick={() => this.onClickDeliverItem(index)}
+		return <LMR className="py-1" key={id} left={left}>
 			<div className="row col-12 py-1">
 				<span className="col-2 text-muted px-1">产品: </span>
 				<span className="col-5 pl-1">{ProductX.tv(pack.owner)} </span>
@@ -63,9 +73,18 @@ export class VDelivering extends VPage<CHome> {
 				<span className="col-2 text-muted px-1">应发: </span>
 				<span className="col-5 text-info">{deliverShould}</span>
 				<span className="col-2 text-muted px-1">实发: </span>
-				<input type="text" className="form-control col-2 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
-					onChange={o => deliverItem.deliverShould = o.target.value} defaultValue={deliverShould}
-				/>
+				<div className="col-3 form-inline p-0 m-0">
+					<span className="col-1 pl-0" onClick={() => { if (deliverItem.deliverDone > 0) { deliverItem.deliverDone = Number(deliverItem.deliverDone) - 1; } }}>
+						<FA name="minus" className="fa fa-minus-square fa-sm text-info" />
+					</span>
+					{React.createElement(observer(() => {
+						return <input type="text" className="form-control col-7 px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+							onChange={o => deliverItem.deliverDone = o.target.value} defaultValue={deliverDone} />
+					}))}
+					<span className="col-1 pl-0" onClick={() => { deliverItem.deliverDone = Number(deliverItem.deliverDone) + 1; }}>
+						<FA name="plus" className="fa fa-plus-square fa-sm text-info" />
+					</span>
+				</div>
 			</div>
 		</LMR>;
 	}
@@ -76,6 +95,7 @@ export class VDelivering extends VPage<CHome> {
 		let { contactDetail } = this.main;
 		this.detail.forEach(async element => {
 			deliverTotal += element.deliverShould;
+			element.deliverDone = element.deliverShould;
 		});
 
 		// <div className="col-12 px-1 py-1">订单备注:{ }</div>  // 暂时注释

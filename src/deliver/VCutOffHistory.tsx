@@ -1,6 +1,5 @@
-import { VPage, LMR, List, Scroller, FA } from "tonva-react";
+import { VPage, LMR, List, Scroller, FA, EasyDate } from "tonva-react";
 import { CDeliver } from "./CDeliver";
-import { format } from 'date-fns';
 
 export class VCutOffHistory extends VPage<CDeliver> {
 
@@ -25,7 +24,7 @@ export class VCutOffHistory extends VPage<CDeliver> {
             <div className="row py-1 col-12">
                 <div className="col-5 px-1">{no}</div>
                 <div className="col-3 px-0 text-muted small">{WebUser.tv(cutter)}</div>
-                <div className="col-4 px-0 text-muted small">{format(Date.now(), 'yyyy/MM/dd HH:mm')}</div>
+                <div className="col-4 px-0 text-muted small"><EasyDate date={create} /></div>
             </div>
         </LMR>;
     }

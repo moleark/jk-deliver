@@ -1,4 +1,4 @@
-//=== UqApp builder created on Thu Oct 21 2021 10:24:19 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Fri Oct 22 2021 14:27:37 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -148,7 +148,7 @@ export interface ReturnGetDeliverDetail {
 	deliverMain: number;
 	item: number;
 	deliverShould: number;
-	pickDone: number;
+	deliverDone: number;
 	returnDone: number;
 }
 export interface ResultGetDeliver {
@@ -178,6 +178,7 @@ export interface ReturnGetCutOffMainList$page {
 	id: number;
 	no: string;
 	cutter: number;
+	create: any;
 }
 export interface ResultGetCutOffMainList {
 	$page: ReturnGetCutOffMainList$page[];
@@ -276,25 +277,15 @@ export interface ResultGetCarrierNo {
 	ret: ReturnGetCarrierNoRet[];
 }
 
-export interface ParamGetCutOffTypeReadyCutOffCount {
+export interface ParamGetReadyCutOffCount {
 }
-export interface ReturnGetCutOffTypeReadyCutOffCountRet {
+export interface ReturnGetReadyCutOffCountRet {
 	warehouse: number;
 	cutofftype: number;
 	readyCutOffCount: number;
 }
-export interface ResultGetCutOffTypeReadyCutOffCount {
-	ret: ReturnGetCutOffTypeReadyCutOffCountRet[];
-}
-
-export interface ParamGetWarehouseReadyCutOffCount {
-}
-export interface ReturnGetWarehouseReadyCutOffCountRet {
-	warehouse: number;
-	id: number;
-}
-export interface ResultGetWarehouseReadyCutOffCount {
-	ret: ReturnGetWarehouseReadyCutOffCountRet[];
+export interface ResultGetReadyCutOffCount {
+	ret: ReturnGetReadyCutOffCountRet[];
 }
 
 export interface OrderMain {
@@ -559,8 +550,7 @@ export interface UqExt extends Uq {
 	GetOrderDetailTransportation: UqQuery<ParamGetOrderDetailTransportation, ResultGetOrderDetailTransportation>;
 	GetPointExchangeDetailTransportation: UqQuery<ParamGetPointExchangeDetailTransportation, ResultGetPointExchangeDetailTransportation>;
 	GetCarrierNo: UqQuery<ParamGetCarrierNo, ResultGetCarrierNo>;
-	GetCutOffTypeReadyCutOffCount: UqQuery<ParamGetCutOffTypeReadyCutOffCount, ResultGetCutOffTypeReadyCutOffCount>;
-	GetWarehouseReadyCutOffCount: UqQuery<ParamGetWarehouseReadyCutOffCount, ResultGetWarehouseReadyCutOffCount>;
+	GetReadyCutOffCount: UqQuery<ParamGetReadyCutOffCount, ResultGetReadyCutOffCount>;
 	OrderMain: UqID<any>;
 	OrderDetail: UqID<any>;
 	Warehouse: UqID<any>;

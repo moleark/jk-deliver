@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { List, Page, VPage, tv, FA, PropGrid, EasyDate, LMR } from 'tonva-react';
+import { List, VPage, tv, FA, PropGrid, EasyDate } from 'tonva-react';
 import { CDeliver } from './CDeliver';
 //import './printStyle/ReceiptList.css';
 import printJS from 'print-js';

@@ -19,12 +19,17 @@ export class VHome extends VPage<CHome> {
             else {
                 content = warehousePending.map(v => {
                     let { warehouse, readyCutOffs, cutOffMains, pickups, deliverMains } = v;
+                    let readyCutOffCount: number = 0;
+                    readyCutOffs.forEach(element => {
+                        readyCutOffCount += element.readyCutOffCount;
+                    });
+
                     return <div key={warehouse} className="my-3">
                         <div className="my-1 px-2 text-info font-weight-bold">
                             {JkWarehouse.Warehouse.tv(warehouse)} &nbsp;&nbsp;
                             <span className="small text-muted">待截单</span><span className="small text-danger"
                                 onClick={() => onOpenCutOffPage(warehouse)}>
-                                {readyCutOffs.length}
+                                {readyCutOffCount}
                             </span>
                             <span className="small float-right mr-1" onClick={() => onOpenCutOffHistory(warehouse)}>
                                 <FA className="mr-1 cursor-pointer text-muted" name="ellipsis-v" />
