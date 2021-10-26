@@ -57,6 +57,7 @@ export class VDeliverSheet extends VPage<CHome> {
 
 	private piling = async (id: number) => {
 		await this.controller.Delivering(id);
+		// await this.controller.cApp.cHome.load();
 		this.closePage();
 		this.openVPage(VDelivering, [this.main, this.detail])
 	}

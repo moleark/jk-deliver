@@ -120,6 +120,11 @@ export class VTallying extends VPage<CHome> {
     private getCutOffMain = async (cutOffMain: number) => {
         let { onGetCutOffMain } = this.controller;
         let result = await onGetCutOffMain(cutOffMain);
+        result.forEach(element => {
+            if (element.tallyState === 0) {
+                element.tallyDone = element.tallyShould;
+            }
+        });
         this.detail = result.sort((a: any, b: any) => a["tallyState"] - b["tallyState"] || a["trayNumber"] - b["trayNumber"]);
     }
 
@@ -133,7 +138,8 @@ export class VTallying extends VPage<CHome> {
             }
         });
 
-        let topLeft = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginRight: '2px' }} onClick={() => this.getCutOffMain(id)}>全部</button>
+        // let topLeft = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginRight: '2px' }} onClick={() => this.getCutOffMain(id)}>全部</button>
+        let topLeft = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={() => this.identifyProductNumber('')}><FA name="search" /></button>
         let topRight = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={this.searchProductPackByOrigin}><FA name="search" /></button>
         return <div id="tallyListDiv" className="p-1 bg-white">
             <div className="px-1 py-1 bg-light">
@@ -169,5 +175,29 @@ export class VTallying extends VPage<CHome> {
             await doneTally(warehouse, id);
             this.closePage();
         }
+    }
+
+    /* 正则表达式识别失败，使用字符串解析 */
+    // let commonReg: RegExp = new RegExp('[/^[a-z|A-Z]+');
+    // alert(code.match(commonReg));
+    private async identifyProductNumber(code: string) {
+        // code = '212583 LQ20U112 jkchemical 1';  // jk
+        code = 'P:22122020-1-11:05:502410191kgFCB066537';    // fluorochem
+        let result: string = '';
+
+        if (code.search("jkchemical") > 0) {    // jk
+            result = code.split(' ')[0];
+        } else if (code.substring(0, 2) === 'P:') { // fluorochem
+            let temp_fluorochem: string = code.split(':')[3];
+            let l: RegExp = new RegExp('[/^[a-z|A-Z]+$');
+            let a = l.exec(temp_fluorochem);
+            alert(a);
+            result = temp_fluorochem.substring(2, temp_fluorochem.length);
+        } else if (code.substring(0, 2) === '1P') {
+
+        }
+
+        alert(result);
+        console.log(result);
     }
 }

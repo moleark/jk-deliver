@@ -524,7 +524,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                         onKeyUp={o => {
                             if (o.key === 'Enter') {
                                 cutOffItem.waybillNumber = (o.target as HTMLInputElement).value;
-                                alert((o.target as HTMLInputElement).value);
+                                this.updateWaybillNumber(deliverMain, cutOffItem.carrier, cutOffItem.waybillNumber);
                             }
                         }} defaultValue={waybillNumber} />
                 </div>

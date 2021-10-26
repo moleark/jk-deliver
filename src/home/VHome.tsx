@@ -11,6 +11,7 @@ export class VHome extends VPage<CHome> {
         return React.createElement(observer(() => {
             // 这个页面每10秒刷一次。因为很少人用，每次数据库查询很小
             let { uqs, warehousePending, onOpenCutOffPage, onOpenCutOffHistory, onCutOffMain, onPickup, onDeliverMain } = this.controller;
+            // console.log(warehousePending);
             let { JkWarehouse } = uqs;
             let content: any;
             if (!warehousePending) {
@@ -52,6 +53,7 @@ export class VHome extends VPage<CHome> {
 
 
     private renderCutOffMain = (row: ReturnWarehouseCutOffMainRet, index: number): JSX.Element => {
+
         let { no, staff } = row;
         let left = <div className="w-5c text-info">理货单</div>;
         let right: any;
@@ -62,9 +64,11 @@ export class VHome extends VPage<CHome> {
         return <LMR className="px-3 py-2" left={left} right={right}>
             <b>{no}</b>
         </LMR>
+
     }
 
     private renderPickup = (row: ReturnWarehousePickupsRet, index: number): JSX.Element => {
+
         let { no, picker } = row;
         let left = <div className="w-5c text-success">拣货单</div>;
         let right: any;
@@ -75,12 +79,15 @@ export class VHome extends VPage<CHome> {
         return <LMR className="px-3 py-2" left={left} right={right}>
             <b>{no}</b>
         </LMR>
+
     }
 
     private renderDeliverMain = (row: ReturnWarehouseDeliverMainRet, index: number): JSX.Element => {
         let { JkCustomer } = this.controller.uqs;
         let { Customer, BuyerAccount } = JkCustomer;
-        let { deliverMain, no, customerAccount, create, rows, pickRows, staff } = row;
+
+
+        let { deliverMain, no, customerAccount, create, rows, pickRows, cutOffMain, traynumber, staff } = row;
         let left = <div className="w-5c text-primary">发运单</div>;
         /*let right = pickRows === rows ?
             (staff ?
@@ -94,8 +101,12 @@ export class VHome extends VPage<CHome> {
             <span className="text-danger">待处理</span>;
 
         return <LMR className="px-3 py-2" left={left} right={right}>
-            <b>{no}</b> &nbsp;
-            <span className="small text-muted">{BuyerAccount.tv(customerAccount)}</span>
+            <b>{cutOffMain}</b> &nbsp;
+            <span className="small text-muted">{traynumber}</span>
         </LMR>
+        /*
+        <b>{no}</b> &nbsp;
+            <span className="small text-muted">{BuyerAccount.tv(customerAccount)}</span>
+        */
     }
 }
