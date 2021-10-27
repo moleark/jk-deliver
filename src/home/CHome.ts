@@ -1,6 +1,6 @@
 import { QueryPager } from "tonva-react";
 import { makeObservable, observable } from "mobx";
-import { CApp, CUqBase, JkDeliver } from "uq-app";
+import { CApp, CUqBase } from "uq-app";
 import { ReturnGetReadyCutOffCountRet, ReturnWarehouseCutOffMainRet, ReturnWarehouseDeliverMainRet } from "uq-app/uqs/JkDeliver";
 import { ReturnWarehousePickupsRet } from "uq-app/uqs/JkWarehouse/JkWarehouse";
 import { VDelivering } from "./VDelivering";
@@ -50,13 +50,14 @@ export class CHome extends CUqBase {
 	warehouse: number;
 	customer: number;
 	warehousePending: WarehousePending[];
-	barcodeString: string = '';
+	// barcodeString: string = '';
+	genreInput: HTMLInputElement;
 
 	constructor(cApp: CApp) {
 		super(cApp);
 		makeObservable(this, {
 			warehousePending: observable.shallow,
-			barcodeString: observable
+			genreInput: observable
 		});
 	}
 	protected async internalStart() {
@@ -235,7 +236,7 @@ export class CHome extends CUqBase {
 	onGetCutOffMain = async (cutOffMain: number) => {
 		let { JkDeliver } = this.uqs;
 		let ret = await JkDeliver.GetCutOffMain.query({ cutOffMain });
-		let { main, detail } = ret;
+		let { detail } = ret;
 		return detail;
 	}
 
@@ -542,6 +543,6 @@ export class CHome extends CUqBase {
 				result = product_res[0];
 			}
 		}
-		this.barcodeString = result;
+		this.genreInput.value = result;
 	}
 }

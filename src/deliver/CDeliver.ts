@@ -1,13 +1,10 @@
 import { CApp, CUqBase } from "uq-app";
 import { VDeliver } from "./VDeliver";
-import { VCustomerDeliver } from "./VCustomerDeliver";
-import { makeObservable, observable } from "mobx";
 import { VCutOffSheetDetail } from "./VCutOffSheetDetail";
 import { VCutOffHistory } from "./VCutOffHistory";
 import { VReceiptList } from "./VReceiptList";
 import { VSFExpressSheet } from "./VSFExpressSheet";
 import { VZJSExpressSheet } from "./VZJSExpressSheet";
-import { accessSync } from "fs";
 
 export class CDeliver extends CUqBase {
 	// warehousePendingDeliver: ReturnWarehousePendingDeliverRet[];
@@ -221,7 +218,7 @@ export class CDeliver extends CUqBase {
 	}
 
 	getProductId = async (pack: number) => {
-		let { JkProduct } = this.uqs;
+		//let { JkProduct } = this.uqs;
 	}
 
 	/**

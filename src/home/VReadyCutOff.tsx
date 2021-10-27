@@ -102,7 +102,7 @@ export class VReadyCutOffSheet extends VPage<CHome> {
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
 
-        let { item, shouldQuantity, customerAccount } = cutOffItem;
+        let { item, shouldQuantity } = cutOffItem;
         let pack = PackX.getObj(item);
 
         let checkState: boolean = (cutOffItem.checkState === false || cutOffItem.checkState === undefined) ? false : true;

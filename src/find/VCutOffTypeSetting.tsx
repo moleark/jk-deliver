@@ -1,4 +1,4 @@
-import { tv, VPage, LMR, List, FA, ID } from "tonva-react";
+import { VPage, LMR, List, FA } from "tonva-react";
 import { CFind } from "./CFind";
 
 export class VCutOffTypeSetting extends VPage<CFind> {
@@ -19,7 +19,7 @@ export class VCutOffTypeSetting extends VPage<CFind> {
 
     content() {
 
-        let { JkDeliver } = this.controller.uqs;
+        // let { JkDeliver } = this.controller.uqs;
         // let { CutOffType } = JkDeliver;
         // let { fieldArr, fields } = CutOffType.ui;
         return <div>

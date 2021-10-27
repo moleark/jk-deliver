@@ -1,5 +1,3 @@
-import { observer } from "mobx-react";
-import React from "react";
 import { VPage } from "tonva-react";
 import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliver";
 import { CHome } from "./CHome";

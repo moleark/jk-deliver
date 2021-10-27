@@ -1,4 +1,4 @@
-import { VPage, List, LMR, DropdownAction, DropdownActions } from 'tonva-react';
+import { VPage, List, LMR, DropdownAction, DropdownActions, ID } from 'tonva-react';
 import { CDeliver } from "./CDeliver";
 // import { ReturnGetCutOffMainMain, ReturnGetCutOffMainDetail } from "uq-app/uqs/JkDeliver";
 // import { VReceiptList } from './VReceiptList';
@@ -48,14 +48,14 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
 
         // 把数据源根据临时理货号（托盘号）去重复，因为发货单是;
         for (let index = 0; index < cutOffDetail.length; index++) {
-            if (arrId.indexOf(cutOffDetail[index]['trayNumber']) == -1 && cutOffDetail[index]['apointCarrier'] != 10) {
+            if (arrId.indexOf(cutOffDetail[index]['trayNumber']) === -1 && cutOffDetail[index]['apointCarrier'] !== 10) {
 
                 let trayProductList: any[] = [];
                 let trayProductCount: number = 0;
                 let trayProductPrice: number = 0.00;
 
                 for (let indexB = 0; indexB < cutOffDetail.length; indexB++) {
-                    if (cutOffDetail[indexB]['trayNumber'] == cutOffDetail[index]['trayNumber']) {
+                    if (cutOffDetail[indexB]['trayNumber'] === cutOffDetail[index]['trayNumber']) {
                         trayProductList.push(cutOffDetail[indexB]);
 
                         trayProductCount += cutOffDetail[indexB]['tallyShould'];
@@ -152,6 +152,67 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
                             this.webSocket.send(text);
                             //let deliverMainId: number = Number(e.Id.split('_')[1]);
                             this.updateWaybillNumber(e.id, this.jdCarrier, e.DeliveryId);	//更新快递单号
+                        } else {
+                            console.log(e.ResultMsg + e.Id);
+                        }
+                    });
+                } else {
+                    console.log(res);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            alert('没有选中的数据');
+        }
+    }
+
+    private pringJingDongSingle = async (cutOffItem: any) => {
+        let dataList: any[] = [];
+        let { no: cutOffMainNo, warehouseDetail } = this.main;
+
+        console.log(cutOffItem);
+        let warehouseNo = warehouseDetail?.no;
+        let remark: string = "订单批号:" + cutOffMainNo + ",货号:" + cutOffItem.trayNumber + ",提醒注意：（汽运禁航）（务必本人或专人签收）";
+        // e.orderMainNo + '_'  \ e.orderMainNo \ 
+        dataList.push({
+            Id: cutOffItem.deliverMain, SaleOrderId: '', Oinvoice: cutOffMainNo,
+            TrayNumber: cutOffItem.trayNumber, WarehouseId: warehouseNo, ConsigneeName: cutOffItem.contactDetail?.name,
+            ConsigneeUnitName: cutOffItem.contactDetail?.organizationName, ConsigneeAddressDetail: cutOffItem.contactDetail?.addressString,
+            ConsigneeTelephone: cutOffItem.contactDetail?.telephone, ConsigneeMobile: cutOffItem.contactDetail?.mobile, IsBaoJia: '0',
+            BaoJia: cutOffItem.trayProductPrice, Remark: remark
+        });
+
+        let waybillNumber: string = (cutOffItem.waybillNumber === undefined) ? '' : cutOffItem.waybillNumber + ',';
+        if (dataList.length > 0) {
+            let requestData = { data: dataList };
+            let formData = JSON.stringify(requestData);
+
+            try {
+                let res = await window.fetch(this.interFaceUrl, {
+                    method: 'post',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain;application/json;charset=utf-8', 'Accept': 'application/json' },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    let result = await res.json();
+                    let jsonResult: any[] = result.ret; // JSON.parse(ret);
+                    jsonResult.forEach((e: any) => {
+                        if (e.ResultCode === "1") {
+                            // 发送socket命令消息
+                            // let printData: string = "9XR7FEUvv/J9BWiMc02qM8IBW3f+j592F4nskdvvGT0CvnKb8dpvQlqwklpmF7VGwdcM5MHMiln+0d8wSjY7S7lAgOPrZz4W0Vj9sROipFu16wJ1aZQ8oB5JHCYzrUTL6Zo6KmaTbc66Yd6e29oYsXF6ueiIaj2Li0QH/ymRq6PbCNhbKcH4XCLvJhroitt1rVYHO30if7/jW1ojiPp8N7FZNA/lvEZII7MdRXyx8qoX7Z/Thy9jM8wvRUz5tMAD+uVzds+OPqhQJjlJSWgkizvzPNlXwzGnlhJYCni/kn3y9wNJFeqyJU9QyUNt4y2WxlBmY4XvWZilOdh7Z+K7btK42JBWziUzygbVJDmESj/P/hcfjTlayYHFArdcrHh4cCwyV9wPIXZcmDxBVv13vp4gAWBiA2nN9tsKiouXUFgDTfwUuUy/7D8Ek46aOBBuXSJAKQrhiFjQRde2RLb04stNWDM8WOf8tGU1n1o6H6bMjtdlJJ0UpqqccYi6Z454ftsOduUriUmvfCBpeYouxmilpFhSKYbpnXQtDTC0RfupZvXauaLnunDY50SLy2GqzcKe5/PY2LZkhi96rwMs4HOTYOiAAYgR+tT/7R9qAetltqBt+Eq8BemPaYEOGTz6u+W1K/cY0JqJOMqx3nFBd6eccSYvDKYe5jUFVbMZUdKnhE5s6OSd9PVnvgYc34lOTOG/zlKp/g0vAGTjMhwtly3sgMd7xeEo2FnZXjXy7jTSqIK6Il9Mo5seESJVHwT8so1WYYjjezXBfA/YXiB3Os5Zbu0MVM5SGv7iuuz61HaxOWEnldYmfa/6eVdg1XtaGcSzVR1lgZq3PK+6RDsXfksp/cFRhLSc+J8juH1T6GWeSla0rkE/vmizLMqDYCx3y2TVlkLmUrX8Hyz+mslyZNel9qhlDc+mVkUnyOEK5eryDRpRth9eUY+XAF35aIvm59Tt6iJH97x4PTXfvlNU6y2y9f5fU1gKJwh4eIP7gmrCwG1hbk1iv1HYpjIziKia1Cp+cVkEjgT9rkKZvs1FryNjPusT1l9PoH++AFUiCXC4ymwPuUHfOVxmEaNdJoVw3pLo5nUOYQCGAFWPOfxgIe/+pfQj4bpONn77jSqiL8PWpYZB2hBZcIknLtVLv0tq/JLcfT2D9sUsAq1d3qbjl84fzkqhUsU9N1OR1pU+0Q5jYhDlMSf8a6n4jBU2paQIUsFUZ/Ov9+98puaxPlSNo6e8bYkNwN/SZ85g4ET5FsEb235dw58AneeluRaZQjruhLh3uKfKVQFkKiwKJThdZxCzbO0zgqm2QT0YomKdJz+VIbSADmyK9QVnQp/HYnXXWSbA2sa/LE+2jSjY5kND0SkJiy8h/QfXHRCwamMaGnGQGO8eGfCgh1ehhoFnT1NAJJNpdh21CAeV5CcqaV6abhiSP1TS0SN2oSeCX0fj1kWaIxdvRH1Qu9OmXUiUsPQs6fRo/SsYOvtXq77IvLL27eKEuuq92y2+XL7ulyoYqPu9GgcFYJes1P8zidFNDl1a+y2S54gx64uNYH8fmGBLUuOXs60aZF1UW3pW24HD8iVuIIpkiTVQJ8s+39NFUxdkdSGjajdBtcTQwcZoEC+mDwEZYRvWHtIPI6I64gAk6XzBxb7PfqHSY6MR3kMUVeGu";		//1、打印数据
+                            let printData: string = e.PrintData;	//1、打印数据
+                            var temp = e.StandardTemplate;	        //2、打印模版
+                            var tempUser = "";					    //3、打印自定义模版
+                            var printDataUser = "";				    //4、打印自定义数据
+                            var printCmd = "print";				    //5、打印指令
+                            var printName = "HPRT R42D";		    //6、打印机名称
+                            var text = "{\"orderType\": \"" + printCmd + "\", \"parameters\": {\"printName\": \"" + printName + "\", 		\"tempUrl\": \"" + temp + "\", \"customTempUrl\": \"" + tempUser + "\", \"customData\": [" + printDataUser + "], 	\"printData\": [\"" + printData + "\"] } }";
+                            this.webSocket.send(text);
+                            //let deliverMainId: number = Number(e.Id.split('_')[1]);
+                            this.updateWaybillNumber(e.id, cutOffItem.carrier, waybillNumber + e.DeliveryId);	//更新快递单号
                         } else {
                             console.log(e.ResultMsg + e.Id);
                         }
@@ -349,10 +410,10 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         await openSFExpressSheetList(jsonResult);
         */
         let dataList: any[] = [];
-        let { no: cutOffMainNo, warehouseDetail } = this.main;
+        let { no: cutOffMainNo } = this.main;
         this.trayNumberListInfo.filter(v => v.carrier === this.sfCarrier).forEach((e: any) => {
             let remark: string = "订单批号:" + cutOffMainNo + "\n" + "提醒注意：（汽运禁航） （务必本人或专人签收）" + "\n" + "临时理货号：" + e.trayNumber;
-            let warehouseNo = warehouseDetail?.no;
+            // let warehouseNo = warehouseDetail?.no;
             // e.orderMainNo + '_' +
             dataList.push({
                 Id: e.deliverMain, ConsigneeName: e.contactDetail?.name,
@@ -396,7 +457,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
     }
 
     right() {
-        let { id } = this.main;
+        // let { id } = this.main;
         let actions: DropdownAction[] = [
             {
                 icon: 'print',
@@ -429,24 +490,35 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let cutOffItemListLiDiv = document.getElementById("cutOffItemListDiv").getElementsByTagName("ul")[0].getElementsByTagName("li");
 
         for (let index = 0; index < cutOffItemListLiDiv.length; index++) {
-            if (index == rowIndex) {
-                cutOffItemListLiDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFF99";
+            if (index === rowIndex) {
+                cutOffItemListLiDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFACD";
             } else {
                 cutOffItemListLiDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFFFF";
             }
         }
     }
 
+    /**
+     * 单个打印
+     * @param deliverMain 
+     * @param carrier 
+     */
+    private async printSingle(cutOffItem: any) {
+        if (Number(cutOffItem.carrier) === this.jdCarrier) {
+            await this.pringJingDongSingle(cutOffItem);
+        }
+    }
+
     private renderCutOffItem = (cutOffItem: any, index: number) => {
 
         let { carrierList } = this.controller;
-        let { JkDeliver, JkProduct, JkCustomer, JkWarehouse } = this.controller.uqs;
+        let { JkProduct } = this.controller.uqs;
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
-        let { Customer, Contact } = JkCustomer;
-        //let { ExpressLogistics } = JkWarehouse;
+        // let { Customer, Contact } = JkCustomer;
+        // let { ExpressLogistics } = JkWarehouse;  trayNumber, contact, customerAccount,
 
-        let { deliverMain, trayNumber, contact, customerAccount, carrier, waybillNumber, deliverTime, deliverDetail,
+        let { deliverMain, carrier, waybillNumber, deliverTime, deliverDetail,
             item, tallyShould, content, productExt } = cutOffItem;
         let pack = PackX.getObj(item);
 
@@ -487,7 +559,7 @@ export class VCutOffSheetDetail extends VPage<CDeliver> {
         let right = <div className="m-auto">
             <div className="py-1 text-left">{symbol}</div>
             <div className="py-1 text-left">
-                <div><button className="btn btn-primary btn-sm py-1" onClick={e => alert('打印')}>打印</button></div>
+                <div><button className="btn btn-primary btn-sm py-1" onClick={e => this.printSingle(cutOffItem)}>打印</button></div>
             </div>
         </div>;
         // <div><button className="btn btn-primary btn-sm my-1" onClick={e => alert('发运')}>发运</button></div>

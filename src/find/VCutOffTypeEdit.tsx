@@ -62,8 +62,8 @@ export class VCutOffTypeEdit extends VPage<CFind> {
 
     content() {
 
-        let { JkDeliver } = this.controller.uqs;
-        let { CutOffType } = JkDeliver;
+        // let { JkDeliver } = this.controller.uqs;
+        // let { CutOffType } = JkDeliver;
 
         return React.createElement(observer(() => {
             let selectOrganiza: JSX.Element;

@@ -1,7 +1,7 @@
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { tv, Page, VPage, LMR, List, FA } from "tonva-react";
+import { VPage, LMR, List, FA } from "tonva-react";
 import { tvPackx } from "tools/tvPackx";
 import { CHome } from "./CHome";
 // import { ReturnGetDeliverDetail, ReturnGetDeliverMain } from "uq-app/uqs/JkDeliver";
@@ -33,7 +33,7 @@ export class VDelivering extends VPage<CHome> {
 		let deliverListDiv = document.getElementById("deliverProductList").getElementsByTagName("ul")[0].getElementsByTagName("li");
 
 		for (let index = 0; index < deliverListDiv.length; index++) {
-			if (index == rowIndex) {
+			if (index === rowIndex) {
 				deliverListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFACD";
 			} else {
 				deliverListDiv[index].getElementsByTagName("div")[0].style.backgroundColor = "#FFFFFF";

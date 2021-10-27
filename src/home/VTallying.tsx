@@ -8,7 +8,7 @@ import React from "react";
 
 export class VTallying extends VPage<CHome> {
     private main: ReturnGetCutOffMainMain;
-    private genreInput: HTMLInputElement;
+    // private genreInput: HTMLInputElement;
     private taskCount: number = 0;
     private currentCount: number = 0;
     detail: ReturnGetCutOffMainDetail[];
@@ -100,10 +100,10 @@ export class VTallying extends VPage<CHome> {
      */
     private searchProductPackByOrigin = async () => {
         let { searchProductPackByOrigin } = this.controller;
-        if (!this.genreInput.value) {
+        if (!this.controller.genreInput.value) {
             return;
         }
-        let result: any = await searchProductPackByOrigin(this.genreInput.value);
+        let result: any = await searchProductPackByOrigin(this.controller.genreInput.value);
         let packList: any[] = [];
         result.forEach((e: any) => {
             packList.push(e.pack.id);
@@ -131,7 +131,7 @@ export class VTallying extends VPage<CHome> {
     content() {
         let { openBarcodePage } = this.controller;
         let pickTotal: number = 0;
-        let { id, no } = this.main;
+        let { id } = this.main;
         this.detail.forEach(element => {
             pickTotal += element.tallyShould;
             if (element.tallyState === 0) {
@@ -151,7 +151,7 @@ export class VTallying extends VPage<CHome> {
                 {React.createElement(observer(() => {
                     return <LMR left={topLeft} right={topRight}>
                         <form onSubmit={(e) => { e.preventDefault(); this.searchProductPackByOrigin() }} >
-                            <input ref={v => this.genreInput = v} type="text" defaultValue={this.controller.barcodeString} placeholder={'输入商品编号'} className="form-control"></input>
+                            <input ref={v => this.controller.genreInput = v} type="text" placeholder={'输入商品编号'} className="form-control"></input>
                         </form>
                     </LMR>
                 }))}
@@ -177,7 +177,7 @@ export class VTallying extends VPage<CHome> {
         await doneTallySingle(deliverMain, deliverDetail, tallyDone);
 
         // let isAllCheck: boolean = this.detail.every((e: any) => e.tallyState === true);
-        let isAllCheck: boolean = (this.currentCount == this.taskCount) ? true : false;
+        let isAllCheck: boolean = (this.currentCount === this.taskCount) ? true : false;
         if (isAllCheck) {
             await doneTally(warehouse, id);
             this.closePage();
@@ -255,10 +255,10 @@ export class VTallying extends VPage<CHome> {
         }
         console.log(result);
     }
-
-    /* 正则表达式识别失败，使用字符串解析 */
-    // let commonReg: RegExp = new RegExp('[/^[a-z|A-Z]+');
-    // alert(code.match(commonReg));
+    /**
+     * 识别产品编号，作废
+     * @param code 
+     */
     private async convertProductNumber2(code: string) {
         // code = '212583 LQ20U112 jkchemical 1';  // jk
         // code = 'P:22122020-1-11:05:502410191kgFCB066537';    // fluorochem
@@ -269,7 +269,7 @@ export class VTallying extends VPage<CHome> {
         // let format_code: string = code.replace(/^\s*|\s*$/g, "");
         let result: string = '';
 
-        if (code.indexOf("jkchemical") != -1) {    // jk
+        if (code.indexOf("jkchemical") !== -1) {    // jk
             result = code.split(' ')[0];
         } else if (code.substring(0, 2) === 'P:') { // fluorochem
             let temp_fluorochem: string = code.split(':')[3];
@@ -278,13 +278,13 @@ export class VTallying extends VPage<CHome> {
             // alert(a);
             // 2410191kgFCB066537  获取存在问题。
             result = temp_fluorochem.substring(2, 8); //temp_fluorochem.substring(2, temp_fluorochem.length);
-        } else if (code.substring(0, 2) === '1P' && code.indexOf(" 1T") != -1) { // Alfa Aesar
+        } else if (code.substring(0, 2) === '1P' && code.indexOf(" 1T") !== -1) { // Alfa Aesar
             let temp_AlfaAesar: string = code.split('.')[0];
             result = temp_AlfaAesar.substring(2).trimEnd();
-        } else if (code.substring(0, 2) === '1P' && code.trim().indexOf("1T") != -1) { // Acros ? 貌似反馈的规则不对
+        } else if (code.substring(0, 2) === '1P' && code.trim().indexOf("1T") !== -1) { // Acros ? 貌似反馈的规则不对
             let temp_Acros: string = code.split('1T')[0];
             result = temp_Acros.substring(2).trimEnd();
-        } else if (code.indexOf("|") != -1) {  // STREM
+        } else if (code.indexOf("|") !== -1) {  // STREM
             let temp_STREM: string = code.split('.')[0];
             result = temp_STREM.trim();
         } else if (/^\d+$/.test(code) === true) {

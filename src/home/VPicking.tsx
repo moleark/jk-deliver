@@ -40,13 +40,13 @@ export class VPicking extends VPage<CHome> {
 
 	private renderPickItem = (pickItem: any, index: number) => {
 
-		let { JkProduct, JkWarehouse } = this.controller.uqs;
+		let { JkProduct } = this.controller.uqs;
 		let { ProductX } = JkProduct;
 		// let { ShelfBlock } = JkWarehouse;
 		let PackX = ProductX.div('packx');
 
 		// let { id: mainId } = this.main;
-		let { id: pickupDetail, product, deliverDetail, shelfBlock, shelfBlockName, lotNumber, item, shouldQuantity, pickdone, pickstate } = pickItem;
+		let { id: pickupDetail, shelfBlockName, lotNumber, item, shouldQuantity, pickdone, pickstate } = pickItem;
 		let pack = PackX.getObj(item);	// JSON.stringify(pack)
 
 		// let left = <div className="py-1 pr-2">{index + 1}</div>;

@@ -2,7 +2,6 @@ import { CUqBase } from "uq-app";
 import { VFind } from "./VFind";
 import { VCutOffTypeSetting } from "./VCutOffTypeSetting";
 import { VCutOffTypeEdit } from "./VCutOffTypeEdit";
-import { ID, IDX } from "tonva-react";
 import { CutOffType } from "uq-app/uqs/JkDeliver";
 
 export class CFind extends CUqBase {
@@ -19,7 +18,6 @@ export class CFind extends CUqBase {
 	 */
 	onOpenCutOffTypeSetting = async () => {
 
-		let { JkDeliver } = this.uqs;
 		let ret: any = { list: {} }; //await JkDeliver.GetCutOffTypeList.query({});
 		let { list } = ret;
 		this.openVPage(VCutOffTypeSetting, list);

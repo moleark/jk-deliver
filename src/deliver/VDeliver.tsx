@@ -1,6 +1,4 @@
-import { observer } from "mobx-react";
-import React from "react";
-import { List, VPage } from "tonva-react";
+import { VPage } from "tonva-react";
 import { CDeliver } from "./CDeliver";
 
 export class VDeliver extends VPage<CDeliver> {

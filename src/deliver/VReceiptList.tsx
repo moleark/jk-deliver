@@ -1,5 +1,4 @@
-import { observer } from 'mobx-react';
-import { List, VPage, tv, FA, PropGrid, EasyDate } from 'tonva-react';
+import { List, VPage, FA } from 'tonva-react';
 import { CDeliver } from './CDeliver';
 //import './printStyle/ReceiptList.css';
 import printJS from 'print-js';
@@ -48,10 +47,10 @@ export class VReceiptList extends VPage<CDeliver> {
     private renderProductList = (productItem: any, index: number) => {
 
         // let { expressLogisticsList } = this.controller;
-        let { JkDeliver, JkProduct } = this.controller.uqs;
+        let { JkProduct } = this.controller.uqs;
         let { ProductX } = JkProduct;
         let PackX = ProductX.div('packx');
-        let { product, item, tallyShould, showPrice, productExt, productDetail, price, content } = productItem;
+        let { item, tallyShould, showPrice, productExt, productDetail, price, content } = productItem;
         let pack = PackX.getObj(item);
         let endUserName: string;
         let PO: string;
@@ -94,7 +93,7 @@ export class VReceiptList extends VPage<CDeliver> {
 
         let { no } = this.main;
         let { JkCustomer, JkDeliver } = this.controller.uqs;
-        let { Customer, BuyerAccount } = JkCustomer;
+        let { BuyerAccount } = JkCustomer;
         let { Carrier } = JkDeliver;
         let { trayNumber, customerAccount, contactDetail, carrier, trayProductCount, trayProductPrice } = trayItem;
 

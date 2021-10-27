@@ -83,11 +83,12 @@ export class VHome extends VPage<CHome> {
     }
 
     private renderDeliverMain = (row: ReturnWarehouseDeliverMainRet, index: number): JSX.Element => {
-        let { JkCustomer } = this.controller.uqs;
+        /*let { JkCustomer } = this.controller.uqs;
         let { Customer, BuyerAccount } = JkCustomer;
+        deliverMain, no, customerAccount, create, rows, pickRows, */
 
 
-        let { deliverMain, no, customerAccount, create, rows, pickRows, cutOffMain, traynumber, staff } = row;
+        let { cutOffMain, traynumber, staff } = row;
         let left = <div className="w-5c text-primary">发运单</div>;
         /*let right = pickRows === rows ?
             (staff ?

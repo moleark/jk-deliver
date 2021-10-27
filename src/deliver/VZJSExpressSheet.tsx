@@ -42,8 +42,8 @@ export class VZJSExpressSheet extends VPage<CDeliver> {
 
     private renderExpressSheetList = (sheetItem: any, index: number) => {
 
-        let { Id, ExpressStatus, ExpressCode, ConsigneeAddressDetail, ConsigneeUnitName, VcityCode, SiteNo, SiteName, ProvinceName,
-            CityName, TownNme, ConsigneeName, ConsigneeMobile, ConsigneeTelephone, ExpressOrderNo, ImportantHints, Createdate, ExceptionMessage } = sheetItem;
+        let { ExpressCode, ConsigneeAddressDetail, ConsigneeUnitName, VcityCode, SiteNo, SiteName, ProvinceName,
+            CityName, TownNme, ConsigneeName, ConsigneeMobile, ConsigneeTelephone, ExpressOrderNo, ImportantHints, Createdate } = sheetItem;
 
         return <div className="zjs_expressSheetItem">
             <div className="zjs_top">
