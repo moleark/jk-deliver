@@ -94,7 +94,7 @@ export class VPicking extends VPage<CHome> {
 						<FA name="minus" className="fa fa-minus-square fa-sm text-info" />
 					</span>
 					{React.createElement(observer(() => {
-						return <input type="text" className="form-control col-7 px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+						return <input type="text" className="form-control col-6 px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
 							onChange={o => pickItem.pickdone = o.target.value} defaultValue={pickdone} />
 					}))}
 					<span className="col-1 pl-0" onClick={() => { pickItem.pickdone = Number(pickItem.pickdone) + 1; }}>

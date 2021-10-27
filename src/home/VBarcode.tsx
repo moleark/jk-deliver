@@ -38,30 +38,11 @@ export class VBarcode extends VPage<CHome> {
         console.log('============== type ==============');
         console.log(type);
         console.log('============== type ==============');
-        switch (type) {
-            // @ts-ignore 
-            case plus.barcode.QR:
-                text = 'QR';
-                break;
-            // @ts-ignore 
-            case plus.barcode.EAN13:
-                text = 'EAN13';
-                break;
-            // @ts-ignore 
-            case plus.barcode.EAN8:
-                text = 'EAN8';
-                break;
-        }
-        // '912152 LT40U57 Jkchemical 1'   
 
         console.log('============== result ==============');
         console.log(result);
         console.log('============== result ==============');
-        if (!text) {
-            alert('此码无法解析额');
-            this.close();
-            return;
-        };
+
         // 解析字符串方法
         await this.controller.convertProductNumber(result);
         this.close();
@@ -79,7 +60,7 @@ export class VBarcode extends VPage<CHome> {
         this.closePage();
     }
 
-    afterBack = () => { this.close(); };
+    afterBack = () => { this.scanClose(); };
 
     header() { return <div className="w-100 text-center">扫一扫</div> }
 

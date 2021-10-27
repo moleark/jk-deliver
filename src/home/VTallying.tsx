@@ -75,7 +75,7 @@ export class VTallying extends VPage<CHome> {
                         <FA name="minus" className="fa fa-minus-square fa-sm text-info" />
                     </span>
                     {React.createElement(observer(() => {
-                        return <input type="text" className="col-7 form-control px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+                        return <input type="text" className="col-6 form-control px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
                             onChange={o => {
                                 tallyItem.tallyDone = o.target.value;
                             }} defaultValue={tallyDone} />
@@ -144,14 +144,14 @@ export class VTallying extends VPage<CHome> {
         </div>
         let topRight = <div className="form-inline" style={{ flexFlow: 'row' }}>
             <button className="btn btn-primary w-50" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={this.searchProductPackByOrigin}><FA name="search" /></button>
-            <button className="btn btn-primary w-50" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={() => this.convertProductNumber('')}><FA name="qrcode" /></button>
+            <button className="btn btn-primary w-50" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={openBarcodePage}><FA name="qrcode" /></button>
         </div>
         return <div id="tallyListDiv" className="p-1 bg-white">
             <div className="px-1 py-1 bg-light">
                 {React.createElement(observer(() => {
                     return <LMR left={topLeft} right={topRight}>
                         <form onSubmit={(e) => { e.preventDefault(); this.searchProductPackByOrigin() }} >
-                            <input ref={v => this.genreInput = v} type="text" value={this.controller.barcodeString} placeholder={'输入商品编号'} className="form-control"></input>
+                            <input ref={v => this.genreInput = v} type="text" defaultValue={this.controller.barcodeString} placeholder={'输入商品编号'} className="form-control"></input>
                         </form>
                     </LMR>
                 }))}

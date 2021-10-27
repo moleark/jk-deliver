@@ -78,7 +78,7 @@ export class VDelivering extends VPage<CHome> {
 						<FA name="minus" className="fa fa-minus-square fa-sm text-info" />
 					</span>
 					{React.createElement(observer(() => {
-						return <input type="text" className="form-control col-7 px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
+						return <input type="text" className="form-control col-6 px-0 mx-0 py-0 my-0 text-info" style={{ height: 'calc(1.0em + 0.5rem + 2px)' }}
 							onChange={o => deliverItem.deliverDone = o.target.value} defaultValue={deliverDone} />
 					}))}
 					<span className="col-1 pl-0" onClick={() => { deliverItem.deliverDone = Number(deliverItem.deliverDone) + 1; }}>

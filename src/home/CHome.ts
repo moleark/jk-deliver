@@ -437,12 +437,23 @@ export class CHome extends CUqBase {
 		return shelfBlock?.name;
 	}
 
+	/**
+	 * 通过产品编号查询产品包装id
+	 * @param origin 
+	 * @returns 
+	 */
 	searchProductPackByOrigin = async (origin: string) => {
 		let { JkProduct } = this.uqs;
 		let result: any = await JkProduct.GetProductPackByOrigin.query({ origin: origin, salesRegion: 1 });
 		return result.ret;
 	}
 
+	/**
+	 * 获取截单类型待结单数量
+	 * @param warehouse 
+	 * @param cutofftypeId 
+	 * @returns 
+	 */
 	getCutOffTypeReadyCount = async (warehouse: number, cutofftypeId: number) => {
 		let { JkDeliver } = this.uqs;
 		let readyCutOffCount: number = 0;
@@ -453,16 +464,28 @@ export class CHome extends CUqBase {
 		return readyCutOffCount;
 	}
 
+	/**
+	 * 通过lot查询产品编号
+	 * @param lot 
+	 * @returns 
+	 */
 	getProductNoByLot = async (lot: string) => {
 		let { JkWarehouse } = this.uqs;
 		let result = await JkWarehouse.SearchProductByLot.query({ lotNumber: lot });
 		return result.list;
 	}
 
+	/**
+	 * 打开二维码扫描界面
+	 */
 	openBarcodePage = () => {
 		this.openVPage(VBarcode);
 	}
 
+	/**
+	 * 识别转换产品编号
+	 * @param code 
+	 */
 	async convertProductNumber(code: string) {
 		let result: string = '';
 
