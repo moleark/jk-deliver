@@ -1,4 +1,4 @@
-//=== UqApp builder created on Mon Oct 25 2021 10:26:32 GMT+0800 (中国标准时间) ===//
+//=== UqApp builder created on Tue Oct 26 2021 17:56:08 GMT+0800 (中国标准时间) ===//
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IDXValue, Uq, UqTuid, UqAction, UqQuery, UqID, UqIDX, UqIX } from "tonva-react";
 
@@ -350,6 +350,7 @@ export interface DeliverMain {
 	warehouse: number;
 	cutOffMain: number;
 	trayNumber: number;
+	$create?: any;
 }
 
 export interface DeliverDetail {
@@ -375,12 +376,14 @@ export interface CutOffMain {
 	no?: string;
 	warehouse: number;
 	cutter: number;
+	$create?: any;
 }
 
 export interface CutOffType {
 	id?: number;
 	name: string;
 	description: string;
+	$create?: any;
 }
 
 export interface DeliverType {
@@ -406,6 +409,7 @@ export interface Request {
 	id?: number;
 	customerAccount: number;
 	contact: number;
+	$create?: any;
 }
 
 export interface DxDeliverMain {

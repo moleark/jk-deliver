@@ -12,6 +12,7 @@ import { VTallying } from "./VTallying";
 import { VTallySheet } from "./VTallySheet";
 import { VPicking } from "./VPicking";
 import { VPickSheet } from "./VPickSheet";
+import { VBarcode } from "./VBarcode";
 
 export class WarehousePending {
 	warehouse: number;
@@ -49,12 +50,13 @@ export class CHome extends CUqBase {
 	warehouse: number;
 	customer: number;
 	warehousePending: WarehousePending[];
-
+	barcodeString: string = '';
 
 	constructor(cApp: CApp) {
 		super(cApp);
 		makeObservable(this, {
-			warehousePending: observable.shallow
+			warehousePending: observable.shallow,
+			barcodeString: observable
 		});
 	}
 	protected async internalStart() {
@@ -451,4 +453,72 @@ export class CHome extends CUqBase {
 		return readyCutOffCount;
 	}
 
+	getProductNoByLot = async (lot: string) => {
+		let { JkWarehouse } = this.uqs;
+		let result = await JkWarehouse.SearchProductByLot.query({ lotNumber: lot });
+		return result.list;
+	}
+
+	openBarcodePage = () => {
+		this.openVPage(VBarcode);
+	}
+
+	async convertProductNumber(code: string) {
+		let result: string = '';
+
+		let jk_Reg = /^\w*\s\w*\sJkchemical\s1\b/;
+		let fluorochem_Reg = /\bP:\d*-\d*-\d*:\w*:\w*\b/;
+		let alfa_Reg = /\b1P\d*\.\d\s*\w*\b/;
+		let acros_Reg = /\b1P\d*\s*\w*\b/;
+		let strem_Reg = /\w*.\d.\w*\b/;
+		let lot_Reg = /^\d+$/;  // 纯数字，匹配lot
+		let product_Reg = /^\w\.+$/;  // 字母 符号 加数字，匹配产品编号
+
+		let jk_res = jk_Reg.exec(code);
+		if (jk_res !== null && jk_res !== undefined) {
+			result = jk_res[0].split(/\s/)[0];
+		}
+		if (result === '') {
+			let fluorochem_res = fluorochem_Reg.exec(code);
+			if (fluorochem_res !== null) {
+				result = fluorochem_res[0].split(/:/)[3].substring(2, 8);
+			}
+		}
+		if (result === '') {
+			let alfa_res = alfa_Reg.exec(code);
+			if (alfa_res !== null) {
+				result = alfa_res[0].split('.')[0].substring(2);
+			}
+		}
+		if (result === '') {
+			let acros_res = acros_Reg.exec(code);
+			if (acros_res !== null) {
+				result = acros_res[0].split('1T')[0].substring(2);
+			}
+		}
+		if (result === '') {
+			let strem_res = strem_Reg.exec(code);
+			if (strem_res !== null) {
+				result = strem_res[0];
+			}
+		}
+		if (result === '') {
+			let lot_res = lot_Reg.exec(code);
+			if (lot_res !== null) {
+				let productNo: any = await this.getProductNoByLot(lot_res[0]);
+				if (productNo.length > 0) {
+					result = productNo.product;
+				} else {
+					result = '';
+				}
+			}
+		}
+		if (result === '') {
+			let product_res = product_Reg.exec(code);
+			if (product_res !== null) {
+				result = product_res[0];
+			}
+		}
+		this.barcodeString = result;
+	}
 }

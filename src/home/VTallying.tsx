@@ -129,6 +129,7 @@ export class VTallying extends VPage<CHome> {
     }
 
     content() {
+        let { openBarcodePage } = this.controller;
         let pickTotal: number = 0;
         let { id, no } = this.main;
         this.detail.forEach(element => {
@@ -138,16 +139,22 @@ export class VTallying extends VPage<CHome> {
             }
         });
 
-        // let topLeft = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginRight: '2px' }} onClick={() => this.getCutOffMain(id)}>全部</button>
-        let topLeft = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={() => this.identifyProductNumber('')}><FA name="search" /></button>
-        let topRight = <button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={this.searchProductPackByOrigin}><FA name="search" /></button>
+        let topLeft = <div><button className="btn btn-primary w-100" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginRight: '2px' }} onClick={() => this.getCutOffMain(id)}>全部</button>
+
+        </div>
+        let topRight = <div className="form-inline" style={{ flexFlow: 'row' }}>
+            <button className="btn btn-primary w-50" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={this.searchProductPackByOrigin}><FA name="search" /></button>
+            <button className="btn btn-primary w-50" style={{ height: 'calc(1.0em + 1.2rem + 2px)', marginLeft: '2px' }} onClick={() => this.convertProductNumber('')}><FA name="qrcode" /></button>
+        </div>
         return <div id="tallyListDiv" className="p-1 bg-white">
             <div className="px-1 py-1 bg-light">
-                <LMR left={topLeft} right={topRight}>
-                    <form onSubmit={(e) => { e.preventDefault(); this.searchProductPackByOrigin() }} >
-                        <input ref={v => this.genreInput = v} type="text" placeholder={'输入商品编号'} className="form-control"></input>
-                    </form>
-                </LMR>
+                {React.createElement(observer(() => {
+                    return <LMR left={topLeft} right={topRight}>
+                        <form onSubmit={(e) => { e.preventDefault(); this.searchProductPackByOrigin() }} >
+                            <input ref={v => this.genreInput = v} type="text" value={this.controller.barcodeString} placeholder={'输入商品编号'} className="form-control"></input>
+                        </form>
+                    </LMR>
+                }))}
             </div>
             <div className="px-1 pb-1 bg-light" style={{ borderBottom: '1px dashed #dee2e6' }}>
                 <span className="px-1 text-info small">应理货总瓶数：<strong>{pickTotal}</strong></span>
@@ -177,27 +184,124 @@ export class VTallying extends VPage<CHome> {
         }
     }
 
+    private async openBarcodePage() {
+        let { openBarcodePage } = this.controller;
+        await openBarcodePage();
+    }
+
+    private async convertProductNumber(code: string) {
+        let result: string = '';
+        // code = '212583 LQ20U112 Jkchemical 1';  // jk
+        // code = 'P:22122020-1-11:05:502410191kgFCB066537';    // fluorochem
+        // code = '1P440300250   1TA0377514';    // Acros
+        // code = '1PB23830.2     1T10225944';    // Alfa
+        // code = '25-1330.2|36051100';    // STREM
+        // code = '2212725';
+        code = 'EN300-97037';
+
+        let jk_Reg = /^\w*\s\w*\sJkchemical\s1\b/;
+        let fluorochem_Reg = /\bP:\d*-\d*-\d*:\w*:\w*\b/;
+        let alfa_Reg = /\b1P\d*\.\d\s*\w*\b/;
+        let acros_Reg = /\b1P\d*\s*\w*\b/;
+        let strem_Reg = /\w*.\d.\w*\b/;
+        let lot_Reg = /^\d+$/;  // 纯数字，匹配lot
+        let product_Reg = /^\w\.+$/;  // 字母 符号 加数字，匹配产品编号
+        // let jk_check = jk_reg.test(code);
+        let jk_res = jk_Reg.exec(code);
+        if (jk_res !== null && jk_res !== undefined) {
+            // console.log(jk_res[0]);
+            result = jk_res[0].split(/\s/)[0];
+        }
+        if (result === '') {
+            let fluorochem_res = fluorochem_Reg.exec(code);
+            if (fluorochem_res !== null) {
+                result = fluorochem_res[0].split(/:/)[3].substring(2, 8);
+            }
+        }
+        if (result === '') {
+            let alfa_res = alfa_Reg.exec(code);
+            if (alfa_res !== null) {
+                result = alfa_res[0].split('.')[0].substring(2);
+            }
+        }
+        if (result === '') {
+            let acros_res = acros_Reg.exec(code);
+            if (acros_res !== null) {
+                result = acros_res[0].split('1T')[0].substring(2);
+            }
+        }
+        if (result === '') {
+            let strem_res = strem_Reg.exec(code);
+            if (strem_res !== null) {
+                result = strem_res[0];
+            }
+        }
+        if (result === '') {
+            let lot_res = lot_Reg.exec(code);
+            if (lot_res !== null) {
+                let productNo: any = await this.getProductNoByLot(lot_res[0]);
+                if (productNo.length > 0) {
+                    result = productNo.product;
+                } else {
+                    result = '';
+                }
+            }
+        }
+        if (result === '') {
+            let product_res = product_Reg.exec(code);
+            if (product_res !== null) {
+                result = product_res[0];
+            }
+        }
+        console.log(result);
+    }
+
     /* 正则表达式识别失败，使用字符串解析 */
     // let commonReg: RegExp = new RegExp('[/^[a-z|A-Z]+');
     // alert(code.match(commonReg));
-    private async identifyProductNumber(code: string) {
+    private async convertProductNumber2(code: string) {
         // code = '212583 LQ20U112 jkchemical 1';  // jk
-        code = 'P:22122020-1-11:05:502410191kgFCB066537';    // fluorochem
+        // code = 'P:22122020-1-11:05:502410191kgFCB066537';    // fluorochem
+        // code = '1P440300250   1TA0377514';    // Acros
+        // code = '1PB23830.2     1T10225944';    // Alfa
+        // code = '25-1330.2|36051100';    // STREM
+        // code = '2212725';
+        // let format_code: string = code.replace(/^\s*|\s*$/g, "");
         let result: string = '';
 
-        if (code.search("jkchemical") > 0) {    // jk
+        if (code.indexOf("jkchemical") != -1) {    // jk
             result = code.split(' ')[0];
         } else if (code.substring(0, 2) === 'P:') { // fluorochem
             let temp_fluorochem: string = code.split(':')[3];
-            let l: RegExp = new RegExp('[/^[a-z|A-Z]+$');
-            let a = l.exec(temp_fluorochem);
-            alert(a);
-            result = temp_fluorochem.substring(2, temp_fluorochem.length);
-        } else if (code.substring(0, 2) === '1P') {
-
+            // let l: RegExp = new RegExp('[/^[a-z|A-Z]+$');
+            // let a = l.exec(temp_fluorochem);
+            // alert(a);
+            // 2410191kgFCB066537  获取存在问题。
+            result = temp_fluorochem.substring(2, 8); //temp_fluorochem.substring(2, temp_fluorochem.length);
+        } else if (code.substring(0, 2) === '1P' && code.indexOf(" 1T") != -1) { // Alfa Aesar
+            let temp_AlfaAesar: string = code.split('.')[0];
+            result = temp_AlfaAesar.substring(2).trimEnd();
+        } else if (code.substring(0, 2) === '1P' && code.trim().indexOf("1T") != -1) { // Acros ? 貌似反馈的规则不对
+            let temp_Acros: string = code.split('1T')[0];
+            result = temp_Acros.substring(2).trimEnd();
+        } else if (code.indexOf("|") != -1) {  // STREM
+            let temp_STREM: string = code.split('.')[0];
+            result = temp_STREM.trim();
+        } else if (/^\d+$/.test(code) === true) {
+            let productNo: any = await this.getProductNoByLot(code);
+            if (productNo.length > 0) {
+                result = productNo.product;
+            } else {
+                result = '';
+            }
+        } else {
+            result = code.trim();
         }
-
-        alert(result);
         console.log(result);
+    }
+
+    private getProductNoByLot = async (lot: string) => {
+        let { getProductNoByLot } = this.controller;
+        return await getProductNoByLot(lot);
     }
 }
